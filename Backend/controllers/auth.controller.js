@@ -113,16 +113,18 @@ exports.login = async(req, res) => {
         }
 
         // generate token
-        const token= jwt.sign({id: user._id}, process.env.JWT_SECRET, {expiresIn: '1d'});
+        const token= jwt.sign({id: user._id, role: user.role}, process.env.JWT_SECRET, {expiresIn: '1d'});
         await res.cookie("jwt-loubilux", token, {
 			httpOnly: true,
 			maxAge: 3 * 24 * 60 * 60 * 1000,
 			sameSite: "strict",
+            
 		});
 
         return res.status(200).json({
             status: 'success',
             message: 'User logged in successfully',
+            role: user.role,
             token: token
         })
 
