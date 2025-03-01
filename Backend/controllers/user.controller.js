@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 
 exports.register = async(req, res) => {
     try{
-        const {name, username, password, email, phone, role, confirmPassword} = req.body;
+        const {name, username, password, email, phoneNumber, role, confirmPassword} = req.body;
 
         // check if fields are empty
         if(!name || !username || !password || !email || !role || !confirmPassword) {
@@ -70,14 +70,15 @@ exports.register = async(req, res) => {
             username: username,
             password: hashedPassword,
             email: email,
-            phoneNumber: phone,
+            phoneNumber: phoneNumber,
             role: role
         });
         await newUser.save();
 
         return res.status(201).json({
             status: 'success',
-            message: 'User created successfully'
+            message: 'User created successfully',
+            data: newUser
         })
 
     } catch(error) {
@@ -110,7 +111,7 @@ exports.login = async(req, res) => {
         }
 
         // generate token
-        const token= jwt.sign({id: user._id}, process.env.JWT_SECRET, {expiresIn: '1h'});
+        const token= jwt.sign({id: user._id}, process.env.JWT_SECRET, {expiresIn: '2h'});
 
         return res.status(200).json({
             status: 'success',
