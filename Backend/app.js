@@ -2,7 +2,8 @@ const express = require('express');
 const dotenv = require('dotenv');
 const cors = require('cors');
 const { connectDB } = require('./db/connection');
-const authRouter = require('./routes/user.route');
+const authRouter = require('./routes/auth.route');
+const usersRouter = require('./routes/user.route');
 
 const app = express();
 const port = 3000;
@@ -13,6 +14,7 @@ dotenv.config();
 app.use(express.json());
 
 app.use('/api/v1/auth', authRouter);
+app.use('/api/v1/users', usersRouter);
 
 // not found routes
 app.use((req, res, next) => {

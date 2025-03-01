@@ -1,84 +1,81 @@
 const User = require('../models/user.models');
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
+// const bcrypt = require('bcrypt');
+// const jwt = require('jsonwebtoken');
 
-exports.register = async(req, res) => {
+
+exports.getAllUsers = async(req, res) => {
     try{
-        const {name, username, password, email, phoneNumber, role, confirmPassword} = req.body;
+        const users = await User.find().select('name username email phoneNumber role');
+        return res.status(200).json({
+            status: 'success',
+            message: 'Users retrieved successfully',
+            data: users
+        })
+    } catch(error) {
+        console.error(error.message);
+        return res.status(500).json({
+            status: 'error',
+            message: 'Internal Server Error message ',
+            error: error.message
+        });
+    }
+}
+
+// get user by id
+exports.getUserbyId = async(req, res) => {
+    try{
+        const userId = req.params.id;
+        const user = await User.findById(userId);
+        return res.status(200).json({
+            status: 'success',
+            message: `User found successfully`,
+            data: user
+        })
+    } catch(error) {
+        console.error(error.message);
+        return res.status(500).json({
+            status: 'error',
+            message: 'Internal Server Error message ',
+            error: error.message
+        });
+    }
+}
+
+// update user
+exports.updateUser = async(req, res) => {
+    try{
+        const userId = req.params.id;
+        const {name, username, email, phoneNumber, role} = req.body;
+
 
         // check if fields are empty
-        if(!name || !username || !password || !email || !role || !confirmPassword) {
+        if(!name || !username || !email || !role ) {
             return res.status(400).json({
                 status: 'error',
                 message: 'Name, Username, password, email and role fields are required'
             });
         }
 
-        // check password length
-        if(username.length < 6 || username.length > 30) {
-            return res.status(400).json({
-                status: 'error',
-                message: 'Username must be between 6 to 30 characters'
+        // check if user exist
+        const user = await User.findById(userId);
+        if(!user) {
+            return res.status(404).json({
+                message: 'User not found'
             });
         }
 
-        // check length password
-        if(password.length<=8){
-            return res.status(400).json({
-                status: 'error',
-                message: 'Password must be at least 8 characters'
-            });
-        }
+        user.name = name;
+        user.username = username;
+        user.email = email;
+        user.phoneNumber = phoneNumber;
+        user.role = role;
 
-        const upperCase = /[A-Z]/.test(password);
-        const lowerCase = /[a-z]/.test(password);
-        const number = /[0-9]/.test(password);
-        const specialChar = /[\W_]/.test(password);
+        await user.save();
 
-        if (!upperCase || !lowerCase || !number || !specialChar) {
-            return res.status(400).json({
-                status: 'error',
-                message: "Password must contain at least uppercase letter, lowercase letter, number, and special character",
-            });
-        }
-
-        // valid confirm
-        if(password !== confirmPassword) {
-            return res.status(400).json({
-                status: 'error',
-                message: 'Password does not match'
-            });
-        }
-
-
-        // check existing user
-        const userExist = await User.findOne({username: username, email: email});
-        
-        if(userExist) {
-            return res.status(400).json({
-                message: 'User already exist username and email must be unique'
-            });
-        }
-
-        // hash password
-        const salt = await bcrypt.genSalt(10);
-        const hashedPassword = await bcrypt.hash(password, salt);
-
-        // insert into database
-        const newUser = new User({
-            name: name,
-            username: username,
-            password: hashedPassword,
-            email: email,
-            phoneNumber: phoneNumber,
-            role: role
-        });
-        await newUser.save();
-
-        return res.status(201).json({
+        return res.status(200).json({
             status: 'success',
-            message: 'User created successfully',
-            data: newUser
+            message: 'User updated successfully',
+            data: user
         })
 
     } catch(error) {
@@ -91,32 +88,24 @@ exports.register = async(req, res) => {
     }
 }
 
-exports.login = async(req, res) => {
+// delete user
+exports.deleteUser = async(req, res) => {
     try{
-        const {username, password} = req.body;
+        const userId = req.params.id;
 
         // check if user exist
-        const user = await User.findOne({username: username});
+        const user = await User.findById(userId);
         if(!user) {
             return res.status(404).json({
                 message: 'User not found'
             });
         }
 
-        const isMatch = await bcrypt.compare(password, user.password);
-        if(!isMatch) {
-            return res.status(400).json({
-                message: 'Invalid credentials Password'
-            });
-        }
-
-        // generate token
-        const token= jwt.sign({id: user._id}, process.env.JWT_SECRET, {expiresIn: '2h'});
+        await user.remove();
 
         return res.status(200).json({
             status: 'success',
-            message: 'User logged in successfully',
-            token: token
+            message: 'User deleted successfully',
         })
 
     } catch(error) {
