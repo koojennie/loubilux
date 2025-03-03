@@ -5,7 +5,7 @@ const {getAllUsers, getUserbyId, updateUser, deleteUser} = require('../controlle
 const { register } = require('../controllers/auth.controller');
 const { authenticateUser, authorizeRoles } = require('../middleware/auth.middleware');
 
-router.get('/', authenticateUser, authorizeRoles('admin'), getAllUsers);
+router.get('/', authenticateUser, authorizeRoles('superadmin'), getAllUsers);
 router.get('/:id', getUserbyId);
 router.post('/', register);
 router.put('/:id', updateUser);

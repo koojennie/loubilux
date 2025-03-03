@@ -42,52 +42,43 @@ exports.getUserbyId = async(req, res) => {
 }
 
 // update user
-exports.updateUser = async(req, res) => {
-    try{
+exports.updateUser = async (req, res) => {
+    try {
         const userId = req.params.id;
-        const {name, username, email, phoneNumber, role} = req.body;
 
-
-        // check if fields are empty
-        if(!name || !username || !email || !role ) {
-            return res.status(400).json({
-                status: 'error',
-                message: 'Name, Username, password, email and role fields are required'
-            });
-        }
-
-        // check if user exist
+        // Check apakah user ada
         const user = await User.findById(userId);
-        if(!user) {
+        if (!user) {
             return res.status(404).json({
+                status: 'error',
                 message: 'User not found'
             });
         }
 
-        user.name = name;
-        user.username = username;
-        user.email = email;
-        user.phoneNumber = phoneNumber;
-        user.role = role;
+        const updates = {};
+        if (req.body.name) updates.name = req.body.name;
+        if (req.body.username) updates.username = req.body.username;
+        if (req.body.email) updates.email = req.body.email;
+        if (req.body.phoneNumber) updates.phoneNumber = req.body.phoneNumber;
+        if (req.body.role) updates.role = req.body.role;
 
-        await user.save();
+        const updatedUser = await User.findByIdAndUpdate(userId, updates, { new: true, runValidators: true });
 
         return res.status(200).json({
             status: 'success',
             message: 'User updated successfully',
-            data: user
-        })
+            data: updatedUser
+        });
 
-    } catch(error) {
+    } catch (error) {
         console.error(error.message);
         return res.status(500).json({
             status: 'error',
-            message: 'Internal Server Error message ',
+            message: 'Internal Server Error',
             error: error.message
         });
     }
-}
-
+};
 // delete user
 exports.deleteUser = async(req, res) => {
     try{
