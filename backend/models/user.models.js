@@ -31,7 +31,11 @@ const userSchema = new mongoose.Schema(
         profilePicture: {
             type: String,
             default: "",
-        },    
+        }, 
+        isVerified: {
+            type: Boolean,
+            default:false
+        }   
     },
     { timestamps: true }
 )

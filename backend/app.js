@@ -1,7 +1,7 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const cors = require('cors');
-const { connectDB } = require('./db/connection');
+const { connectDB } = require('./lib/connection');
 
 const app = express();
 const port = 3000;
