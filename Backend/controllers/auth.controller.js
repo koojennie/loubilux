@@ -113,7 +113,7 @@ exports.login = async(req, res) => {
         }
 
         // generate token
-        const token= jwt.sign({id: user._id, role: user.role}, process.env.JWT_SECRET, {expiresIn: '1d'});
+        const token= jwt.sign({id: user._id, role: user.role}, process.env.JWT_SECRET, {expiresIn: '3d'});
         await res.cookie("jwt-loubilux", token, {
 			httpOnly: true,
 			maxAge: 3 * 24 * 60 * 60 * 1000,

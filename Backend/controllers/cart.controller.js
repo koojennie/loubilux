@@ -6,15 +6,19 @@ const addItemToCart = async (req, res) => {
     const { user } = req;
     const {productId, quantity} = req.body;
 
+    if (quantity < 1) {
+        return res.status(400).json({ message: 'Quantity must be at least 1' });
+    }
+
     const product = await Product.findById(productId);
     if(!product){
         return res.status(404).json({message: 'Product not found'});
-    }
+    }    
     
-    let cart = await Cart.findOne({user: user._id});
+    let cart = await Cart.findOne({user: user.id});
     if(!cart){
         cart = new Cart({
-            user: user._id,
+            user: user.id,
             products: [],
             totalPrice: 0,
         });
@@ -51,8 +55,12 @@ const getCart = async (req, res) => {
     try {
         const { user } = req;
 
-        const cart = await Cart.findOne({user: user._id}).populate('products.product');
+        const cart = await Cart.findOne({ user: user.id }).populate('products.product').lean();
+        if (!cart) {
+            return res.status(404).json({ message: 'Cart not found' });
+        }
         res.json(cart);
+
     } catch (error) {
         console.error(error);
         return res.status(500).json({
@@ -65,15 +73,13 @@ const getCart = async (req, res) => {
 
 const clearCart = async (req, res) => {
     try {
-        const userId = req.user.id;
-
-        let cart = await Cart.findOne({ userId });
-        if (!cart) return res.status(404).json({ message: "Cart not found" });
-    
-        cart.items = [];
-        cart.totalPrice = 0;
-    
-        await cart.save();
+        const { user } = req;
+        await Cart.findOneAndUpdate(
+            { user: user.id },
+            { products: [], totalPrice: 0 },
+            { new: true }
+        );
+        
        return res.json({message: 'Cart cleared successfully', data: cart});
 
     } catch (error) {
@@ -92,7 +98,7 @@ const removeItemFromCart = async (req, res) => {
         const { user } = req;
         const { productId } = req.body;
 
-        let cart = await Cart.findOne({user: user._id});
+        let cart = await Cart.findOne({user: user.id});
         if(!cart){
             return res.status(404).json({message: 'Cart not found'});
         }
