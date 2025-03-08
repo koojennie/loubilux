@@ -1,4 +1,21 @@
 /* Sign Up */
+.sign-up {
+    min-height: 100vh;
+}
+
+.sign-up .container {
+    padding-top: 50px;
+    padding-bottom: 50px;
+}
+
+.sign-up .img-fluid{
+    max-width: 100%;
+    height: auto;
+}
+
+.sign-up .bg-blue{
+    background-color: #1A1640;
+}
 
 .sign-up input[type="password"],
 .sign-up input[type="email"],
