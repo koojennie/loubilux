@@ -50,13 +50,34 @@ const createProduct = async (req, res) => {
 
 const getAllProducts = async (req, res) => {
     try {
-        const products = await Product.find().populate('category', 'name description').lean();
-        return res.status(200).json({ status: 'success', message: 'Products retrieved successfully', data: products });
+        let { page, limit } = req.query;
+        page = parseInt(page) || 1; 
+        limit = parseInt(limit) || 10; 
+
+        const totalProducts = await Product.countDocuments(); 
+        const totalPages = Math.ceil(totalProducts / limit);
+
+        const products = await Product.find()
+            .populate('category', 'name description')
+            .skip((page - 1) * limit) // Lewati data sesuai halaman
+            .limit(limit) // Batasi jumlah data
+            .lean();
+
+        return res.status(200).json({
+            status: 'success',
+            message: 'Products retrieved successfully',
+            total: totalProducts, // Total semua produk
+            page,
+            limit,
+            totalPages, // Total halaman
+            data: products
+        });
     } catch (error) {
         console.error('Error retrieving products:', error);
         return res.status(500).json({ status: 'error', message: 'Internal Server Error' });
     }
 };
+
 
 const getProductById = async (req, res) => {
     try {

@@ -22,6 +22,11 @@ const productSchema = new mongoose.Schema(
             type: String,
             default: "",
         },
+        status:{
+            type:String,
+            default: "draft",
+            enum:["active","draft"]
+        },
         category: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Category',

@@ -4,19 +4,19 @@ const cors = require('cors');
 const { connectDB } = require('./lib/connection');
 
 const app = express();
-const port = 3000;
+const port = 5000;
 
 const routes = require('./routes/index');
 
 dotenv.config();
 
 
-// app.use(
-//   cors({
-//     origin: "http://localhost:5173",
-//     credentials: true,
-//   })
-// )
+app.use(
+  cors({
+    origin: "*",
+    credentials: true,
+  })
+)
 
 app.use(express.json());
 
