@@ -1,6 +1,12 @@
-import Image from 'next/image';
+"use client";
 
-export type TableType = 'product' | 'user' | 'transaction';
+import Image from 'next/image';
+// import { useRouter } from 'next/router';
+import Link from 'next/link';
+import {generateSlug} from '@/utils/generateSlug';
+
+
+export type TableType = 'products' | 'user' | 'transaction';
 
 export interface Column<T> {
   key: keyof T | 'actions';
@@ -14,9 +20,6 @@ interface ActionProps {
   onDelete?: (id: string | number) => void;
 }
 
-/**
- * Fungsi untuk merender isi sel tabel berdasarkan tipe tabel dan jenis data.
- */
 export const renderCellContent = <T extends { [key: string]: any }>(
   row: T,
   col: Column<T>,
@@ -25,7 +28,9 @@ export const renderCellContent = <T extends { [key: string]: any }>(
 ) => {
   const value = row[col.key];
 
-  if (tableType === 'product') {
+  // const router = useRouter();
+
+  if (tableType === 'products') {
     if (col.key === 'price') {
       return (
         <p className="font-normal text-sm text-slate-800">
@@ -38,7 +43,7 @@ export const renderCellContent = <T extends { [key: string]: any }>(
           <Image src={value as string} width={50} height={50} alt="Product Image" className="rounded-md" />
         </div>
       );
-    } else if (col.key === 'status') {
+    } else if (col.key === 'statusPublish') {
       return (
         <span
           className={`px-3 py-1 rounded-md text-xs font-semibold ${value === 'active' ? 'bg-green-200 text-green-800'
@@ -47,7 +52,7 @@ export const renderCellContent = <T extends { [key: string]: any }>(
                 : 'bg-gray-200 text-gray-800'
             }`}
         >
-      {typeof value === 'string' ? value.charAt(0).toUpperCase() + value.slice(1) : ''}
+        {typeof value === 'string' ? value.charAt(0).toUpperCase() + value.slice(1) : 'No status'}
 
     </span>);
     }
@@ -79,26 +84,29 @@ export const renderCellContent = <T extends { [key: string]: any }>(
   }
 
   if (col.key === 'actions' && actions) {
+    const slugName = generateSlug(row.name);
+    const slugId = `${slugName}-${row.id}`;
+
     return (
       <div className="flex space-x-2">
         {actions.onInfo && (
           <button
             type="button"
             className="text-white bg-cyan-500 font-light text-xs !rounded-lg p-2.5 m-1 text-center inline-flex items-center shadow-md shadow-gray-300 hover:scale-[1.09] transition-transform"
-            onClick={() => actions.onInfo?.(row.id)}
+            onClick={() => actions.onInfo?.(row.id)} // Ensure onInfo is called with row.id
           >
             Info
           </button>
         )}
         {actions.onEdit && (
-          <button
-            type="button"
-            className="text-white bg-yellow-500 font-light text-xs !rounded-lg p-2.5 m-1 text-center inline-flex items-center shadow-md shadow-gray-300 hover:scale-[1.09] transition-transform"
-
-            onClick={() => actions.onEdit?.(row.id)}
-          >
-            Edit
-          </button>
+          <Link href={`/admin/${tableType}/${row.id}/edit`}>
+            <button
+              type="button"
+              className="text-white bg-yellow-500 font-light text-xs !rounded-lg p-2.5 m-1 text-center inline-flex items-center shadow-md shadow-gray-300 hover:scale-[1.09] transition-transform"
+            >
+              Edit
+            </button>
+          </Link>
         )}
         {actions.onDelete && (
           <button
