@@ -9,7 +9,11 @@ const categorySchema = new mongoose.Schema(
         description: {
             type: String,
             default: "",
-        }
+        },
+        prefix: {
+            type: String,
+            default: "",
+        },
     },
     { timestamps: true }
 )

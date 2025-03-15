@@ -3,7 +3,7 @@ const Category = require('../models/category.model');
 // Create 
 const createCategory = async (req, res) => {
     try {
-        const { name, description } = req.body;
+        const { name, description, prefix} = req.body;
 
         if(!name) {
             return res.status(400).json({
@@ -30,7 +30,8 @@ const createCategory = async (req, res) => {
 
         const category = new Category({
             name,
-            description
+            description,
+            prefix
         });
 
         await category.save();

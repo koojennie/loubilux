@@ -175,10 +175,33 @@ const deleteProduct = async (req, res) => {
     }
 };
 
+const countProductByCategory = async (req, res) => {
+    try {
+        const { categoryId } = req.query;
+        if(!categoryId){
+            return res.status(400).json({status: "error", message:"Category ID is required"});
+        }
+
+        const category = await Category.findById(categoryId);
+
+        if(!category){
+            return res.status(404).json({status: "error", message: "category not found"});
+        }
+
+        const countProductByCategory = await Product.countDocuments({ category: categoryId });
+
+        return res.status(200).json({status: "success", prefix: category.prefix, countProductByCategory});
+        
+    } catch (error) {
+        return res.status(500).json({status: 'error', message: 'error fetching product count', error: error.mesage})
+    }
+}
+
 module.exports = {
     createProduct,
     getAllProducts,
     getProductById,
     updateProduct,
-    deleteProduct
+    deleteProduct,
+    countProductByCategory
 };
