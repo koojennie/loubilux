@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 interface EditProductProps {
   params: {
     id: string;
+    slug:string;
   }
 }
 
@@ -15,19 +16,21 @@ const EditProduct = ({ params }: EditProductProps) => {
 
   const router = useRouter();
 
-  const [products, setProducts] = useState([
-    { id: '1', name: "Baju", qty: "17", amount: "$1,200.00", status: "Active", category: "Clothing", Action: "Edit" },
-    { id: '2', name: "Sepatu", qty: "10", amount: "$1,500.00", status: "Active", category: "Footwear", Action: "Edit" },
-    { id: '3', name: "Sepatu", qty: "10", amount: "$1,500.00", status: "Draft", category: "Footwear", Action: "Edit" },
-    { id: '4', name: "Sepatu", qty: "10", amount: "$1,500.00", status: "Active", category: "Footwear", Action: "Edit" },
-    { id: '5', name: "sepatu", qty: "10", amount: "$1,500.00", status: "Active", category: "Footwear", Action: "Edit" },
-    { id: '6', name: "Baju", qty: "17", amount: "$1,200.00", status: "Draft", category: "Clothing", Action: "Edit" },
-    { id: '7', name: "Sepatu", qty: "10", amount: "$1,500.00", status: "Draft", category: "Footwear", Action: "Edit" },
-    { id: '8', name: "Sepatu", qty: "10", amount: "$1,500.00", status: "Draft", category: "Footwear", Action: "Edit" },
-  ]);
+  // const [products, setProducts] = useState([
+  //   { id: '1', name: "Baju", qty: "17", amount: "$1,200.00", status: "Active", category: "Clothing", Action: "Edit" },
+  //   { id: '2', name: "Sepatu", qty: "10", amount: "$1,500.00", status: "Active", category: "Footwear", Action: "Edit" },
+  //   { id: '3', name: "Sepatu", qty: "10", amount: "$1,500.00", status: "Draft", category: "Footwear", Action: "Edit" },
+  //   { id: '4', name: "Sepatu", qty: "10", amount: "$1,500.00", status: "Active", category: "Footwear", Action: "Edit" },
+  //   { id: '5', name: "sepatu", qty: "10", amount: "$1,500.00", status: "Active", category: "Footwear", Action: "Edit" },
+  //   { id: '6', name: "Baju", qty: "17", amount: "$1,200.00", status: "Draft", category: "Clothing", Action: "Edit" },
+  //   { id: '7', name: "Sepatu", qty: "10", amount: "$1,500.00", status: "Draft", category: "Footwear", Action: "Edit" },
+  //   { id: '8', name: "Sepatu", qty: "10", amount: "$1,500.00", status: "Draft", category: "Footwear", Action: "Edit" },
+  // ]);
 
+  
+  const [products, setProducts] = useState(null);
   const [isModalConfirmationOpen, setIsModalConfirmationOpen] = useState<boolean>(false);
-  const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(true);
+  const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
 
   const openModalConfirmation = () => {
     setIsModalConfirmationOpen(true);
@@ -217,7 +220,6 @@ const EditProduct = ({ params }: EditProductProps) => {
                 <input
                   type="text"
                   className="w-full h-10 bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded px-3 shadow-sm focus:border-slate-400"
-                  defaultValue={products[0].id}
                   placeholder="Enter your text"
                   readOnly
                 />
@@ -229,7 +231,6 @@ const EditProduct = ({ params }: EditProductProps) => {
                 <input
                   type="text"
                   className="w-full h-10 bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded px-3 shadow-sm focus:border-slate-400"
-                  defaultValue={products[0].name}
                   placeholder="Enter Product Name"
                 />
               </div>
@@ -238,7 +239,7 @@ const EditProduct = ({ params }: EditProductProps) => {
               <div className="w-full">
                 <label className="block mb-1 text-sm text-slate-700">Category</label>
                 <select className="w-full h-10 bg-transparent text-slate-700 text-sm border border-slate-200 rounded px-3 shadow-sm focus:border-slate-400">
-                  <option defaultValue={products[0].category}>{products[0].category}</option>
+                  <option value="">ini value</option>
                 </select>
               </div>
 
@@ -248,7 +249,6 @@ const EditProduct = ({ params }: EditProductProps) => {
                 <input
                   type="text"
                   className="w-full h-10 bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded px-3 shadow-sm focus:border-slate-400"
-                  defaultValue={products[0].amount}
                   placeholder="Enter Amount"
                 />
               </div>
@@ -259,7 +259,6 @@ const EditProduct = ({ params }: EditProductProps) => {
                 <input
                   type="number"
                   className="w-full h-10 bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded px-3 shadow-sm focus:border-slate-400"
-                  defaultValue={products[0].qty}
                   placeholder="Enter Quantity"
                 />
               </div>
@@ -268,7 +267,7 @@ const EditProduct = ({ params }: EditProductProps) => {
               <div className="w-full">
                 <label className="block mb-1 text-sm text-slate-700">Status</label>
                 <select className="w-full h-10 bg-transparent text-slate-700 text-sm border border-slate-200 rounded px-3 shadow-sm focus:border-slate-400">
-                  <option defaultValue={products[0].status}>{products[0].status}</option>
+                  <option value="">ini adlah value</option>
                 </select>
               </div>
             </div>
