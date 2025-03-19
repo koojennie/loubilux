@@ -10,8 +10,6 @@ interface ModalViewDetailsProps {
 const ModalViewDetails = ({ isOpen, onClose, data }: ModalViewDetailsProps) => {
   if (!isOpen || !data) return null;
 
-  console.log(data);
-
   const valueStatus = data.statusPublish;
 
   return (
@@ -36,7 +34,7 @@ const ModalViewDetails = ({ isOpen, onClose, data }: ModalViewDetailsProps) => {
             <div className="grid grid-rows-1 md:grid-cols-2 gap-4">
               <div className="w-full">
                 <p className="block mb-2 font-semibold text-base text-slate-600">Product Code</p>
-                <p className="text-slate-500 text-sm truncate">{data.id}</p>
+                <p className="text-slate-500 text-sm truncate">{data.productCode}</p>
               </div>
               <div className="w-full">
                 <p className="block mb-2 font-semibold text-base text-slate-600">Quantity</p>

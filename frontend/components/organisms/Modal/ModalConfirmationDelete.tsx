@@ -3,7 +3,7 @@
 interface ModalConfirmationDeleteProps {
     isOpen: boolean;
     onClose: () => void;
-    onConfirm: () => void;
+    onConfirm: (id: any ) => void;
 }
 
 const ModalConfirmationDelete = ({ isOpen, onClose, onConfirm }: ModalConfirmationDeleteProps) => {

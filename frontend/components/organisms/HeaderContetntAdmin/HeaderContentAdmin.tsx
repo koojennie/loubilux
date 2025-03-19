@@ -1,12 +1,18 @@
 "use client";
 
+import toast, { Toaster } from 'react-hot-toast';
+
 interface HeaderContentAdminProps {
   header: string;
   subHeader: string;
+  toAddPage: () => void;
   backPage: () => void;
 }
 
-const HeaderContentAdmin = ({header, subHeader, backPage}: HeaderContentAdminProps) => {
+const HeaderContentAdmin = ({header, subHeader, toAddPage}: HeaderContentAdminProps) => {
+
+  const notify = () => toast('Here is your toast.');
+ 
     return (
         <div className="relative mx-4 mt-4 overflow-hidden text-gray-700 rounded-none bg-clip-border">
           <div className="flex items-center justify-between gap-8 mb-8">
@@ -18,12 +24,16 @@ const HeaderContentAdmin = ({header, subHeader, backPage}: HeaderContentAdminPro
                 {subHeader}
               </p>
             </div>
+              
+              <Toaster />
             <div className="flex flex-col gap-2 shrink-0 sm:flex-row">
               
               <button
                 className="flex select-none items-center gap-3 rounded-lg bg-gray-900 py-2 px-4 text-center align-middle font-sans text-xs font-bold uppercase text-white shadow-md shadow-gray-900/10 transition-all hover:shadow-lg hover:shadow-gray-900/20 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
                 type="button"
+                onClick={toAddPage}
               >
+
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
