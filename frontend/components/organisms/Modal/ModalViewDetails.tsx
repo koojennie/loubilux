@@ -46,8 +46,9 @@ const ModalViewDetails = ({ isOpen, onClose, data }: ModalViewDetailsProps) => {
                 ${valueStatus === 'active' ? 'bg-green-200 text-green-800' : valueStatus === 'draft' ? 'bg-yellow-200 text-yellow-800'
                     : 'bg-gray-200 text-gray-800'
                   }`}>
-                  {valueStatus.charAt(0).toUpperCase() + valueStatus.slice(1) || 'No status'}
+                  {/* {valueStatus.charAt(0).toUpperCase() + valueStatus.slice(1) || 'No status'} */}
                   {/* {valueStatus || 'No status'} */}
+                  {typeof valueStatus === 'string' ? valueStatus.charAt(0).toUpperCase() + valueStatus.slice(1) : 'No status'}
                 </span>
               </div>
               <div className="w-full">
