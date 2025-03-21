@@ -102,7 +102,7 @@ const EditProduct = ({ params }: EditProductProps) => {
               </div>
             )}
             {/* Dropdown menu */}
-            {/* {isDropdownOpen && (
+            {isDropdownOpen && (
     <div
     id="dropdownRadio"
     className="z-10 hidden w-48 bg-white divide-y divide-gray-100 rounded-lg shadow-sm dark:bg-gray-700 dark:divide-gray-600"
@@ -207,7 +207,7 @@ const EditProduct = ({ params }: EditProductProps) => {
       </li>
     </ul>
   </div>
-  )} */}
+  )}
           </div>
 
 

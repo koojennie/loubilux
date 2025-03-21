@@ -2,20 +2,25 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import axios from "axios";
+import toast, {Toaster} from "react-hot-toast";
 import TableComponents from "@/components/organisms/Table/TableComponents";
 import HeaderContentAdmin from "@/components/organisms/HeaderContetntAdmin/HeaderContentAdmin";
 import ModalConfirmationDelete from "@/components/organisms/Modal/ModalConfirmationDelete";
 import ModalViewDetails from "@/components/organisms/Modal/ModalViewDetails";
 
 type Category = {
+  _id: string;
   id: string;
   name: string;
   description: string;
 }
 
 type Product = {
+  _id: string;
   id: string;
   name: string;
+  productCode: string;
   quantity: number;
   price: number;
   statusPublish: string;
@@ -29,52 +34,113 @@ type ProductsProps = {
 }
 
 const ProductPage = ({ initialProducts }: ProductsProps) => {
+
+  const router = useRouter();
+
   const [products, setProducts] = useState<Product[]>(initialProducts);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [selectedViewDetailProduct, setSelectedViewDetailProduct] = useState<Product | null>(null);
+  const [selectedDeleteProduct, setSelectedDeleteProduct] = useState<Product | null>(null);
+  const [page, setPage] = useState<number>(1);
+  const [totalItems, setTotalItems] = useState<number>(1);
+  const [limit, setLimit] = useState<number>(5);
+  // const limit = 5;
 
   const [isModalConfirmationDeleteOpen, setIsModalConfirmationDeleteOpen] = useState<boolean>(false);
   const [isModalViewDetailOpen, setIsModalViewDetailOpen] = useState<boolean>(false);
+  const [token, setToken] = useState<string>('');
+
+
+  // const [itemsToShow, setItemsToShow] = useState(5);
+
 
   // fetch ulang data setelah halaman dimuat (CSR)
   useEffect(() => {
-    const fetchProducts = async () => {
-      setIsLoading(true);
-      try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/products`);
-        const results = await response.json();
-        results.data = results.data.map((product: any, index: number) => ({
-          id: product._id,
-          ...product,
-          no: index + 1,
-          category: product.category?.name || " ",
-          image: product.image || "/icon/loubilux-logo.png",
-        }));
-        setProducts(results.data);
-        console.log("Products", results.data);
-      } catch (error) {
-        console.error("Error fetching products", error);
-      }
-      setIsLoading(false);
-    };
-
+    
     fetchProducts();
-  }, []);
+    fetchToken();
+  }, [page, limit]);
 
-  const openModalConfirmationDelete = () => {
-    setIsModalConfirmationDeleteOpen(true);
+  const fetchProducts = async () => {
+    setIsLoading(true);
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/products?page=${page}&limit=${limit}`);
+      const results = await response.json();
+      results.data = results.data.map((product: any, index: number) => ({
+        id: product._id,
+        ...product,
+        no: (page - 1) * limit + (index + 1), 
+        category: product.category?.name || " ",
+        image: product.image || "/icon/loubilux-logo.png",
+      }));
+      setProducts(results.data);
+      setTotalItems(results.total)
+      console.log("Products", results.data);
+    } catch (error) {
+      console.error("Error fetching products", error);
+    }
+    setIsLoading(false);
   };
 
-  const closeModalConfirmationDelete = () => {
-    setIsModalConfirmationDeleteOpen(false);
+  const fetchToken = async () => {
+    try {
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/auth/login`, {
+        username: 'saniadmin1',
+        password: 'saniadmin1.P'
+      });
+      const token = response.data.token;
+      setToken(token);
+      console.log('done get token', token);
+      
+    } catch (error) {
+      console.error('Error fetching token', error);
+    }
   };
 
-  const openCloseModalViewDetail = (product?: Product) => {
-    setSelectedProduct(product || null);
+
+  
+
+  const handleDeleteProduct = async (product: Product | null) => {
+  
+     
+
+    if (!product) {
+      console.log("No product selected for deletion");  
+      return;
+    }
+
+    try {
+      const response = await axios.delete(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/products/${product._id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      toast.success('Deleted Sucessfully');
+
+      fetchProducts();
+      
+      setIsModalConfirmationDeleteOpen(!isModalConfirmationDeleteOpen);
+    } catch (error) {
+      console.error('Error when deleting products ', error);
+    } 
+    
+  };
+  
+
+  const handleOpenCloseModalConfirmationDelete = (product?:Product) => {
+    setSelectedDeleteProduct(product || null);
+    setIsModalConfirmationDeleteOpen(!isModalConfirmationDeleteOpen);
+  };
+  const handleOpenCloseModalViewDetail = (product?: Product) => {
+    setSelectedViewDetailProduct(product || null);
     setIsModalViewDetailOpen(!isModalViewDetailOpen);
   }
 
-  const router = useRouter();
+
 
   const handleToPageEdit = () => {
 
@@ -87,7 +153,19 @@ const ProductPage = ({ initialProducts }: ProductsProps) => {
         <HeaderContentAdmin
           header="Products"
           subHeader="List of all products"
+          columns={[
+            { key: 'no', label: 'Number' },
+            { key: 'productCode', label: 'Product Code' },
+            { key: 'name', label: 'Name' },
+            { key: 'quantity', label: 'Quantity' },
+            { key: 'price', label: 'Price' },
+            { key: 'statusPublish', label: 'Status' },
+            { key: 'category', label: 'Category' },
+          ]}
+          totalItems={totalItems}
+          onChangeDropDownShowLimitData={setLimit}
           backPage={() => { console.log("Back") }}
+          toAddPage={() => router.push('/admin/products/add')}
         />
 
         {!isLoading ? (
@@ -95,49 +173,40 @@ const ProductPage = ({ initialProducts }: ProductsProps) => {
           data={products}
           columns={[
             { key: 'no', label: 'Number' },
-            { key: 'image', label: 'Image' },
+            { key: 'productCode', label: 'Product Code' },
             { key: 'name', label: 'Name' },
             { key: 'quantity', label: 'Quantity' },
             { key: 'price', label: 'Price' },
             { key: 'statusPublish', label: 'Status' },
             { key: 'category', label: 'Category' },
           ]}
-          onInfo={(id) => openCloseModalViewDetail(products.find(product => product.id === id))}
+          onInfo={(id) => handleOpenCloseModalViewDetail(products.find(product => product.id === id))}
           onEdit={handleToPageEdit}
-          onDelete={openModalConfirmationDelete}
+          onDelete={(id) => handleOpenCloseModalConfirmationDelete(products.find(product => product.id === id))}
           tableType="products"
+          page={page}
+          limit={limit}
+          totalItems={totalItems}
+          onPageChange={setPage}
         />
         ): (<div>Loading...</div>)}
-
-
-        {/* <TableComponents
-          data={[
-            { id: 1, name: 'Laptop ASUS', price: 8000000, image: '/laptop.jpg' },
-            { id: 2, name: 'iPhone 13', price: 12000000, image: '/iphone.jpg' },
-          ]}
-          columns={[
-            { key: 'name', label: 'Product Name' },
-            { key: 'price', label: 'Price' },
-            { key: 'image', label: 'Image' },
-          ]}
-          tableType="product"
-          onInfo={(id) => console.log("Info", id)}
-          onEdit={(id) => console.log("Edit", id)}
-          onDelete={(id) => console.log("Delete", id)}
-        /> */}
 
       </div>
 
       <ModalViewDetails
         isOpen={isModalViewDetailOpen}
-        onClose={openCloseModalViewDetail}
-        data={selectedProduct}
+        onClose={handleOpenCloseModalViewDetail}
+        data={selectedViewDetailProduct}
       />
 
       <ModalConfirmationDelete
         isOpen={isModalConfirmationDeleteOpen}
-        onClose={closeModalConfirmationDelete}
-        onConfirm={closeModalConfirmationDelete} />
+        onClose={handleOpenCloseModalConfirmationDelete}
+        // onConfirm={() => handleDeleteProduct} 
+        onConfirm={() => handleDeleteProduct(selectedDeleteProduct)} 
+        />
+
+        <Toaster />
     </>
   );
 };
