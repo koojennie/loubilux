@@ -20,6 +20,16 @@ app.use(
 
 app.use(express.json());
 
+// app.use((req, res, next) => {
+//   let data = [];
+//   req.on("data", chunk => data.push(chunk));
+//   req.on("end", () => {
+//     console.log("🟡 Raw Request Body:", Buffer.concat(data).toString());
+//     next();
+//   });
+// });
+
+
 app.use('/api/v1', routes);
 
 // not found routes

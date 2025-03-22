@@ -26,7 +26,7 @@ const ProductSchema = new mongoose.Schema(
             type: String,
             default: "",
         },
-        image: [{
+        images: [{
             type: String,
             default: "",
         }],
@@ -47,13 +47,14 @@ ProductSchema.pre('save', async function (next) {
     if (!this.isNew) return next(); 
 
     try {
-        const category = await mongoose.model('Category').findById(this.categoryId);
+        const category = await mongoose.model('Category').findById(this.category);        
+
         if (!category) {
             throw new Error('Category not found'); 
         }
 
-        const prefix = category.prefix
-        const lastProduct = await this.constructor.findOne({ categoryId: this.categoryId })
+        const prefix = category.prefix;
+        const lastProduct = await this.constructor.findOne({ category: this.category })
             .sort({ createdAt: -1 }) 
             .select('productCode');
 
