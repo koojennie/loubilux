@@ -2,30 +2,47 @@
 
 import React, { useState } from 'react';
 import { Column } from '../Table/RenderCellComponent'
+import {Product} from '../../../app/admin/products/page'
 
 interface HeaderContentAdminProps {
   header: string;
   subHeader: string;
-  columns: Column<JSON>[]
+  columns: Column<Product>[]
   totalItems: number;
-  onChangeDropDownShowLimitData: (value: number) => void;
+  onChangeDropDownSortBy: (value:string) => void;
+  onChangeDropDownOrderBy: (value:string) => void;
+  onChangeDropDownLimitData: (value: number) => void;
+  onChangeSearchQuery: (value:string) => void;
   toAddPage: () => void;
   backPage: () => void;
 }
 
-const HeaderContentAdmin = ({ header, subHeader, toAddPage, totalItems, columns ,onChangeDropDownShowLimitData }: HeaderContentAdminProps) => {
+const HeaderContentAdmin = ({ header, subHeader, toAddPage, totalItems, columns, onChangeDropDownLimitData, onChangeDropDownSortBy, onChangeDropDownOrderBy, onChangeSearchQuery}: HeaderContentAdminProps) => {
 
   const [selectedLimit, setSelectedLimit] = useState<number>(5);
-  const [selectedSortBy, setSelectedSortBy] = useState<string>('name');
+  const [selectedSortBy, setSelectedSortBy] = useState<string>('no');
+  const [selectedSortOrderBy, setSelectedSortOrderBy] = useState<string>('asc');
+  const [searchQuery, setSearchQuery] = useState<string>('');
 
   const handleSelectLimit = (value: number) => {
     setSelectedLimit(value);
-    onChangeDropDownShowLimitData(value);
+    onChangeDropDownLimitData(value);
   };
 
   const handleSelectSortBy = (value: string) => {
     setSelectedSortBy(value);
+    onChangeDropDownSortBy(value);
   };
+
+  const handleSelectOrderBy = (value: string) => {
+    setSelectedSortOrderBy(value);
+    onChangeDropDownOrderBy(value);
+  }
+
+  const handleSearchQuery = (value: string) => {
+    setSearchQuery(value);
+    onChangeSearchQuery(value);
+  }
 
   return (
     <div className="relative mx-4 mt-4 overflow-hidden text-gray-700 rounded-none bg-clip-border">
@@ -40,13 +57,11 @@ const HeaderContentAdmin = ({ header, subHeader, toAddPage, totalItems, columns 
         </div>
 
         <div className="flex flex-col gap-2 shrink-0 sm:flex-row">
-
           <button
             className="flex select-none items-center gap-3 rounded-lg bg-gray-900 py-2 px-4 text-center align-middle font-sans text-xs font-bold uppercase text-white shadow-md shadow-gray-900/10 transition-all hover:shadow-lg hover:shadow-gray-900/20 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
             type="button"
             onClick={toAddPage}
           >
-
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
@@ -62,11 +77,11 @@ const HeaderContentAdmin = ({ header, subHeader, toAddPage, totalItems, columns 
         </div>
       </div>
       <div className="flex flex-col items-center justify-between mb-3 gap-4 md:flex-row">
-        {/* Dropdown show data limit */}
-        {/* Dropdown sort by  */}
+
+        {/* Dropdown show data */}
         <div className="block w-full overflow-hidden md:w-max">
           <p className="block mt-2 font-sans text-xs antialiased font-normal leading-relaxed text-gray-700">
-            Sort By
+            Show Data
           </p>
           <div className="relative">
             <select
@@ -89,29 +104,52 @@ const HeaderContentAdmin = ({ header, subHeader, toAddPage, totalItems, columns 
         </div>
          {/* Dropdown Sort By */}
          <div className="block w-full md:w-max">
-          <p className="mt-2 text-xs text-gray-700">Show Data</p>
+          <p className="mt-2 text-xs text-gray-700">Order By</p>
           <div className="relative">
             <select
-              className="w-full text-xs border rounded pl-3 pr-6 py-2 focus:outline-none cursor-pointer"
+              className="w-full text-xs border rounded pl-2 py-2 focus:outline-none cursor-pointer"
               value={selectedSortBy}
               onChange={(e) => handleSelectSortBy(e.target.value)}
             >
               {columns.map((column) => (
-                <option key={String(column.key)} value={String(column.key)}>
-                  {column.label}
-                </option>
+              <option
+                key={String(column.key)}
+                value={String(column.key === 'no' ? 'createdAt' : column.key)}
+                disabled={selectedSortBy === String(column.key === 'no' ? 'createdAt' : column.key)}
+              >
+                {column.label}
+              </option>
               ))}
             </select>
           </div>
         </div>
+
+        {/* DropDown Order By*/}
+        <div className="block w-full md:w-max">
+          <p className="mt-2 text-xs text-gray-700">Sort By</p>
+          <div className="relative">
+            <select
+              className="w-full text-xs border rounded pl-2 py-2 focus:outline-none cursor-pointer"
+              value={selectedSortOrderBy}
+              onChange={(e) => handleSelectOrderBy(e.target.value)}
+            >
+              <option value="asc">Ascending</option>
+              <option value="desc">Descending</option>
+              
+            </select>
+          </div>
+        </div>
         
-        <div className="block min-w-[500px]"></div>
+        <div className="block min-w-[100px] md:min-w-[400px]"></div>
+
         <div className="w-full md:w-72">
           <div className="ml-3">
-            <div className="w-full max-w-sm min-w-[200px] relative">
+            <div className="w-full max-w-sm min-w-[150px] relative">
               <input
-                className="w-full pr-11 h-10 pl-3 py-2 bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded transition duration-300 focus:outline-none focus:border-slate-400 hover:border-slate-400 shadow-sm focus:shadow-md"
-                placeholder="Search for products..."
+                className="w-full pr-11 h-10 pl-3 bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded transition duration-300 focus:outline-none focus:border-slate-400 hover:border-slate-400 shadow-sm focus:shadow-md"
+                placeholder="Search for products name..."
+                value={searchQuery}
+                onChange={(e) => handleSearchQuery(e.target.value)}
               />
               <button className="absolute h-8 w-8 right-1 top-1 my-auto px-2 flex items-center bg-white rounded" type="button">
                 <svg

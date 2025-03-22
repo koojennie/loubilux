@@ -7,25 +7,28 @@ import ModalConfirmation from "../Modal/ModalConfirmation";
 import ModalConfirmationDelete from "../Modal/ModalConfirmationDelete";
 
 interface ProductFormProps {
-  onSubmit: (formData: any) => void;
+  onSubmit?: (formData: any) => void;
+  onEditSubmit?: (formData: any) => void;
+  isEdit?: boolean;
+  initialData?: any;
 }
 
-const ProductForm: React.FC<ProductFormProps> = ({ onSubmit }) => {
+const ProductForm: React.FC<ProductFormProps> = ({ onSubmit, onEditSubmit ,isEdit = false, initialData }) => {
   const router = useRouter();
 
   // state Option Category
   const [optionCategories, setOptionCategories] = useState([]);
 
   // state form
-  const [generatedProductCode, setGenerateProductCode] = useState<string>("");
-  const [productName, setProductName] = useState<string>("");
-  const [selectedCategory, setSelectedCategory] = useState<string>("");
-  const [quantity, setQuantity] = useState<string>("");
-  const [price, setPrice] = useState<string>("");
-  const [displayPrice, setDisplayPrice] = useState<string>("");
-  const [statusPublish, setStatusPublish] = useState<string>("draft");
-  const [descriptionProduct, setDescriptionProduct] = useState<string>("");
-  const [images, setImages] = useState<string[]>([]);
+  const [generatedProductCode, setGenerateProductCode] = useState(initialData?.productCode || "");
+  const [productName, setProductName] = useState(initialData?.name || "");
+  const [selectedCategory, setSelectedCategory] = useState(initialData?.category || "");
+  const [quantity, setQuantity] = useState(initialData?.quantity?.toString() || "");
+  const [price, setPrice] = useState(initialData?.price?.toString() || "");
+  const [displayPrice, setDisplayPrice] = useState(initialData?.price ? new Intl.NumberFormat("id-ID").format(initialData.price) : "");
+  const [statusPublish, setStatusPublish] = useState(initialData?.statusPublish || "draft");
+  const [descriptionProduct, setDescriptionProduct] = useState(initialData?.description || "");
+  const [images, setImages] = useState(initialData?.images || []);
 
   // state open modal 
   const [isOpenCloseModalConfirmation, setIsOpenCloseModalConfirmation] = useState<boolean>(false);
@@ -91,17 +94,14 @@ const ProductForm: React.FC<ProductFormProps> = ({ onSubmit }) => {
       images,
     };
 
-    onSubmit(formData);
+    if (isEdit && onEditSubmit) {
+      onEditSubmit(formData); 
+    } else if (!isEdit && onSubmit) {
+      onSubmit(formData); 
+    }
+
+    // onSubmit(formData);
     setIsOpenCloseModalConfirmation(false);
-    
-  }
-
-  // handle Delete
-  const handleDelete = (e: React.FormEvent) => {
-
-    // const
-
-    setIsOpenCloseModalDeleteConfirmation(false)
   }
 
   return (
@@ -121,6 +121,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ onSubmit }) => {
               <div className="w-full">
                 <p className="block mb-2 font-semibold text-base text-slate-600">Product Code</p>
                 <p className="text-slate-500 text-sm truncate">{generatedProductCode || `Please Choose Category first`}</p>
+                <p className="text-slate-500 text-sm truncate">{productName}</p>
                 <input type="hidden" name='productCode' value={generatedProductCode} />
               </div>
 
@@ -133,7 +134,8 @@ const ProductForm: React.FC<ProductFormProps> = ({ onSubmit }) => {
                   placeholder="0"
                   min="0"
                   value={quantity}
-                  onChange={(e) => {const value = e.target.value;
+                  onChange={(e) => {
+                    const value = e.target.value;
                     if (/^\d*$/.test(value)) {
                       setQuantity(value);
                     }
@@ -149,7 +151,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ onSubmit }) => {
                   className="w-full h-10 bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded px-3 shadow-sm focus:border-slate-400"
                   placeholder="Enter Product Name"
                   value={productName}
-                  onChange={(e) => {setProductName(e.target.value)}
+                  onChange={(e) => { setProductName(e.target.value) }
                   }
                 />
               </div>
@@ -172,9 +174,9 @@ const ProductForm: React.FC<ProductFormProps> = ({ onSubmit }) => {
                       setDisplayPrice(value
                         ? new Intl.NumberFormat("id-ID").format(Number(value))
                         : "");
-                        if (/^\d*$/.test(value)) {
-                        }
-                      }}
+                      if (/^\d*$/.test(value)) {
+                      }
+                    }}
                   />
                 </div>
               </div>
@@ -203,7 +205,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ onSubmit }) => {
                 <label className="block mb-1 text-sm text-slate-700">Status Publish</label>
                 <select className="w-full h-10 bg-transparent text-slate-700 text-sm border border-slate-200 rounded px-3 shadow-sm focus:border-slate-400"
                   value={statusPublish}
-                  onChange={(e) => {setStatusPublish(e.target.value)}}
+                  onChange={(e) => { setStatusPublish(e.target.value) }}
                 >
                   <option value={'draft'}>Draft</option>
                   <option value={'active'}>Active</option>
@@ -218,8 +220,8 @@ const ProductForm: React.FC<ProductFormProps> = ({ onSubmit }) => {
                   className="bg-transparent border border-gray-300 text-slate-700 text-sm rounded-lg focus:ring-2 focus:ring-fuchsia-50 focus:border-fuchsia-300 block w-full p-2.5"
                   placeholder="Leave a description product..."
                   value={descriptionProduct}
-                  onChange={(e) => {setDescriptionProduct(e.target.value)}
-                }
+                  onChange={(e) => { setDescriptionProduct(e.target.value) }
+                  }
                 >
                 </textarea>
 
@@ -228,8 +230,8 @@ const ProductForm: React.FC<ProductFormProps> = ({ onSubmit }) => {
 
 
             <div className="col-span-1">
-            <label className="block mb-1 text-sm text-slate-700">Image</label>
-              <ImageUploader images={images} setImages={setImages}/>
+              <label className="block mb-1 text-sm text-slate-700">Image</label>
+              <ImageUploader images={images} setImages={setImages} />
             </div>
           </div>
 
@@ -263,7 +265,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ onSubmit }) => {
         textModal="Are you sure add this product?"
       />
 
-  {/* <ModalConfirmationDelete 
+      {/* <ModalConfirmationDelete 
     isOpen={isOpenCloseModalDeleteConfirmation}
     onClose={()=> setIsOpenCloseModalDeleteConfirmation(false)}
     onConfirm={}

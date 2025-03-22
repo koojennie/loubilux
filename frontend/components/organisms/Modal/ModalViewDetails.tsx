@@ -1,5 +1,11 @@
 import Image from "next/image";
 import React from "react";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Pagination, Navigation } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/pagination";
+import "swiper/css/navigation";
+
 
 interface ModalViewDetailsProps {
   isOpen: boolean;
@@ -8,9 +14,11 @@ interface ModalViewDetailsProps {
 }
 
 const ModalViewDetails = ({ isOpen, onClose, data }: ModalViewDetailsProps) => {
+  
   if (!isOpen || !data) return null;
 
   const valueStatus = data.statusPublish;
+  const images = data.images ?? []; 
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-xs transition-opacity duration-300">
@@ -28,14 +36,11 @@ const ModalViewDetails = ({ isOpen, onClose, data }: ModalViewDetailsProps) => {
             {data.name}
           </p>
           <p className="mb-4 mt-1 text-sm truncate text-slate-400">
-            {data.description || 'No description'} 
+            {/* {data.description || 'No description'}  */}
+            {data.productCode}
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="grid grid-rows-1 md:grid-cols-2 gap-4">
-              <div className="w-full">
-                <p className="block mb-2 font-semibold text-base text-slate-600">Product Code</p>
-                <p className="text-slate-500 text-sm truncate">{data.productCode}</p>
-              </div>
               <div className="w-full">
                 <p className="block mb-2 font-semibold text-base text-slate-600">Quantity</p>
                 <p className="text-slate-500 text-sm truncate">{data.quantity}</p>
@@ -55,10 +60,45 @@ const ModalViewDetails = ({ isOpen, onClose, data }: ModalViewDetailsProps) => {
                 <p className="block mb-2 font-semibold text-base text-slate-600">Price</p>
                 <p className="text-slate-500 text-sm truncate">Rp {new Intl.NumberFormat('id-ID').format(data.price)}</p>
               </div>
+              <div className="w-full">
+                <p className="block mb-2 font-semibold text-base text-slate-600">Category</p>
+                <p className="text-slate-500 text-sm truncate">{data.category}</p>
+              </div>
+              <div className="w-full col-span-2">
+                <p className="block mb-2 font-semibold text-base text-slate-600">Description Product</p>
+                {/* <p className="text-slate-500 text-sm truncate">{data.description}</p> */}
+                <p className="mb-4 mt-1 text-sm truncate text-slate-400">{data.description}</p>
+              </div>
             </div>
+            {/* Right Section (Image Swiper) */}
             <div className="flex flex-col items-center">
-              <label className="block mb-1 text-sm text-slate-700">Preview Image</label>
-              <Image src={data.image} width={100} height={100} alt="Product Image" />
+              <p className="font-semibold text-sm text-slate-700">Preview Image</p>
+              {images.length > 0 ? (
+                <Swiper
+                  pagination={{ type: "fraction" }}
+                  navigation={true} 
+                  modules={[Pagination, Navigation]}
+                  className="w-full h-48 rounded-lg overflow-hidden"
+                >
+                  {images.map(({imgSrc, index}:any) => (
+                    <SwiperSlide key={index}>
+                      <div className="relative w-full h-64 pl-25 pt-20">
+                        <Image
+                          src={imgSrc}
+                          alt={`Product Image ${index + 1}`}
+                          width={150}
+                          height={150}
+                          // fill
+                          objectFit="cover"
+                          className="rounded-lg"
+                        />
+                      </div>
+                    </SwiperSlide>
+                  ))}
+                </Swiper>
+              ) : (
+                <p className="text-gray-500 text-sm mt-2">No image available</p>
+              )}
             </div>
           </div>
         </div>

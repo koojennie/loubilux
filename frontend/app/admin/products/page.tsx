@@ -16,9 +16,10 @@ type Category = {
   description: string;
 }
 
-type Product = {
+export type Product = {
   _id: string;
   id: string;
+  no: number;
   name: string;
   productCode: string;
   quantity: number;
@@ -26,7 +27,6 @@ type Product = {
   statusPublish: string;
   image: string;
   category: Category;
-  no: number;
 }
 
 type ProductsProps = {
@@ -44,12 +44,14 @@ const ProductPage = ({ initialProducts }: ProductsProps) => {
   const [page, setPage] = useState<number>(1);
   const [totalItems, setTotalItems] = useState<number>(1);
   const [limit, setLimit] = useState<number>(5);
-  // const limit = 5;
-
+  const [sortBy, setSortBy] = useState<string>('createdAt');
+  const [orderBy, setOrderBy] = useState<string>('asc');
+  const [searchQuery, setSearchQuery] = useState<string>('');
   const [isModalConfirmationDeleteOpen, setIsModalConfirmationDeleteOpen] = useState<boolean>(false);
   const [isModalViewDetailOpen, setIsModalViewDetailOpen] = useState<boolean>(false);
   const [token, setToken] = useState<string>('');
-
+  
+  // const limit = 5;
 
   // const [itemsToShow, setItemsToShow] = useState(5);
 
@@ -59,12 +61,12 @@ const ProductPage = ({ initialProducts }: ProductsProps) => {
     
     fetchProducts();
     fetchToken();
-  }, [page, limit]);
+  }, [page, limit, sortBy, orderBy, searchQuery]);
 
   const fetchProducts = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/products?page=${page}&limit=${limit}`);
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/products?page=${page}&limit=${limit}&sortBy=${sortBy}&sortOrder=${orderBy}&searchQuery=${searchQuery}`);
       const results = await response.json();
       results.data = results.data.map((product: any, index: number) => ({
         id: product._id,
@@ -75,7 +77,7 @@ const ProductPage = ({ initialProducts }: ProductsProps) => {
       }));
       setProducts(results.data);
       setTotalItems(results.total)
-      console.log("Products", results.data);
+      console.log("sortby ", orderBy);
     } catch (error) {
       console.error("Error fetching products", error);
     }
@@ -97,13 +99,7 @@ const ProductPage = ({ initialProducts }: ProductsProps) => {
     }
   };
 
-
-  
-
   const handleDeleteProduct = async (product: Product | null) => {
-  
-     
-
     if (!product) {
       console.log("No product selected for deletion");  
       return;
@@ -135,12 +131,11 @@ const ProductPage = ({ initialProducts }: ProductsProps) => {
     setSelectedDeleteProduct(product || null);
     setIsModalConfirmationDeleteOpen(!isModalConfirmationDeleteOpen);
   };
+
   const handleOpenCloseModalViewDetail = (product?: Product) => {
     setSelectedViewDetailProduct(product || null);
     setIsModalViewDetailOpen(!isModalViewDetailOpen);
   }
-
-
 
   const handleToPageEdit = () => {
 
@@ -163,7 +158,10 @@ const ProductPage = ({ initialProducts }: ProductsProps) => {
             { key: 'category', label: 'Category' },
           ]}
           totalItems={totalItems}
-          onChangeDropDownShowLimitData={setLimit}
+          onChangeDropDownLimitData={setLimit}
+          onChangeDropDownOrderBy={setOrderBy}
+          onChangeDropDownSortBy={setSortBy}
+          onChangeSearchQuery={setSearchQuery}
           backPage={() => { console.log("Back") }}
           toAddPage={() => router.push('/admin/products/add')}
         />
