@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
+import AOSProvider from "@/components/providers/AOSProvider";
 import "bootstrap/dist/css/bootstrap.min.css"; 
 import "aos/dist/aos.css";
 import "@/app/utilities.css";
@@ -12,7 +13,8 @@ import "@/app/transactions.css";
 import "@/app/transactions-detail.css";
 import "@/app/edit-profile.css";
 import "@/app/navbar-log-in.css";
-// import "./globals.css";
+import "@/app/sidebar.css";
+import "./globals.css";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -35,7 +37,9 @@ export default function RootLayout({
       <body
         className={`${poppins.variable} antialiased`}
       >
-        {children}
+        <AOSProvider>
+          {children}
+        </AOSProvider>
       </body>
     </html>
   );

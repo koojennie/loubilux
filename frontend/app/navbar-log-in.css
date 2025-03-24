@@ -1,15 +1,15 @@
 /* Navbar */
 .navbar-light .navbar-nav .nav-link.active, .navbar-light .navbar-nav .show>.nav-link{
     font-weight: 500;
-    color: #0C145A;
+    color: #705C53;
 }
 
 .navbar-light .navbar-nav .nav-link:hover{
-    color: #0C145A;
+    color: #705C53;
 }
 
 .navbar-light .navbar-nav .nav-link{
-    color: #7E8CAC;
+    color: #BFB29E;
 }
 
 .navbar-light .btn-sign-in{
