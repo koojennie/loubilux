@@ -1,19 +1,27 @@
 const mongoose = require('mongoose');
 const Product = require('../models/product.model');
 const Category = require('../models/category.model');
+const cloudinary = require('../lib/cloudinary');
 
 const createProduct = async (req, res) => {
-    try {
-        const { name, quantity, price, description, image, category } = req.body;
 
-        if (!name || quantity === undefined || price === undefined || !category) {
-            return res.status(400).json({ status: 'error', message: 'Name, quantity, price, and category are required' });
+    try {
+        let { productCode, name, quantity, price, description, images, category } = req.body;
+        
+        quantity = Number(quantity);
+        price = Number(price);
+
+        if (!name || quantity === undefined || price === undefined || !category || !productCode) {
+            return res.status(400).json({ status: 'error', message: 'Product Code, Name, quantity, price, and category are required' });
         }
 
         if (!mongoose.isValidObjectId(category)) {
             return res.status(400).json({ status: 'error', message: 'Invalid category ID' });
         }
 
+        console.log("ini adalah quantity", typeof(quantity));
+
+        
         if (!Number.isInteger(quantity) || quantity < 0) {
             return res.status(400).json({ status: 'error', message: 'Quantity must be a non-negative integer' });
         }
@@ -31,13 +39,30 @@ const createProduct = async (req, res) => {
             return res.status(404).json({ status: 'error', message: 'Category not found' });
         }
 
+        let imageUrls = [];
+
+        if (req.body.images && req.body.images.length > 0) {
+          
+            for (const imageBase64 of req.body.images) {
+              try {
+                const uploadedResponse = await cloudinary.uploader.upload(imageBase64, {
+                  upload_preset: "ml_default",
+                });
+                imageUrls.push(uploadedResponse.secure_url);
+              } catch (error) {
+                console.error("Cloudinary Upload Error:", error);
+              }
+            }
+          }
+
         const newProduct = await Product.create({
-            name,
-            quantity,
-            price,
-            description,
-            image: image || '',
-            category
+        productCode,
+        name,
+        quantity,
+        price,
+        description,
+        images: imageUrls.length > 0 ? imageUrls : [], 
+        category,
         });
 
         return res.status(201).json({ status: 'success', message: 'Product created successfully', data: newProduct });
@@ -50,13 +75,46 @@ const createProduct = async (req, res) => {
 
 const getAllProducts = async (req, res) => {
     try {
-        const products = await Product.find().populate('category', 'name description').lean();
-        return res.status(200).json({ status: 'success', message: 'Products retrieved successfully', data: products });
+        let { page, limit, sortOrder, sortBy, searchQuery } = req.query;
+        page = parseInt(page) || 1; 
+        limit = parseInt(limit) || 10; 
+        sortOrder = sortOrder === 'desc' ? -1 : 1; // Default ascending (1), descending (-1)
+        
+        const sortOptions = {};
+        if (sortBy) {
+            sortOptions[sortBy] = sortOrder;
+        }
+
+        const query = {};
+        if (searchQuery) {
+            query.name = { $regex: searchQuery, $options: 'i' }; // Case-insensitive search
+        }
+
+        const totalProducts = await Product.countDocuments(query); 
+        const totalPages = Math.ceil(totalProducts / limit);
+
+        const products = await Product.find(query)
+            .populate('category', 'name description')
+            .sort(sortOptions)
+            .skip((page - 1) * limit) 
+            .limit(limit) 
+            .lean();
+
+        return res.status(200).json({
+            status: 'success',
+            message: 'Products retrieved successfully',
+            total: totalProducts, 
+            page,
+            limit,
+            totalPages, 
+            data: products
+        });
     } catch (error) {
         console.error('Error retrieving products:', error);
         return res.status(500).json({ status: 'error', message: 'Internal Server Error' });
     }
 };
+
 
 const getProductById = async (req, res) => {
     try {
@@ -82,7 +140,7 @@ const getProductById = async (req, res) => {
 const updateProduct = async (req, res) => {
     try {
         const { id } = req.params;
-        const { name, quantity, price, description, image, category } = req.body;
+        const { name, quantity, price, description, image, category, statusPublish } = req.body;
 
         if (!mongoose.isValidObjectId(id)) {
             return res.status(400).json({ status: 'error', message: 'Invalid product ID' });
@@ -120,6 +178,9 @@ const updateProduct = async (req, res) => {
         }
         if (image) updates.image = image;
 
+        if (statusPublish) updates.statusPublish = statusPublish;
+
+
         const updatedProduct = await Product.findByIdAndUpdate(id, updates, { new: true, runValidators: true }).lean();
         if (!updatedProduct) {
             return res.status(404).json({ status: 'error', message: 'Product not found' });
@@ -154,10 +215,33 @@ const deleteProduct = async (req, res) => {
     }
 };
 
+const countProductByCategory = async (req, res) => {
+    try {
+        const { categoryId } = req.query;
+        if(!categoryId){
+            return res.status(400).json({status: "error", message:"Category ID is required"});
+        }
+
+        const category = await Category.findById(categoryId);
+
+        if(!category){
+            return res.status(404).json({status: "error", message: "category not found"});
+        }
+
+        const countProductByCategory = await Product.countDocuments({ category: categoryId });
+
+        return res.status(200).json({status: "success", prefix: category.prefix, countProductByCategory});
+        
+    } catch (error) {
+        return res.status(500).json({status: 'error', message: 'error fetching product count', error: error.mesage})
+    }
+}
+
 module.exports = {
     createProduct,
     getAllProducts,
     getProductById,
     updateProduct,
-    deleteProduct
+    deleteProduct,
+    countProductByCategory
 };

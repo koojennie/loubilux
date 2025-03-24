@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Head from 'next/head'
 import { Poppins } from "next/font/google";
 import AOSProvider from "@/components/providers/AOSProvider";
 import "bootstrap/dist/css/bootstrap.min.css"; 
@@ -25,6 +26,7 @@ const poppins = Poppins({
 export const metadata: Metadata = {
   title: "Loubilux by Loubi.shop",
   description: "Made by Alia",
+
 };
 
 export default function RootLayout({
@@ -34,6 +36,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <Head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      </Head>
       <body
         className={`${poppins.variable} antialiased`}
       >
