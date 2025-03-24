@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { FaCartShopping } from "react-icons/fa6";
 
 interface AuthProps {
     isLogin?: boolean;
@@ -7,11 +8,17 @@ export default function Auth(props: Partial<AuthProps>) {
   const { isLogin } = props;
   if (isLogin) {
     return (
-      <li className="nav-item my-auto dropdown d-flex">
+      <li className="nav-item my-auto dropdown flex flex-col md:flex-col lg:flex-row gap-3 md:gap-6 lg:gap-6 lg:items-center">
         <div className="vertical-line d-lg-block d-none"></div>
-        <div>
+        <div className="relative dropdown-toggle ms-lg-25">
+          <FaCartShopping className="text-3xl color-palette-1 cursor-pointer mb-16 mt-16" />
+          <span className="absolute top-2 left-4 md:top-2 md:left-4 lg:top-2 lg:-right-3 bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">
+            0
+          </span>
+        </div>
+        <div className="sm:relative">
           <a
-            className="dropdown-toggle ms-lg-40"
+            className="dropdown-toggle ms-lg-25"
             href="#"
             role="button"
             id="dropdownMenuLink"
@@ -19,7 +26,7 @@ export default function Auth(props: Partial<AuthProps>) {
             aria-expanded="false"
           >
             <img
-              src="/img/avatar-1.png"
+              src="/img/user-loubilux.svg"
               className="rounded-circle"
               width="40"
               height="40"

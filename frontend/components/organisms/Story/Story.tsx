@@ -9,7 +9,7 @@ export default function Story() {
           >
             <img
               className="img-fluid"
-              src="/img/Header-9.png"
+              src="/img/story.svg"
               width={612}
               height={452}
               alt="header"
@@ -18,22 +18,22 @@ export default function Story() {
           <div className="col-lg-5 col-12 ps-lg-60">
             <div className="">
               <h2 className="text-4xl fw-bold color-palette-1 mb-30">
-                Win the battle.
-                <br /> Be the Champion.
+                Own the Luxury.
+                <br /> Embrace the Elegance.
               </h2>
               <p className="text-lg color-palette-1 mb-30">
-                Kami menyediakan jutaan cara untuk
+                We provide premium branded bags and 
                 <br className="d-sm-block d-none" />
-                membantu players menjadi
-                <br className="d-sm-block d-none" /> pemenang sejati
+                luxury items with honesty and integrity,
+                <br className="d-sm-block d-none" /> hassle-free service, and COD available for your convenience. 
               </p>
               <div className="d-md-block d-flex flex-column w-100">
                 <a
-                  className="btn btn-read text-lg rounded-pill"
-                  href="#"
+                  className="btn btn-read text-white rounded-pill"
+                  href="./about-us"
                   role="button"
                 >
-                  Read Story
+                  Read Our Story
                 </a>
               </div>
             </div>
