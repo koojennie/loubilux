@@ -16,122 +16,111 @@ export default function Footer() {
                 />
               </a>
               <p className="mt-30 text-lg color-palette-1 mb-30">
-                StoreGG membantu gamers
-                <br /> untuk menjadi pemenang sejati
+                Selling Your Most Wanted Authentic
+                <br />Luxury Since 2023, Trusted & Reliable
               </p>
               <p className="mt-30 text-lg color-palette-1 mb-30">
-                Copyright 2021. All Rights Reserved.
+                Copyright 2025. All Rights Reserved.
               </p>
             </div>
             <div className="col-lg-8 mt-lg-0 mt-20">
               <div className="row gap-sm-0">
                 <div className="col-md-4 col-6 mb-lg-0 mb-25">
                   <p className="text-lg fw-semibold color-palette-1 mb-12">
-                    Company
+                    Marketplace
                   </p>
                   <ul className="list-unstyled">
                     <li className="mb-6">
                       <a
-                        href=""
-                        className="text-lg color-palette-1 text-decoration-none"
+                        href="https://chat.whatsapp.com/DGoYM1AHpH36PYYS2qNRbK"
+                        className="text-lg color-palette-1 !hover:text-black !no-underline"
                       >
-                        About Us
+                        WhatsApp Group
                       </a>
                     </li>
                     <li className="mb-6">
                       <a
-                        href=""
-                        className="text-lg color-palette-1 text-decoration-none"
+                        href="https://shopee.co.id/loubi.shop24"
+                        className="text-lg color-palette-1 !hover:text-black !no-underline"
                       >
-                        Press Release
+                        Shopee
                       </a>
                     </li>
                     <li className="mb-6">
                       <a
-                        href=""
-                        className="text-lg color-palette-1 text-decoration-none"
+                        href="https://www.tokopedia.com/loukiesshop"
+                        className="text-lg color-palette-1 !hover:text-black !no-underline"
                       >
-                        Terms of Use
+                        Tokopedia
                       </a>
                     </li>
                     <li className="mb-6">
                       <a
-                        href=""
-                        className="text-lg color-palette-1 text-decoration-none"
+                        href="https://www.instagram.com/loubi.shop24/"
+                        className="text-lg color-palette-1 !hover:text-black !no-underline"
                       >
-                        Privacy & Policy
+                        Instagram
                       </a>
                     </li>
                   </ul>
                 </div>
                 <div className="col-md-4 col-6 mb-lg-0 mb-25">
                   <p className="text-lg fw-semibold color-palette-1 mb-12">
-                    Support
+                    Content
                   </p>
                   <ul className="list-unstyled">
                     <li className="mb-6">
                       <a
-                        href=""
-                        className="text-lg color-palette-1 text-decoration-none"
+                        href="/"
+                        className="text-lg color-palette-1 !hover:text-black !no-underline"
                       >
-                        Refund Policy
+                        Home
                       </a>
                     </li>
                     <li className="mb-6">
                       <a
-                        href=""
-                        className="text-lg color-palette-1 text-decoration-none"
+                        href="/catalog"
+                        className="text-lg color-palette-1 !hover:text-black !no-underline"
                       >
-                        Unlock Rewards
+                        Catalog
                       </a>
                     </li>
                     <li className="mb-6">
                       <a
-                        href=""
-                        className="text-lg color-palette-1 text-decoration-none"
+                        href="/about-us"
+                        className="text-lg color-palette-1 !hover:text-black !no-underline"
                       >
-                        Live Chatting
+                        About Us
                       </a>
                     </li>
                   </ul>
                 </div>
                 <div className="col-md-4 col-12 mt-lg-0 mt-md-0 mt-25">
                   <p className="text-lg fw-semibold color-palette-1 mb-12">
-                    Connect
+                    Business Hour
                   </p>
                   <ul className="list-unstyled">
-                    <li className="mb-6">
+                  <li className="mb-6">
                       <a
-                        href="mailto: hi@store.gg"
-                        className="text-lg color-palette-1 text-decoration-none"
+                        href="https://wa.me/6281212768921"
+                        className="text-lg color-palette-1 !hover:text-black !no-underline"
                       >
-                        hi@store.gg
+                        WhatsApp
                       </a>
                     </li>
                     <li className="mb-6">
-                      <a
-                        href="mailto: team@store.gg"
-                        className="text-lg color-palette-1 text-decoration-none"
+                      <p
+                        className="text-lg color-palette-1"
                       >
-                        team@store.gg
-                      </a>
+                        Monday - Friday: 09:00 - 21:00
+                      </p>
                     </li>
                     <li className="mb-6">
-                      <a
-                        href="http://maps.google.com/?q=Pasific 12,
-                                      Jakarta Selatan"
-                        className="text-lg color-palette-1 text-decoration-none"
+                      <p
+                        className="text-lg color-palette-1"
                       >
-                        Pasific 12, Jakarta Selatan
-                      </a>
-                    </li>
-                    <li className="mb-6">
-                      <a
-                        href="tel: 02111229090"
-                        className="text-lg color-palette-1 text-decoration-none"
-                      >
-                        021 - 1122 - 9090
-                      </a>
+                        Saturday - Sunday: 10:00 - 18:00
+                      </p>
                     </li>
                   </ul>
                 </div>

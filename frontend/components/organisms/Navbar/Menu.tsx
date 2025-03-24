@@ -14,6 +14,7 @@ export default function Menu(props: Partial<MenuProps>) {
     'nav-link': true,
     'nav-item': true,
     'my-auto': true,
+    'me-lg-20': true,
     active,
   });
   

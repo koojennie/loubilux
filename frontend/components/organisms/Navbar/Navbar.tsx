@@ -15,8 +15,8 @@ function Navbar() {
               <div className="collapse navbar-collapse" id="navbarNav">
                   <ul className="navbar-nav ms-auto text-lg gap-lg-0 gap-2">
                       <Menu title="Home" active />
-                      <Menu title="Catalog" />
-                      <Menu title="About Us" />
+                      <Menu title="Catalog" href="/catalog"/>
+                      <Menu title="About Us" href="about-us"/>
                       <Auth isLogin/>
                   </ul>
               </div>

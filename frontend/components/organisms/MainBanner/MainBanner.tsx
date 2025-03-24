@@ -6,21 +6,23 @@ export default function MainBanner() {
     <section className="header pt-lg-60 pb-50">
         <div className="container-xxl container-fluid">
           <div className="row gap-lg-0 gap-5">
+            <div className="block lg:hidden text-center my-6">
+              <img src="/img/main-banner-sm.png" className="w-[1000px] mx-auto mb-6" alt="" />
+            </div>
             <div className="col-lg-6 col-12 my-auto">
               <p className="text-support text-lg color-palette-2">
-                Halo gamers,
+                Hallo Luxusmamas!
               </p>
               <h1 className="header-title color-palette-1 fw-bold">
-                Topup & Get <span className="d-sm-inline d-none">a</span>
-                <span className="d-sm-none d-inline">a</span>
-                <span className="underline-blue"> New</span>{" "}
-                <br className="d-sm-block d-none" />{" "}
-                <span className="underline-blue">Experience</span> in Gaming
+                Luxury from{" "}
+                <span className="underline-brown">Germany</span>{" "}
+                <br />
+                Just a{" "}
+                <span className="underline-brown">{" "}Click</span> away
               </h1>
               <p className="mt-30 mb-40 text-lg color-palette-1">
-                Kami menyediakan jutaan cara untuk membantu
-                <br className="d-md-block d-none" /> players menjadi pemenang
-                sejati
+              We bring you branded bags and premium products
+                <br className="d-md-block d-none" />guaranteed 💯% original from Germany
               </p>
               <div className="d-flex flex-lg-row flex-column gap-4">
                 <a
