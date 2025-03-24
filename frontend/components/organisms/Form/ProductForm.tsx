@@ -29,23 +29,38 @@ const ProductForm: React.FC<ProductFormProps> = ({ onSubmit, onEditSubmit ,isEdi
   const [statusPublish, setStatusPublish] = useState(initialData?.statusPublish || "draft");
   const [descriptionProduct, setDescriptionProduct] = useState(initialData?.description || "");
   const [images, setImages] = useState(initialData?.images || []);
+  
+  const [deletedImages, setDeletedImages] = useState([]);
 
   // state open modal 
   const [isOpenCloseModalConfirmation, setIsOpenCloseModalConfirmation] = useState<boolean>(false);
   const [isOpenCloseModalDeleteConfirmation, setIsOpenCloseModalDeleteConfirmation] = useState<boolean>(false);
   const [submitEvent, setSubmitEvent] = useState<FormEvent | null>(null); // Simpan event
 
+  const fetchCategories = async () => {
+    try {
+      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/categories`);
+      setOptionCategories(response.data.data);
+    } catch (error) {
+      console.error("Error fetching categories:", error);
+    }
+  };
+
   useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/categories`);
-        setOptionCategories(response.data.data);
-      } catch (error) {
-        console.error("Error fetching categories:", error);
-      }
-    };
+    if (isEdit && initialData) {
+      setGenerateProductCode(initialData.productCode || "");
+      setProductName(initialData.name || "");
+      setSelectedCategory(initialData.category || "");
+      setQuantity(initialData.quantity?.toString() || "");
+      setPrice(initialData.price?.toString() || "");
+      setDisplayPrice(initialData.price ? new Intl.NumberFormat("id-ID").format(initialData.price) : "");
+      setStatusPublish(initialData.statusPublish || "draft");
+      setDescriptionProduct(initialData.description || "");
+      setImages(initialData.images || []);
+      // setDeletedImages(initialData.images || []);
+    }
     fetchCategories();
-  }, []);
+  }, [initialData, isEdit]);
 
   // Handle Open & Close Modal Confirmation
   const handleIsOpenCloseModalConfirmation = (e: React.FormEvent) => {
@@ -82,6 +97,23 @@ const ProductForm: React.FC<ProductFormProps> = ({ onSubmit, onEditSubmit ,isEdi
   // handle submit
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    const newImages: string[] = [];
+    const oldImagesStillExists: string[] = [];
+
+    const base64Pattern = /^data:image\/(png|jpeg|jpg|gif);base64,/;
+
+    images.forEach((image: string, index: number) => {
+      if (base64Pattern.test(image)) {
+        newImages.push(image);
+      } else {
+        oldImagesStillExists.push(image);
+      }
+    });
+    
+    const imagesToDelete = initialData?.images.filter(
+      (image: string) => !newImages.includes(image) && !oldImagesStillExists.includes(image)
+    );
+    setDeletedImages(imagesToDelete);
 
     const formData = {
       productCode: generatedProductCode,
@@ -91,7 +123,9 @@ const ProductForm: React.FC<ProductFormProps> = ({ onSubmit, onEditSubmit ,isEdi
       statusPublish,
       quantity: Number(quantity),
       price: Number(price),
-      images,
+      newImages: newImages,
+      oldImagesStillExists: oldImagesStillExists,
+      deletedImages: imagesToDelete,
     };
 
     if (isEdit && onEditSubmit) {
@@ -121,7 +155,6 @@ const ProductForm: React.FC<ProductFormProps> = ({ onSubmit, onEditSubmit ,isEdi
               <div className="w-full">
                 <p className="block mb-2 font-semibold text-base text-slate-600">Product Code</p>
                 <p className="text-slate-500 text-sm truncate">{generatedProductCode || `Please Choose Category first`}</p>
-                <p className="text-slate-500 text-sm truncate">{productName}</p>
                 <input type="hidden" name='productCode' value={generatedProductCode} />
               </div>
 

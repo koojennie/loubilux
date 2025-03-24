@@ -21,9 +21,9 @@ const SidebarAdmin = ({isSidebarOpen, toggleSidebar}: SidebarAdminProps) => {
         className={`${ isSidebarOpen ? "w-48" : "w-15" } flex fixed top-0 left-0 z-20 flex-col  transition-all duration-300 flex-shrink-0 pt-16 h-full lg:flex transition-width`}
         aria-label="Sidebar"
       >
-        <div className="flex relative flex-col flex-1 pt-0 min-h-0 bg-white drop-shadow-lg">
+        <div className="flex relative flex-col flex-1 pt-0 min-h-0 bg-[#D6C0B3] drop-shadow-lg">
           <div className="flex overflow-y-auto flex-col flex-1 pt-8 pb-4">
-            <div className={`${ isSidebarOpen ? "px-3" : "" } flex-1 bg-white`} id="sidebar-items">
+            <div className={`${ isSidebarOpen ? "px-3" : "" } flex-1`} id="sidebar-items">
                 <ul className={`pb-2 pt-1`} 
                 style={{ paddingLeft: isSidebarOpen ? '0px' : '13px' }}
                 >

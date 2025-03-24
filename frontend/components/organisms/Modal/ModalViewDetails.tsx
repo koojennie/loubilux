@@ -20,6 +20,9 @@ const ModalViewDetails = ({ isOpen, onClose, data }: ModalViewDetailsProps) => {
   const valueStatus = data.statusPublish;
   const images = data.images ?? []; 
 
+  console.log(images);
+  
+  
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-xs transition-opacity duration-300">
       <div data-dialog="dialog"
@@ -73,27 +76,26 @@ const ModalViewDetails = ({ isOpen, onClose, data }: ModalViewDetailsProps) => {
             {/* Right Section (Image Swiper) */}
             <div className="flex flex-col items-center">
               <p className="font-semibold text-sm text-slate-700">Preview Image</p>
-              {images.length > 0 ? (
+                {images.length > 0 ? (
                 <Swiper
-                  pagination={{ type: "fraction" }}
-                  navigation={true} 
-                  modules={[Pagination, Navigation]}
-                  className="w-full h-48 rounded-lg overflow-hidden"
+                pagination={{ type: "fraction" }}
+                navigation={true} 
+                modules={[Pagination, Navigation]}
+                className="w-full h-48 rounded-lg overflow-hidden"
                 >
-                  {images.map(({imgSrc, index}:any) => (
-                    <SwiperSlide key={index}>
-                      <div className="relative w-full h-64 pl-25 pt-20">
-                        <Image
-                          src={imgSrc}
-                          alt={`Product Image ${index + 1}`}
-                          width={150}
-                          height={150}
-                          // fill
-                          objectFit="cover"
-                          className="rounded-lg"
-                        />
-                      </div>
-                    </SwiperSlide>
+                  {images.map((image: any, index: number) => (
+                  <SwiperSlide key={index}>
+                    <div className="relative w-full h-64 pl-25 pt-20">
+                    <Image
+                      src={image}
+                      alt={`Product Image`}
+                      width={150}
+                      height={150}
+                      objectFit="cover"
+                      className="rounded-lg"
+                    />
+                    </div>
+                  </SwiperSlide>
                   ))}
                 </Swiper>
               ) : (

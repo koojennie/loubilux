@@ -24,7 +24,11 @@ const ImageUploader = ({ images, setImages }: ImageUploaderProps) => {
     const files = event.target.files;
     if (files) {
       const base64Images = await Promise.all(Array.from(files).map(convertToBase64));
-      setImages((prev) => [...prev, ...base64Images]);
+      const convertedImages = base64Images.map((base64Image, index) => ({
+        original: files[index],
+        base64: base64Image,
+      }));
+      setImages((prev) => [...prev, ...convertedImages.map(image => image.base64)]);
 
       if (selectedIndex === null) {
         setSelectedIndex(0);
@@ -80,6 +84,7 @@ const ImageUploader = ({ images, setImages }: ImageUploaderProps) => {
 
               {/* Tombol Hapus */}
               <button
+                type="button"
                 className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 transition-opacity opacity-75 hover:opacity-100 hover:bg-red-700 shadow-md"
                 onClick={() => removeImage(index)}
               >

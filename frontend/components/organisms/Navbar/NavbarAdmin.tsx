@@ -3,7 +3,7 @@ import Image from "next/image";
 const NavbarAdmin = () => {
   return (
     <div>
-      <nav className="fixed z-30 w-full bg-white border-b border-gray-200 shadow-md">
+      <nav className="fixed z-30 w-full bg-[#D6C0B3] border-b border-gray-200 shadow-md">
         <div className="py-1 px-4 lg:px-5 lg:pl-3">
           <div className="flex justify-between items-center">
             <div className="flex justify-start items-center">
@@ -19,7 +19,7 @@ const NavbarAdmin = () => {
               </a>
               <p className="text-md font-semibold flex items-center mt-3 lg:mr-1.5">
 
-                <span className="hidden pl-3 md:inline-block self-center text-xl font-bold whitespace-nowrap no-underline">
+                <span className="hidden pl-3 md:inline-block text-[#493628] self-center text-xl font-bold whitespace-nowrap no-underline">
                   Loubilux
                 </span>
               </p>

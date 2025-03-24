@@ -25,7 +25,8 @@ export type Product = {
   quantity: number;
   price: number;
   statusPublish: string;
-  image: string;
+  images: string[];
+  description:string;
   category: Category;
 }
 

@@ -39,8 +39,7 @@ const EditProduct = () => {
         console.error('Error fetching product', error);
       }
     }
-
-
+    
     fetchProduct()
     fetchToken();
   }, []);
@@ -53,8 +52,9 @@ const EditProduct = () => {
       return;
     }
 
+    console.log('data yang dikirim buat edit', formData);
     try {
-      // const response = await axios.post(
+      // const response = await axios.put(
       //   `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/products/edit/${paramsProductId}`,
       //   formData,
       //   { 
@@ -64,14 +64,10 @@ const EditProduct = () => {
       //   }
       // );
 
-      console.log('data yang dikirim buat edit', formData);
-      
-
-
       // if(response.status === 200){
       //   toast.success("Product update successfully");
         
-      //   setTimeout(() => router.push("/admin/products"), 2000); 
+      //   router.push("/admin/products");
       // } else {
       //   toast.error(response.data.message || "Failed to add product!");
       // }
