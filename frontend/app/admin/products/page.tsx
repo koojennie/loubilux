@@ -163,7 +163,7 @@ const ProductPage = ({ initialProducts }: ProductsProps) => {
           onChangeDropDownOrderBy={setOrderBy}
           onChangeDropDownSortBy={setSortBy}
           onChangeSearchQuery={setSearchQuery}
-          backPage={() => { console.log("Back") }}
+          // backPage={() => { console.log("Back") }}
           toAddPage={() => router.push('/admin/products/add')}
         />
 

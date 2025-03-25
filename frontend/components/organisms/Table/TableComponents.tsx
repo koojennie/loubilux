@@ -62,7 +62,7 @@ const paginationButtons = generatePagination();
 ))}
 
   return (
-    <div className="relative flex flex-col w-full h-[500px] overflow-y-auto text-gray-700 bg-white shadow-md rounded-lg">
+    <div className="relative flex flex-col w-full h-full overflow-y-auto text-gray-700 bg-white shadow-md rounded-lg">
       <table className="w-full text-center table-auto min-w-max">
         <thead className="sticky top-0 bg-slate-50 shadow">
           <tr className="bg-slate-50">
