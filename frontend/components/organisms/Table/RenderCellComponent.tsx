@@ -63,6 +63,23 @@ export const renderCellContent = <T extends { [key: string]: any }>(
           <Image src={value as string} width={35} height={35} alt="User Profile" className="rounded-full" />
         </div>
       );
+    } else if (col.key === 'role') {
+      return (
+        <span
+          className={`px-3 py-1 rounded-md text-xs font-semibold 
+              ${value === 'user' ? 'bg-yellow-200 text-yellow-800'
+              : value === 'admin' ? 'bg-indigo-200 text-indigo-800'
+              : value === 'superadmin' ? 'bg-purple-200 text-purple-800'
+              : 'bg-gray-200 text-gray-800'
+            }`}
+        >
+          {value === 'superadmin' ? String('Super Admin') 
+          : value === 'admin' ? String('Admin') 
+          : value === 'user' ? String('User')
+          : String(value) 
+        }
+        </span>
+      )
     }
   } else if (tableType === 'transaction') {
     if (col.key === 'amount') {

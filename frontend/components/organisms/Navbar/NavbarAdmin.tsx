@@ -3,7 +3,7 @@ import Image from "next/image";
 const NavbarAdmin = () => {
   return (
     <div>
-      <nav className="fixed z-30 w-full bg-[#D6C0B3] border-b border-gray-200 shadow-md">
+      <nav className="fixed z-30 w-full bg-white border-b border-gray-200 shadow-md">
         <div className="py-1 px-4 lg:px-5 lg:pl-3">
           <div className="flex justify-between items-center">
             <div className="flex justify-start items-center">
