@@ -11,7 +11,9 @@ export default function Auth(props: Partial<AuthProps>) {
       <li className="nav-item my-auto dropdown flex flex-col md:flex-col lg:flex-row gap-3 md:gap-6 lg:gap-6 lg:items-center">
         <div className="vertical-line d-lg-block d-none"></div>
         <div className="relative dropdown-toggle ms-lg-25">
-          <FaCartShopping className="text-3xl color-palette-1 cursor-pointer mb-16 mt-16" />
+          <Link href="/cart">
+            <FaCartShopping className="text-3xl color-palette-1 cursor-pointer mb-16 mt-16" href="/cart" />
+          </Link>
           <span className="absolute top-2 left-4 md:top-2 md:left-4 lg:top-2 lg:-right-3 bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">
             0
           </span>
