@@ -2,21 +2,21 @@
 
 import React, { useState } from "react";
 import { Column } from "../Table/RenderCellComponent";
-import { Product } from "../../../app/admin/products/page";
 
-interface HeaderContentAdminProps {
+interface HeaderContentAdminProps<T> {
   header: string;
   subHeader: string;
-  columns: Column<Product>[];
+  columns: Column<T>[]; 
   totalItems: number;
   onChangeDropDownSortBy: (value: string) => void;
   onChangeDropDownOrderBy: (value: string) => void;
   onChangeDropDownLimitData: (value: number) => void;
   onChangeSearchQuery: (value: string) => void;
   toAddPage: () => void;
+  searchPlaceholder?: string; 
 }
 
-const HeaderContentAdmin = ({
+const HeaderContentAdmin = <T,>({
   header,
   subHeader,
   toAddPage,
@@ -26,7 +26,8 @@ const HeaderContentAdmin = ({
   onChangeDropDownSortBy,
   onChangeDropDownOrderBy,
   onChangeSearchQuery,
-}: HeaderContentAdminProps) => {
+  searchPlaceholder = "Search...",
+}: HeaderContentAdminProps<T>) => {
   const [selectedLimit, setSelectedLimit] = useState<number>(5);
   const [selectedSortBy, setSelectedSortBy] = useState<string>("no");
   const [selectedSortOrderBy, setSelectedSortOrderBy] = useState<string>("asc");
@@ -67,7 +68,7 @@ const HeaderContentAdmin = ({
           <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
             <path d="M6.25 6.375a4.125 4.125 0 118.25 0 4.125 4.125 0 01-8.25 0zM3.25 19.125a7.125 7.125 0 0114.25 0v.003l-.001.119a.75.75 0 01-.363.63 13.067 13.067 0 01-6.761 1.873c-2.472 0-4.786-.684-6.76-1.873a.75.75 0 01-.364-.63l-.001-.122zM19.75 7.5a.75.75 0 00-1.5 0v2.25H16a.75.75 0 000 1.5h2.25v2.25a.75.75 0 001.5 0v-2.25H22a.75.75 0 000-1.5h-2.25V7.5z"></path>
           </svg>
-          Add Product
+          Add Item
         </button>
       </div>
 
@@ -127,7 +128,7 @@ const HeaderContentAdmin = ({
           <div className="relative">
             <input
               className="w-full pr-11 h-10 pl-3 text-sm border rounded focus:outline-none"
-              placeholder="Search for products..."
+              placeholder={searchPlaceholder}
               value={searchQuery}
               onChange={(e) => handleSearchQuery(e.target.value)}
             />

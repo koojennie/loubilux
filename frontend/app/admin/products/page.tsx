@@ -7,7 +7,7 @@ import toast, {Toaster} from "react-hot-toast";
 import TableComponents from "@/components/organisms/Table/TableComponents";
 import HeaderContentAdmin from "@/components/organisms/HeaderContetntAdmin/HeaderContentAdmin";
 import ModalConfirmationDelete from "@/components/organisms/Modal/ModalConfirmationDelete";
-import ModalViewDetails from "@/components/organisms/Modal/ModalViewDetails";
+import ModalViewDetails from "@/components/organisms/Modal/ModalViewDetailsProducts";
 
 type Category = {
   _id: string;

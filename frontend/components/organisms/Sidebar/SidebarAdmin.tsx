@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { FcCamera } from "react-icons/fc";
 import { FcHome } from "react-icons/fc";
+import { FaUser } from "react-icons/fa";
 
 interface SidebarAdminProps {
   isSidebarOpen: boolean;
@@ -21,7 +22,7 @@ const SidebarAdmin = ({isSidebarOpen, toggleSidebar}: SidebarAdminProps) => {
         className={`${ isSidebarOpen ? "w-48" : "w-15" } flex fixed top-0 left-0 z-20 flex-col  transition-all duration-300 flex-shrink-0 mt-16 pt-15 h-full lg:flex transition-width`}
         aria-label="Sidebar"
       >
-        <div className="flex relative flex-col flex-1 pt-0 min-h-0 bg-[#D6C0B3] drop-shadow-lg">
+        <div className="flex relative flex-col flex-1 pt-0 min-h-0 bg-white drop-shadow-lg">
           <div className="flex overflow-y-auto flex-col flex-1 pt-8 pb-4">
             <div className={`${ isSidebarOpen ? "px-3" : "" } flex-1`} id="sidebar-items">
                 <ul className={`pb-2 pt-1`} 
@@ -79,18 +80,18 @@ const SidebarAdmin = ({isSidebarOpen, toggleSidebar}: SidebarAdminProps) => {
                 >
                   <li className="mt-2">
                     <div
-                      className={` ${pathName === '/admin/orders' ? 'bg-white shadow-lg ' : ''} ${ isSidebarOpen ? "pl-2" : "" } flex items-center py-2.5 text-base font-normal text-dark-500 rounded-lg hover:bg-gray-200 group shadow-gray-200 transition-all duration-200 no-underline`}
+                      className={` ${pathName === '/admin/users' ? 'bg-white shadow-lg ' : ''} ${ isSidebarOpen ? "pl-2" : "" } flex items-center py-2.5 text-base font-normal text-dark-500 rounded-lg hover:bg-gray-200 group shadow-gray-200 transition-all duration-200 no-underline`}
                     
                     >
-                      <div className={` ${pathName === '/admin/orders' ? 'bg-fuchsia-400' : ''} shadow-lg shadow-gray-300 !text-white  text-dark-700 w-8 h-8 mr-1 rounded-lg text-center grid place-items-center bg-white `}>
-                        <FcCamera />
+                      <div className={` ${pathName === '/admin/users' ? 'bg-fuchsia-400' : ''} shadow-lg shadow-gray-300 !text-white  text-dark-700 w-8 h-8 mr-1 rounded-lg text-center grid place-items-center bg-white `}>
+                        <FaUser className="bg-amber-300"/>
                       </div>
 
                       { isSidebarOpen ? (
                       <span
                       className="pl-3 text-dark-500 text-sm font-semibold"
                       >
-                        Orders
+                        Users
                       </span>
                       ) : (<span></span>)}
                     </div>
