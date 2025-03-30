@@ -10,7 +10,7 @@ import FeaturedProducts from "@/components/organisms/FeaturedProducts/FeaturedPr
 export default function Home() {
   return (
     <>
-      <Navbar />
+      <Navbar activeMenu="home" />
       <MainBanner />
       <TransactionStep />
       <FeaturedProducts />
