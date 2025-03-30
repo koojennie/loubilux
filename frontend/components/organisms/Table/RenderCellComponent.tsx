@@ -6,7 +6,7 @@ import Link from 'next/link';
 import {generateSlug} from '@/utils/generateSlug';
 
 
-export type TableType = 'products' | 'user' | 'transaction';
+export type TableType = 'products' | 'users' | 'transaction';
 
 export interface Column<T> {
   key: keyof T | 'actions';
@@ -15,6 +15,7 @@ export interface Column<T> {
 
 interface ActionProps {
   id: string | number;
+  // _id: string | number;
   onInfo?: (id: string | number) => void;
   onEdit?: (id: string | number) => void;
   onDelete?: (id: string | number) => void;
@@ -56,7 +57,7 @@ export const renderCellContent = <T extends { [key: string]: any }>(
 
     </span>);
     }
-  } else if (tableType === 'user') {
+  } else if (tableType === 'users') {
     if (col.key === 'profilePicture') {
       return (
         <div className="flex justify-center">

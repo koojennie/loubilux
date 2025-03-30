@@ -6,7 +6,7 @@ interface ImageUploaderProps {
   setImages: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
-const ImageUploader = ({ images, setImages }: ImageUploaderProps) => {
+const ImageUploadersMulti = ({ images, setImages }: ImageUploaderProps) => {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
 
   // Fungsi konversi File ke Base64
@@ -110,4 +110,4 @@ const ImageUploader = ({ images, setImages }: ImageUploaderProps) => {
   );
 };
 
-export default ImageUploader;
+export default ImageUploadersMulti;

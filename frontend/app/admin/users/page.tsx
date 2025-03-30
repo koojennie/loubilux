@@ -7,7 +7,7 @@ import toast, { Toaster } from "react-hot-toast";
 import TableComponents from "@/components/organisms/Table/TableComponents";
 import HeaderContentAdmin from "@/components/organisms/HeaderContetntAdmin/HeaderContentAdmin";
 import ModalConfirmationDelete from "@/components/organisms/Modal/ModalConfirmationDelete";
-import ModalViewDetails from "@/components/organisms/Modal/ModalViewDetailsProducts";
+import ModalViewDetail from "@/components/organisms/Modal/ModalViewDetail";
 
 interface User {
   _id: string;
@@ -33,7 +33,7 @@ const ProductPage = ({ initialUsers }: UsersProps) => {
   const [selectedViewDetailUser, setSelectedViewDetailUser] = useState<User | null>(null);
   const [selectedDeleteUser, setSelectedDeleteUser] = useState<User | null>(null);
   const [page, setPage] = useState<number>(1);
-  const [totalItems, setTotalItems] = useState<number>(1);
+  const [totalUsers, setTotalUsers] = useState<number>(1);
   const [limit, setLimit] = useState<number>(5);
   const [sortBy, setSortBy] = useState<string>("userId");
   const [orderBy, setOrderBy] = useState<string>("asc");
@@ -54,8 +54,14 @@ const ProductPage = ({ initialUsers }: UsersProps) => {
           }
         }
       )
-      setUser(response.data.data);
-      console.log("data from fetch users ", response);
+      const result = response.data.data.map((user: any)=>({
+        id: user._id,
+        ...user
+      }));
+      console.log(result);
+      
+      setUser(result);
+      setTotalUsers(response.data.totalUsers)
     } catch (error) {
       console.error("Error fetching products", error);
     }
@@ -91,7 +97,7 @@ const ProductPage = ({ initialUsers }: UsersProps) => {
     if (token) {
       fetchAllUsers();
     }
-  }, [token, orderBy, sortBy]);
+  }, [token, orderBy, sortBy, page, limit, searchQuery]);
 
   const handleDeleteUsers = async (user: User | null) => {
     // if (!user) {
@@ -125,8 +131,6 @@ const ProductPage = ({ initialUsers }: UsersProps) => {
   };
 
   const handleOpenCloseModalViewDetail = (user?: User) => {
-    console.log("ini adalah user yang di clik ", user);
-    
     setSelectedViewDetailUser(user || null);
     setIsModalViewDetailOpen(!isModalViewDetailOpen);
   };
@@ -148,7 +152,7 @@ const ProductPage = ({ initialUsers }: UsersProps) => {
             { key: "phoneNumber", label: "Phone Number" },
             { key: "role", label: "role" }
           ]}
-          totalItems={totalItems}
+          totalItems={totalUsers}
           onChangeDropDownLimitData={setLimit}
           onChangeDropDownOrderBy={setOrderBy}
           onChangeDropDownSortBy={setSortBy}
@@ -168,12 +172,13 @@ const ProductPage = ({ initialUsers }: UsersProps) => {
               { key: "role", label: "Role" },
             ]}
             onInfo={(id) => { handleOpenCloseModalViewDetail(user.find(user => user.id === id)) }}
+            // onEdith={handleToPageEdit}
             onEdit={handleToPageEdit}
-            onDelete={() => { }}
-            tableType="user"
+            onDelete  ={() => { }}
+            tableType="users"
             page={page}
             limit={limit}
-            totalItems={totalItems}
+            totalItems={totalUsers}
             onPageChange={setPage}
           />
         ) : (
@@ -181,10 +186,18 @@ const ProductPage = ({ initialUsers }: UsersProps) => {
         )}
       </div>
 
-      <ModalViewDetails
+      <ModalViewDetail
         isOpen={isModalViewDetailOpen}
         onClose={handleOpenCloseModalViewDetail}
         data={selectedViewDetailUser}
+        tableType="users"
+        columns={[
+          { key: "userId", label: "user ID" },
+          { key: "username", label: "username" },
+          { key: "name", label: "Name" },
+          { key: "email", label: "Email" },
+          { key: "role", label: "Role" },
+        ]}
       />
 
       <ModalConfirmationDelete

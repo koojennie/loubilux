@@ -2,7 +2,7 @@
 import React, { useState, useEffect, FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
-import ImageUploader from "../ImageUploader/ImageUploader";
+import ImageUploader from "../ImageUploader/ImageUploadersMulti";
 import ModalConfirmation from "../Modal/ModalConfirmation";
 import ModalConfirmationDelete from "../Modal/ModalConfirmationDelete";
 

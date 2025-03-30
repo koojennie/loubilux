@@ -7,7 +7,7 @@ import toast, {Toaster} from "react-hot-toast";
 import TableComponents from "@/components/organisms/Table/TableComponents";
 import HeaderContentAdmin from "@/components/organisms/HeaderContetntAdmin/HeaderContentAdmin";
 import ModalConfirmationDelete from "@/components/organisms/Modal/ModalConfirmationDelete";
-import ModalViewDetails from "@/components/organisms/Modal/ModalViewDetailsProducts";
+import ModalViewDetails from "@/components/organisms/Modal/ModalViewDetail";
 
 type Category = {
   _id: string;
@@ -195,7 +195,16 @@ const ProductPage = ({ initialProducts }: ProductsProps) => {
       <ModalViewDetails
         isOpen={isModalViewDetailOpen}
         onClose={handleOpenCloseModalViewDetail}
+        tableType="products"
         data={selectedViewDetailProduct}
+        columns={[
+          { key: 'productCode', label: 'Product Code' },
+          { key: 'name', label: 'Name' },
+          { key: 'quantity', label: 'Quantity' },
+          { key: 'price', label: 'Price' },
+          { key: 'statusPublish', label: 'Status' },
+          { key: 'category', label: 'Category' },
+        ]}
       />
 
       <ModalConfirmationDelete
