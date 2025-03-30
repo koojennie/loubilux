@@ -18,8 +18,8 @@ exports.getAllUsers = async (req, res) => {
     const totalUsers = await User.countDocuments(query);
     const totalPages = Math.ceil(totalUsers / limit);
 
-    const users = await User.find()
-      .select("userId name username email phoneNumber role createdAt updatedAt")
+    const users = await User.find(query)
+      .select("userId name username email phoneNumber role profilePicture createdAt updatedAt")
       .sort({ [sortBy]: sortOrder })
       .skip((page - 1) * limit)
       .limit(limit)
@@ -129,6 +129,35 @@ exports.deleteUser = async (req, res) => {
     return res.status(500).json({
       status: "error",
       message: "Internal Server Error message ",
+      error: error.message,
+    });
+  }
+};
+
+
+exports.generateUserId = async (req, res) => {
+  try {
+    const lastUser = await User.findOne().sort({ createdAt: -1 });
+
+    let lastNumber = 0;
+    if (lastUser && lastUser.userId) {
+      const userIdParts = lastUser.userId.split("-");
+      if (userIdParts.length === 2) {
+        lastNumber = parseInt(userIdParts[1]) || 0;
+      }
+    }
+
+    const userId = `USR-${String(lastNumber + 1).padStart(4, "0")}`;
+
+    return res.status(200).json({
+      status: "success",
+      message: "User ID successfully generated",
+      userId: userId,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      status: "error",
+      message: "Internal Server Error",
       error: error.message,
     });
   }

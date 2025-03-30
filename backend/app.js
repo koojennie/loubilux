@@ -11,6 +11,9 @@ const routes = require('./routes/index');
 dotenv.config();
 
 
+app.use(express.json({ limit: "10mb" })); // Bisa sesuaikan, misalnya "10mb" atau lebih kecil
+app.use(express.urlencoded({ limit: "10mb", extended: true }));
+
 app.use(
   cors({
     origin: "*",
