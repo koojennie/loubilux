@@ -92,9 +92,9 @@ const ModalViewDetails: React.FC<ModalViewDetailsProps> = ({ isOpen, onClose, da
                 </Swiper>
               ) : profilePicture ? (
                 // Jika hanya ada satu gambar (profilePicture)
-                <div className="relative w-48 h-48 flex justify-center items-center">
+                <div className="relative w-68 h-68 flex justify-center items-center">
                   {/* <Image src={profilePicture} alt="Profile Picture" width={192} height={192} className="rounded-lg object-cover" /> */}
-                  <Image src={profilePicture} alt="Profile Picture" fill objectFit="contain" className="rounded-lg object-cover" />
+                  <Image src={profilePicture} alt="Profile Picture" fill objectFit="contain" className="rounded-lg" />
                 </div>
               ) : (
                 // Jika tidak ada gambar sama sekali

@@ -1,6 +1,7 @@
 const User = require("../models/user.models");
 // const bcrypt = require('bcrypt');
 // const jwt = require('jsonwebtoken');
+const cloudinary = require("../lib/cloudinary");
 
 exports.getAllUsers = async (req, res) => {
   try {
@@ -19,7 +20,9 @@ exports.getAllUsers = async (req, res) => {
     const totalPages = Math.ceil(totalUsers / limit);
 
     const users = await User.find(query)
-      .select("userId name username email phoneNumber role profilePicture createdAt updatedAt")
+      .select(
+        "userId name username email phoneNumber role profilePicture createdAt updatedAt"
+      )
       .sort({ [sortBy]: sortOrder })
       .skip((page - 1) * limit)
       .limit(limit)
@@ -34,7 +37,6 @@ exports.getAllUsers = async (req, res) => {
       totalPages,
       data: users,
     });
-
   } catch (error) {
     console.error(error.message);
     return res.status(500).json({
@@ -85,6 +87,59 @@ exports.updateUser = async (req, res) => {
     if (req.body.email) updates.email = req.body.email;
     if (req.body.phoneNumber) updates.phoneNumber = req.body.phoneNumber;
     if (req.body.role) updates.role = req.body.role;
+    if (req.body.password) updates.password = req.body.password;
+
+    // image
+    const { profilePicture, newImage, oldImage, deletedImage, keepImage } =
+      req.body;
+
+    // case 2 & case 3 delete image
+    if (deletedImage) {
+      try{
+        const publicId = imageUrl.split("/").pop().split(".")[0];
+        await cloudinary.uploader.destroy(`users/${publicId}`);
+        updates.profilePicture = "";
+      } catch(error) {
+        return res.status(500).json({
+          status: "error",
+          message: "Deleted Image failed",
+          error: error.message
+        });
+      }
+    }
+    
+    // case 1 & case 3
+    if(newImage){
+      try {
+        const uploadedResponse = await cloudinary.uploader.upload(
+          profilePicture,
+          {
+            folder: "users",
+            upload_preset: "ml_default",
+          }
+        );
+        updates.profilePicture = uploadedResponse.secure_url; // Save the URL to the user's profile
+      } catch (error) {
+        console.error("Cloudinary Upload Error", error);
+        return res.status(500).json({
+          status: "error",
+          message: "Image upload failed",
+          error: error.message,
+        });
+      }
+    }
+
+    // case 4
+
+    if(keepImage){
+      updates.profilePicture = profilePicture;
+    }
+
+
+    if(profilePicture === "") {
+      updates.profilePictureUrl =
+        "https://res.cloudinary.com/dqjlprqcy/image/upload/v1742188549/user-loubilux_ldr7fh.svg";
+    }
 
     const updatedUser = await User.findByIdAndUpdate(userId, updates, {
       new: true,
@@ -110,15 +165,32 @@ exports.deleteUser = async (req, res) => {
   try {
     const userId = req.params.id;
 
-    // check if user exist
+    // Check if user exists
     const user = await User.findById(userId);
     if (!user) {
       return res.status(404).json({
+        status: "error",
         message: "User not found",
       });
     }
 
-    await user.remove();
+    // Delete profile picture from Cloudinary if it exists
+    if (user.profilePicture && user.profilePicture !== "https://res.cloudinary.com/dqjlprqcy/image/upload/v1742188549/user-loubilux_ldr7fh.svg") {
+      try {
+      const publicId = user.profilePicture.split("/").pop().split(".")[0];
+      await cloudinary.uploader.destroy(`users/${publicId}`);
+      } catch (error) {
+      console.error("Cloudinary Deletion Error", error);
+      return res.status(500).json({
+        status: "error",
+        message: "Failed to delete profile picture from Cloudinary",
+        error: error.message,
+      });
+      }
+    }
+
+    // Remove user from database
+    await User.findByIdAndDelete(userId);
 
     return res.status(200).json({
       status: "success",
@@ -128,12 +200,11 @@ exports.deleteUser = async (req, res) => {
     console.error(error.message);
     return res.status(500).json({
       status: "error",
-      message: "Internal Server Error message ",
+      message: "Internal Server Error",
       error: error.message,
     });
   }
 };
-
 
 exports.generateUserId = async (req, res) => {
   try {

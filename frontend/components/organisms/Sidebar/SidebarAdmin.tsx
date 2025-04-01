@@ -3,9 +3,11 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { FcCamera } from "react-icons/fc";
-import { FcHome } from "react-icons/fc";
+import { FaHouse } from "react-icons/fa6";
+import { FaBoxArchive } from "react-icons/fa6";
 import { FaUser } from "react-icons/fa";
+// import { FcCamera } from "react-icons/fc";
+// import { FcHome } from "react-icons/fc";
 
 interface SidebarAdminProps {
   isSidebarOpen: boolean;
@@ -41,7 +43,7 @@ const SidebarAdmin = ({isSidebarOpen, toggleSidebar}: SidebarAdminProps) => {
                       className={` ${pathName === '/admin' ? 'bg-white shadow-lg ' : ''} ${ isSidebarOpen ? "pl-2" : "" } flex items-center py-2.5 rounded-lg hover:bg-gray-200 group shadow-gray-200 transition-all duration-200`}
                     >
                       <div className={` ${pathName === '/admin' ? 'bg-fuchsia-400' : 'bg-white'} shadow-lg shadow-gray-300 text-white text-dark-700 w-8 h-8 mr-1 rounded-lg text-center grid place-items-center `}>
-                        <FcHome />
+                        <FaHouse className="text-slate-700" />
                       </div>
                       { isSidebarOpen ? (
                       <span
@@ -62,7 +64,7 @@ const SidebarAdmin = ({isSidebarOpen, toggleSidebar}: SidebarAdminProps) => {
                     
                     >
                       <div className={` ${pathName === '/admin/products' ? 'bg-fuchsia-400' : ''} shadow-lg shadow-gray-300 !text-white  text-dark-700 w-8 h-8 mr-1 rounded-lg text-center grid place-items-center`}>
-                        <FcCamera />
+                        <FaBoxArchive className="text-slate-700" />
                       </div>
 
                       { isSidebarOpen ? (
@@ -75,7 +77,7 @@ const SidebarAdmin = ({isSidebarOpen, toggleSidebar}: SidebarAdminProps) => {
                     </div>
                   </li>
                 </Link>
-                <Link href={'/admin/orders'}
+                <Link href={'/admin/users'}
                   style={{ textDecoration: 'none', color: 'inherit' }}
                 >
                   <li className="mt-2">
@@ -84,7 +86,7 @@ const SidebarAdmin = ({isSidebarOpen, toggleSidebar}: SidebarAdminProps) => {
                     
                     >
                       <div className={` ${pathName === '/admin/users' ? 'bg-fuchsia-400' : ''} shadow-lg shadow-gray-300 !text-white  text-dark-700 w-8 h-8 mr-1 rounded-lg text-center grid place-items-center bg-white `}>
-                        <FaUser className="bg-amber-300"/>
+                        <FaUser className="text-slate-700"/>
                       </div>
 
                       { isSidebarOpen ? (

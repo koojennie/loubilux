@@ -9,7 +9,7 @@ import HeaderContentAdmin from "@/components/organisms/HeaderContetntAdmin/Heade
 import ModalConfirmationDelete from "@/components/organisms/Modal/ModalConfirmationDelete";
 import ModalViewDetail from "@/components/organisms/Modal/ModalViewDetail";
 
-interface User {
+export interface User {
   _id: string;
   id: string;
   userId: string;
@@ -100,29 +100,30 @@ const ProductPage = ({ initialUsers }: UsersProps) => {
   }, [token, orderBy, sortBy, page, limit, searchQuery]);
 
   const handleDeleteUsers = async (user: User | null) => {
-    // if (!user) {
-    //   console.log("No product selected for deletion");
-    //   return;
-    // }
+    if (!user) {
+      toast.error("No user selected for deletion");
+      return;
+    }
 
-    // try {
-    //   const response = await axios.delete(
-    //     `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/products/${product._id}`,
-    //     {
-    //       headers: {
-    //         Authorization: `Bearer ${token}`,
-    //       },
-    //     }
-    //   );
+    try {
+      const response = await axios.delete(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/users/${user._id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
-    //   toast.success("Deleted Sucessfully");
+      toast.success("User deleted successfully");
 
-    //   fetchProducts();
+      fetchAllUsers();
 
-    //   setIsModalConfirmationDeleteOpen(!isModalConfirmationDeleteOpen);
-    // } catch (error) {
-    //   console.error("Error when deleting products ", error);
-    // }
+      setIsModalConfirmationDeleteOpen(!isModalConfirmationDeleteOpen);
+    } catch (error) {
+      toast.error("Error occurred while deleting the user");
+      console.error("Error when deleting user", error);
+    }
   };
 
   const handleOpenCloseModalConfirmationDelete = (user?: User) => {
@@ -174,7 +175,7 @@ const ProductPage = ({ initialUsers }: UsersProps) => {
             onInfo={(id) => { handleOpenCloseModalViewDetail(user.find(user => user.id === id)) }}
             // onEdith={handleToPageEdit}
             onEdit={handleToPageEdit}
-            onDelete  ={() => { }}
+            onDelete  ={(id) => {handleOpenCloseModalConfirmationDelete(user.find(user => user.id === id)) }}
             tableType="users"
             page={page}
             limit={limit}

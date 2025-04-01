@@ -28,7 +28,10 @@ const UserForm: React.FC<UserFormProps> = ({ onSubmit, onEditSubmit, isEdit = fa
   const [isPasswordValid, setIsPasswordValid] = useState(false);
   const [isMatchPassword, setIsMatchPassword] = useState(false);
 
-  const [deletedImages, setDeletedImages] = useState([]);
+  const [oldImage, setOldImage] = useState<string>(""); // Store old image before replacement
+  const [newImage, setNewImage] = useState<string>("");
+  const [deletedImage, setDeteledImage] = useState<string>("");
+  const [keepImage, setKeepImage] = useState<boolean>(false);
 
   // state open modal 
   const [isOpenCloseModalConfirmation, setIsOpenCloseModalConfirmation] = useState<boolean>(false);
@@ -43,12 +46,14 @@ const UserForm: React.FC<UserFormProps> = ({ onSubmit, onEditSubmit, isEdit = fa
       setEmail(initialData.email || "")
       setPhoneNumber(initialData.phoneNumber || "")
       setProfilePicture(initialData.profilePicture || "");
-      // setDeletedImages(initialData.images || []);
+      setOldImage(initialData.profilePicture || "");
     }
   }, [initialData, isEdit]);
 
-  useEffect(()=>{
-    getGenerateNewUserId();
+  useEffect(() => {
+    if (!isEdit) {
+      getGenerateNewUserId();
+    }
   })
 
   const getGenerateNewUserId = async () => {
@@ -91,6 +96,38 @@ const UserForm: React.FC<UserFormProps> = ({ onSubmit, onEditSubmit, isEdit = fa
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
+    const base64Pattern = /^data:image\/(png|jpeg|jpg|gif);base64,/;
+
+    let tempNewImage = "";
+    let tempDeletedImage = "";
+    let tempKeepImage = false;
+
+    // case 1 upload image first time 
+    if(!oldImage && profilePicture && base64Pattern.test(profilePicture)){
+      tempNewImage = profilePicture;
+      console.log("case pertama upload");
+    }
+
+    // case 2: deleted image profile
+    if(!profilePicture && oldImage){
+      tempDeletedImage = oldImage;
+      console.log("case kedua upload");
+    }
+
+    // case 3 : replace old profile image
+    if(profilePicture && base64Pattern.test(profilePicture) && oldImage){
+      tempNewImage = profilePicture;
+      tempDeletedImage = oldImage;
+      
+      console.log("case ketiga upload");
+    }
+    
+    // case 4 does't change image 
+    if(oldImage === profilePicture){
+      tempKeepImage = true;
+      console.log("case keempat upload = ", tempKeepImage);
+    }
+
     const formData = {
       userId: generatedUserCode,
       name,
@@ -101,6 +138,10 @@ const UserForm: React.FC<UserFormProps> = ({ onSubmit, onEditSubmit, isEdit = fa
       password,
       confirmPassword,
       profilePicture,
+      newImage: tempNewImage,
+      oldImage,
+      deletedImage: tempDeletedImage,
+      keepImage: tempKeepImage
     };
 
     if (isEdit && onEditSubmit) {
@@ -111,6 +152,7 @@ const UserForm: React.FC<UserFormProps> = ({ onSubmit, onEditSubmit, isEdit = fa
 
     // onSubmit(formData);
     setIsOpenCloseModalConfirmation(false);
+
   }
 
   return (
@@ -118,10 +160,10 @@ const UserForm: React.FC<UserFormProps> = ({ onSubmit, onEditSubmit, isEdit = fa
       <form onSubmit={handleSubmit} action="">
         <div className="flex flex-col py-8 pt-8 mb-12 px-8 ">
           <h4 className="flex text-lg mb-1 font-semibold text-slate-700">
-            Add New User
+            {isEdit ? "Edit User" : "Add New User"}
           </h4>
           <p className="mb-4 text-sm mt-1 text-slate-400">
-            Fill in the information below to add a new user.
+            {isEdit ? "Change in the information below to edit user." : "Fill in the information below to add a new user."}
           </p>
           <div className="grid grid-rows-1 gap-4">
 
@@ -263,7 +305,7 @@ const UserForm: React.FC<UserFormProps> = ({ onSubmit, onEditSubmit, isEdit = fa
               className=" mx-auto select-none rounded bg-slate-800 py-2 px-4 text-center text-sm font-semibold text-white shadow-md shadow-slate-900/10 transition-all hover:shadow-lg hover:shadow-slate-900/20 active:opacity-[0.85] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
               type="submit"
               onClick={handleIsOpenCloseModalConfirmation}
-              disabled={!isPasswordValid || !isMatchPassword}
+              disabled={!isEdit && (!isPasswordValid || !isMatchPassword)}
             >
               Save
             </button>

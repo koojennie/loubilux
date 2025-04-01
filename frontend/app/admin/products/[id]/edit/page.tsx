@@ -54,23 +54,23 @@ const EditProduct = () => {
 
     console.log('data yang dikirim buat edit', formData);
     try {
-      // const response = await axios.put(
-      //   `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/products/edit/${paramsProductId}`,
-      //   formData,
-      //   { 
-      //     headers: { 
-      //       "Authorization": `Bearer ${token}`
-      //     },
-      //   }
-      // );
+      const response = await axios.put(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/products/edit/${paramsProductId}`,
+        formData,
+        { 
+          headers: { 
+            "Authorization": `Bearer ${token}`
+          },
+        }
+      );
 
-      // if(response.status === 200){
-      //   toast.success("Product update successfully");
+      if(response.status === 200){
+        toast.success("Product update successfully");
         
-      //   router.push("/admin/products");
-      // } else {
-      //   toast.error(response.data.message || "Failed to add product!");
-      // }
+        router.push("/admin/products");
+      } else {
+        toast.error(response.data.message || "Failed to add product!");
+      }
     } catch (error) {
       console.error('Error when submitting new product', error);
     }
