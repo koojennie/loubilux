@@ -13,20 +13,41 @@ const orderSchema = new mongoose.Schema({
     totalPrice: {
         type: Number,
         required: true,
+        min: 0,
+    },
+    paymentMethod: {
+        type: String,
+        enum: ["COD", "Credit Card", "Bank Transfer", "E-Wallet"],
     },
     orderDate: {
         type: Date,
         default: Date.now,
+    },
+    isPaid: {
+        type: Boolean,
+        default: false,
+    },
+    paidAt: {
+        type: Date,
     },
     status: {
         type: String,
         enum: ["Pending", "Processing", "Shipped", "Delivered", "Cancelled"],
         default: 'Pending',
     },
-    paymentMethod: {
+    shippingAddress: {
+        fullName: { type: String },
+        address: { type: String },
+        city: { type: String },
+        postalCode: { type: String }
+    },
+    courier: {
+        name: { type: String, required: true },
+        shippingCost: { type: Number, required: true, min: 0 },
+    },
+    cancellationReason: {
         type: String,
-        enum: ['COD', 'CARD'],
-        default: 'COD',
+        default: null,
     },
 }, {timestamps: true});
 
