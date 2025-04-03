@@ -13,8 +13,17 @@ export default function page() {
       <Navbar />
       <div className="grid grid-cols-2 sm:grid-cols-2 max-md:grid-cols-1 max-md:grid-rows-2">
         {/* order form */}
-        <div className="py-12 px-5">
-            <div className="">
+        <div className="px-20 pb-20 max-sm:p-5">
+        <div className="flex flex-col -pb-12 top-4 left-4">
+          <Link href="/cart">
+          <button className="bg-[#493628] text-white !rounded-full w-12 h-12 flex items-center justify-center">
+            <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7m0 0l7-7"></path>
+            </svg>
+          </button>
+          </Link>
+        </div>
+            <div className="mt-3">
                 <p className="text-left text-2xl font-semibold">Contact Information</p>
                 <p className="text-left !mt-10 text-lg font-medium">Email address</p>
                 <input
@@ -115,19 +124,19 @@ export default function page() {
               >
                 Cancel
               </button>
-              <button className="px-4 py-2 !rounded-full bg-[#493628] text-white transition-all duration-500 font-medium hover:bg-[#705C53]
+              <button className="px-4 py-2 !rounded-full bg-[#493628] text-white transition-all duration-500 font-medium text-lg hover:bg-[#705C53]
               ">Apply</button>
             </div>
           </DialogPanel>
         </div>
         </Dialog>
         {/* order summary */}
-        <div className="py-12 px-5 bg-[#f8f5f2]">
+        <div className="p-20 bg-[#f8f5f2] max-sm:p-5">
             <div className="">
                 <p className="text-left text-2xl font-semibold">Order summary</p>
                 <div className="flex items-center justify-between !mt-10 border-b !pb-6 border-gray-200">
                     <div className="flex items-center gap-3">
-                        <img src="/img/featured-item1.png" alt="product" className="w-[100px] h-[100px] rounded-lg" />
+                        <img src="/img/featured-item1.png" alt="product" className="w-[100px] h-[100px] rounded-lg max-sm:w-[50px] max-sm:h-[50px]" />
                         <div className="flex flex-col">
                             <p className="text-lg font-semibold">Coach Mollie Tote Bag</p>
                             <p className="text-base font-normal">Bag</p>
