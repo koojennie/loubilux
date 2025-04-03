@@ -1,4 +1,4 @@
-"use client";
+"use client"
 
 import React, { useState, useEffect } from "react";
 import NavbarAdmin from "@/components/organisms/Navbar/NavbarAdmin";
@@ -23,6 +23,7 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
   const [error, setError] = useState<number | null>(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
+  // Fetch user data
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -30,15 +31,13 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
           `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/auth/me`,
           { withCredentials: true }
         );
-
-        console.log("Response dari API:", response.data);
         setUser(response.data.user || null);
       } catch (err: any) {
         console.error("Error fetching user:", err);
         if (err.response) {
           setError(err.response.status);
         } else {
-          setError(500); // Jika tidak ada response dari server, anggap internal server error
+          setError(500); // Internal server error
         }
       } finally {
         setLoading(false);
@@ -46,13 +45,25 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
     };
 
     fetchUser();
+  }, []); // Runs only once when the component mounts
+
+  // Handle window resizing
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      setIsSidebarOpen(window.innerWidth >= 768);
+    }
+
+    const handleResize = () => {
+      setIsSidebarOpen(window.innerWidth >= 768);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  console.log("ini adalah user di page", user);
-
+  // Error Handling
   if (loading) return <p className="text-center mt-5">Loading...</p>;
 
-  // ERROR HANDLING
   if (error === 401) {
     return (
       <ErrorMessage
@@ -61,7 +72,7 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
       />
     );
   }
-  
+
   if (error === 403) {
     return (
       <ErrorMessage
@@ -80,7 +91,7 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
     );
   }
 
-  // Jika user tidak ditemukan atau bukan admin/superadmin
+  // If user is not an admin or superadmin
   if (!user || (user.role !== "admin" && user.role !== "superadmin")) {
     return (
       <ErrorMessage
@@ -90,20 +101,7 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
     );
   }
 
-  // Handle sidebar
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      setIsSidebarOpen(window.innerWidth >= 768);
-    }
-
-    const handleResize = () => {
-      setIsSidebarOpen(window.innerWidth >= 768);
-    };
-
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
+  // Toggle sidebar visibility
   const toggleSidebar = () => {
     setIsSidebarOpen((prev) => !prev);
   };
@@ -117,7 +115,11 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
         setIsSidebarOpen={setIsSidebarOpen}
       />
       <div className="w-full">
-        <div className={`flex-1 pt-18 transition-all duration-300 ${isSidebarOpen ? "pl-5 md:pl-44" : "pl-5 md:pl-16"}`}>
+        <div
+          className={`flex-1 pt-18 transition-all duration-300 ${
+            isSidebarOpen ? "pl-5 md:pl-44" : "pl-5 md:pl-16"
+          }`}
+        >
           {children}
         </div>
       </div>

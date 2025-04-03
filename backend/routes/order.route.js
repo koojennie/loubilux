@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.post('/create', authenticateUser, authorizeRoles('user'), createOrderFromCart);
 router.get('/all', authenticateUser,authorizeRoles('admin', 'superadmin'), getAllOrders);
-router.get('/',authenticateUser, getUserOrders);
+router.get('/order',authenticateUser, getUserOrders);
 router.put('/update-status', authenticateUser, authorizeRoles('admin', 'superadmin'), updateOrderStatus);
 
 

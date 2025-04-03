@@ -146,12 +146,19 @@ exports.login = async (req, res) => {
       process.env.JWT_SECRET,
       { expiresIn: "3d" }
     );
+    // res.cookie("jwtToken", token, {
+    //   httpOnly: true,
+    //   // secure: true,
+    //   maxAge: 3 * 24 * 60 * 60 * 1000,
+    //   sameSite: "None",
+    // });
+
     res.cookie("jwtToken", token, {
       httpOnly: true,
-      // secure: true,
-      maxAge: 3 * 24 * 60 * 60 * 1000,
-      sameSite: "strict",
-    });
+      secure: process.env.NODE_ENV === "production", // true di production
+      maxAge: 3 * 24 * 60 * 60 * 1000, // 3 hari
+      sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
+    });    
 
     res
       .status(200)
@@ -179,5 +186,9 @@ exports.logout = (req, res) => {
 };
 
 exports.me = (req, res) => {
+  if (!req.user) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+
   res.status(200).json({message: "Users login", user: req.user});
 }

@@ -67,18 +67,10 @@ const OrdersPage = () => {
   // };
 
   const fetchAllOrders = async () => {
-
-    if (!token) {
-      console.error('No token available');
-      return;
-    }
-
     try {
       const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/orders/all`,
         {
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
+          withCredentials: true
         }
       );
       setOrders(response.data.data);
@@ -92,14 +84,14 @@ const OrdersPage = () => {
   }
 
   useEffect(() => {
-    // fetchToken();
+    fetchAllOrders();
   }, []);
 
-  useEffect(() => {
-    if (token) {
-      fetchAllOrders();
-    }
-  }, [token])
+  // useEffect(() => {
+  //   if (token) {
+  //     fetchAllOrders
+  //   }
+  // }, [token])
 
   const handleOpenCloseModalViewDetail = (order?: Order) => {
     console.log('ini adalah orders yang dipilih', order);
