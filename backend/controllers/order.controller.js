@@ -3,6 +3,13 @@ const Order = require("../models/order.models");
 const OrderLineItem = require("../models/orderlineitem.model");
 const Cart = require("../models/cart.model");
 
+// function for generateOrdersID
+const generateOrdersId = async () => {
+    const datePart = new Date().toISOString().split('T')[0].replace(/-/g, ''); // Format: YYYYMMDD
+    const orderCount = await mongoose.model('Order').countDocuments({ orderDate: { $gte: new Date().setHours(0, 0, 0, 0) } });
+    return `ORD-${datePart}-${String(orderCount + 1).padStart(3, '0')}`;
+};
+
 const createOrderFromCart = async (req, res) => {
   try {
     const userId = req.user.id;
@@ -39,7 +46,9 @@ const createOrderFromCart = async (req, res) => {
       0
     );
 
+    const orderId = await generateOrdersId();
     const newOrder = new Order({
+      _id: orderId,
       user: userId,
       totalPrice,
       status: "Pending",
@@ -68,8 +77,7 @@ const createOrderFromCart = async (req, res) => {
       })
     );
 
-    newOrder.orderlineitems = orderLineItems;
-    await newOrder.save();
+    await Order.findByIdAndUpdate(newOrder._id, { orderlineitems: orderLineItems });
 
     const remainingProducts = cart.products.filter(
       (item) => !selectedProductIds.includes(item.product._id.toString())
@@ -93,6 +101,8 @@ const createOrderFromCart = async (req, res) => {
       .json({ status: "error", message: "Server Error", error: error.message });
   }
 };
+
+
 const getUserOrders = async (req, res) => {
   try {
     const { user } = req;
@@ -107,7 +117,7 @@ const getUserOrders = async (req, res) => {
       totalPrice: order.totalPrice,
       status: order.status,
       paymentMethod: order.paymentMethod,
-      orderDate: order.orderDate,
+      orderDate:  new Date(order.orderDate).toLocaleString(),
       shippingAddress: order.shippingAddress || null,
       courier: order.courier || null,
       items: order.orderlineitems.map((item) => ({
@@ -134,29 +144,40 @@ const getUserOrders = async (req, res) => {
 };
 
 const getAllOrders = async (req, res) => {
-  try {
-    const orders = await Order.find()
-      .populate({
-        path: "orderlineitems",
-        select: "product quantity subPrice",
-      })
-      .select("user totalPrice paymentMethod status")
-      .lean();
+    try {
+        const orders = await Order.find()
+            .populate("user", "name email")
+            .select("_id user totalPrice status paymentMethod orderDate courier orderId isPaid");
 
-    return res.status(200).json({
-      status: "success",
-      message: "Orders retrieved successfully",
-      data: orders,
-    });
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({
-      status: "error",
-      message: "Internal Server Error",
-      error: error.message,
-    });
-  }
+        if (!orders.length) {
+            return res.status(404).json({ status: "error", message: "No orders found" });
+        };
+
+        const formattedOrders = orders.map(order => ({
+            _id: order._id,
+            orderId: order.orderId,
+            user: order.user ? order.user.name : "Guest",
+            email: order.user ? order.user.email : "-",
+            totalPrice: order.totalPrice,
+            statusOrder: order.status,
+            isPaid: order.isPaid,
+            paymentMethod: order.paymentMethod,
+            orderDate: new Date(order.orderDate).toLocaleString(),
+            courier: order.courier ? order.courier.name : "Not Assigned",
+        }));
+
+        res.status(200).json({
+            status: "success",
+            message: "Orders retrieved successfully",
+            data: formattedOrders,
+        });
+
+    } catch (error) {
+        console.error("Error retrieving orders:", error);
+        res.status(500).json({ status: "error", message: "Server Error" });
+    }
 };
+
 
 const updateOrderStatus = async (req, res) => {
   try {
@@ -199,7 +220,7 @@ const updateOrderStatus = async (req, res) => {
       error: error.message,
     });
   }
-};
+}
 
 module.exports = {
   createOrderFromCart,

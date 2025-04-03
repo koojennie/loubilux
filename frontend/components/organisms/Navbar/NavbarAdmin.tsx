@@ -1,11 +1,23 @@
 import Image from "next/image";
 
-const NavbarAdmin = () => {
+
+interface SidebarAdminProps {
+  isSidebarOpen: boolean;
+  toggleSidebar: () => void;
+}
+
+const NavbarAdmin = ({ isSidebarOpen, toggleSidebar }: SidebarAdminProps) => {
   return (
     <div>
       <nav className="fixed z-30 w-full bg-white border-b border-gray-200 shadow-md">
         <div className="py-1 px-4 lg:px-5 lg:pl-3">
           <div className="flex justify-between items-center">
+            <div className="md:hidden">
+              <button onClick={toggleSidebar} className="text-3xl ml-5">
+              ☰
+              </button>
+            </div>
+
             <div className="flex justify-start items-center">
               <button
                 id="toggleSidebarMobile"

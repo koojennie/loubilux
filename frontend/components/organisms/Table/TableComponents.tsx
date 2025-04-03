@@ -46,14 +46,14 @@ const TableComponents = <T extends Record<string, any>>({
   const paginationButtons = generatePagination();
 
   return (
-    <div className="relative flex flex-col w-full h-full overflow-y-auto text-gray-700 bg-white shadow-md rounded-lg">
+    <div className="relative flex flex-col w-full h-full overflow-y-auto text-gray-700 bg-white shadow-md rounded-lg my-3">
       <table className="w-full text-center table-auto min-w-max">
         <thead className="sticky top-0 bg-slate-50 shadow">
           <tr className="bg-slate-50">
             {columns.map((col) => (
               <th
                 key={col.key as string}
-                className="transition-colors cursor-pointer border-b border-slate-300 bg-slate-100 hover:bg-slate-200"
+                className="transition-colors cursor-pointer border-b border-slate-300 bg-slate-100 hover:bg-slate-200 px-2"
               >
                 <div className="flex justify-center text-sm font-semibold leading-none text-slate-800">
                   {col.label}
@@ -73,7 +73,7 @@ const TableComponents = <T extends Record<string, any>>({
               className="hover:bg-slate-50 border border-transparent hover:border-slate-200"
             >
               {columns.map((col) => (
-                <td key={`${row.id}-${String(col.key)}`} className="py-2 border-b border-slate-200">
+                <td key={`${row.id}-${String(col.key)}`} className="py-2 px-2 border-b border-slate-200">
                   {renderCellContent(row, col, tableType, { id: row.id, onInfo, onEdit, onDelete })}
                 </td>
               ))}
