@@ -41,9 +41,9 @@ const renderDataDetail = (colKey: string, value: any, tableType: TableType) => {
         </span>
       );
     }
-  } else if(tableType === "orders"){
-    if(colKey === "orderDate"){
-      
+  } else if (tableType === "orders") {
+    if (colKey === "orderDate") {
+
       const formattedDateStr = value.replace(/\./g, ':');
 
       // Parse the date string into a Date object
@@ -67,6 +67,20 @@ const renderDataDetail = (colKey: string, value: any, tableType: TableType) => {
 
       return (
         <p className="text-gray-500 text-sm">{humanReadableDate} WIB</p>
+      )
+    }
+  } else if (tableType === 'users') {
+    if (colKey === 'role') {
+      return (
+        <span className={`px-3 py-1 rounded-md text-xs font-semibold ${value === 'user' ? 'bg-yellow-200 text-yellow-800'
+          : value === 'admin' ? 'bg-indigo-200 text-indigo-800'
+            : value === 'superadmin' ? 'bg-purple-200 text-purple-800'
+              : 'bg-gray-200 text-gray-800'
+          }`}
+        >
+          {value === 'superadmin' ? String('Super Admin') : value === 'admin' ? String('Admin') : value === 'user' ? String('User'): String(value)
+          }
+        </span>
       )
     }
   }
@@ -106,7 +120,7 @@ const ModalViewDetails: React.FC<ModalViewDetailsProps> = ({ isOpen, onClose, da
             {/* Image Preview Section */}
             {tableType !== 'orders' && (
               <div className="flex flex-col items-center">
-                <p className="font-semibold text-sm sm:text-base text-slate-700">Preview Image</p>
+                <p className="font-semibold text-sm sm:text-base text-slate-700">{tableType === 'users' ? "Profile Picture" : "Preview Image"}</p>
 
                 {/* Jika ada banyak gambar (array) */}
                 {images.length > 0 ? (

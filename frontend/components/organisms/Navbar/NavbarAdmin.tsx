@@ -1,12 +1,19 @@
+"use client"
+import React, { useState } from "react";
 import Image from "next/image";
-
+import { IoPersonCircleSharp } from "react-icons/io5";
+import { FaGear } from "react-icons/fa6";
+import { VscSignOut } from "react-icons/vsc";
 
 interface SidebarAdminProps {
   isSidebarOpen: boolean;
   toggleSidebar: () => void;
+  handleSignOut: () => void;
 }
 
-const NavbarAdmin = ({ isSidebarOpen, toggleSidebar }: SidebarAdminProps) => {
+const NavbarAdmin = ({ isSidebarOpen, toggleSidebar, handleSignOut }: SidebarAdminProps) => {
+  const [openCloseDropDown, setOpenCloseDropDown] = useState<boolean>(false);
+
   return (
     <div>
       <nav className="fixed z-30 w-full bg-white border-b border-gray-200 shadow-md">
@@ -14,7 +21,7 @@ const NavbarAdmin = ({ isSidebarOpen, toggleSidebar }: SidebarAdminProps) => {
           <div className="flex justify-between items-center">
             <div className="md:hidden">
               <button onClick={toggleSidebar} className="text-3xl ml-5">
-              ☰
+                ☰
               </button>
             </div>
 
@@ -35,55 +42,57 @@ const NavbarAdmin = ({ isSidebarOpen, toggleSidebar }: SidebarAdminProps) => {
                   Loubilux
                 </span>
               </p>
-              <form action="#" method="GET" className="hidden lg:block lg:pl-8">
-                <label htmlFor="topbar-search" className="sr-only">
-                  Search
-                </label>
-                <div className="relative mt-1 lg:w-64">
-                  <div className="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
-                    <svg
-                      className="w-5 h-5 text-gray-500"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                  </div>
-                  <input
-                    type="text"
-                    name="searchNavbarAdmin"
-                    // id="topbar-search"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-2 focus:ring-fuchsia-50 focus:border-fuchsia-300 block w-full pl-10 p-2.5"
-                    placeholder="Search"
-                  />
-                </div>
-              </form>
             </div>
-            <div className="flex items-center">
-              <button
-                id="toggleSidebarMobileSearch"
-                type="button"
-                className="p-2 text-gray-500 rounded-2xl lg:hidden hover:text-gray-900 hover:bg-gray-100"
+
+            <div className="flex justify-end my-2">
+              <button className=" mr-4"
+                onClick={() => setOpenCloseDropDown(!openCloseDropDown)}
               >
-                <span className="sr-only">Search</span>
-                <svg
-                  className="w-6 h-6"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                    clipRule="evenodd"
-                  />
-                </svg>
+                <Image src={`https://res.cloudinary.com/dqjlprqcy/image/upload/v1742188549/user-loubilux_ldr7fh.svg`} width={40} height={40} alt="Logo" />
               </button>
+
+              {/* dropdown item */}
+              {openCloseDropDown && (
+                <div
+                  className="absolute z-10 min-w-[150px] overflow-auto rounded-lg border border-slate-200 bg-white p-1.5 shadow-lg focus:outline-none top-14"
+                // style={{ top: '50px', right: '10px' }} // Adjust these values as needed
+                >
+                  <li
+                    role="menuitem"
+                    className="cursor-pointer text-slate-800 flex w-full text-sm items-center rounded-md p-3 transition-all hover:bg-slate-100 focus:bg-slate-100 active:bg-slate-100"
+                  >
+                    <IoPersonCircleSharp size={24} className="text-slate-400" />
+                    <p className="text-slate-800 font-medium m-1">
+                      My Profile
+                    </p>
+                  </li>
+                  <li
+                    role="menuitem"
+                    className="cursor-pointer text-slate-800 flex w-full text-sm items-center rounded-md p-3 transition-all hover:bg-slate-100 focus:bg-slate-100 active:bg-slate-100"
+                  >
+                    <FaGear size={18} className="text-slate-400" />
+                    <p className="text-slate-800 font-medium m-1">
+                      Edit Profile
+                    </p>
+                  </li>
+                  <hr className="my-2 border-slate-200" role="menuitem" />
+                  <li
+                    role="menuitem"
+                    className="cursor-pointer text-slate-800 flex w-full text-sm items-center rounded-md p-3 transition-all hover:bg-slate-100 focus:bg-slate-100 active:bg-slate-100"
+                  >
+                    {/* <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5 text-slate-400">
+                      <path fillRule="evenodd" d="M3 4.25A2.25 2.25 0 0 1 5.25 2h5.5A2.25 2.25 0 0 1 13 4.25v2a.75.75 0 0 1-1.5 0v-2a.75.75 0 0 0-.75-.75h-5.5a.75.75 0 0 0-.75.75v11.5c0 .414.336.75.75.75h5.5a.75.75 0 0 0 .75-.75v-2a.75.75 0 0 1 1.5 0v2A2.25 2.25 0 0 1 10.75 18h-5.5A2.25 2.25 0 0 1 3 15.75V4.25Z" clipRule="evenodd" />
+                      <path fillRule="evenodd" d="M19 10a.75.75 0 0 0-.75-.75H8.704l1.048-.943a.75.75 0 1 0-1.004-1.114l-2.5 2.25a.75.75 0 0 0 0 1.114l2.5 2.25a.75.75 0 1 0 1.004-1.114l-1.048-.943h9.546A.75.75 0 0 0 19 10Z" clipRule="evenodd" />
+                    </svg> */}
+                    <VscSignOut size={18} className="text-slate-400" />
+
+                    <p className="text-slate-800 font-medium m-1">
+                      <button onClick={handleSignOut}>
+                        Sign Out
+                      </button>
+                    </p>
+                  </li>
+                </div>)}
             </div>
           </div>
         </div>
