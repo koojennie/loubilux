@@ -1,6 +1,10 @@
 const mongoose = require('mongoose');
 
 const orderSchema = new mongoose.Schema({
+    orderId : {
+        type: String,
+        unique: true,
+    },
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
@@ -23,12 +27,15 @@ const orderSchema = new mongoose.Schema({
         type: Date,
         default: Date.now,
     },
-    isPaid: {
-        type: Boolean,
-        default: false,
+    paymentMethod: {
+        type: String,
+        enum: ["COD", "Credit Card", "Bank Transfer", "E-Wallet"],
+        required: true,
     },
-    paidAt: {
-        type: Date,
+    paymentStatus: { // Memisahkan pembayaran lebih detail
+        type: String,
+        enum: ["Unpaid", "Pending", "Paid", "Failed", "Refunded"],
+        default: "Unpaid",
     },
     status: {
         type: String,
@@ -50,6 +57,16 @@ const orderSchema = new mongoose.Schema({
         default: null,
     },
 }, {timestamps: true});
+
+orderSchema.pre('validate', async function (next) {
+    if (!this.orderId) {
+        const datePart = new Date().toISOString().split('T')[0].replace(/-/g, ''); // Format: YYYYMMDD
+        const orderCount = await mongoose.model('Order').countDocuments({ orderDate: { $gte: new Date().setHours(0, 0, 0, 0) } });
+        this.orderId = `ORD-${datePart}-${String(orderCount + 1).padStart(3, '0')}`;
+    }
+    next();
+});
+
 
 const Order = mongoose.model('Order', orderSchema);
 

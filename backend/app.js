@@ -2,6 +2,7 @@ const express = require('express');
 const dotenv = require('dotenv');
 const cors = require('cors');
 const { connectDB } = require('./lib/connection');
+const cookieParser = require("cookie-parser");
 
 const app = express();
 const port = 5000;
@@ -14,14 +15,16 @@ dotenv.config();
 app.use(express.json({ limit: "10mb" })); // Bisa sesuaikan, misalnya "10mb" atau lebih kecil
 app.use(express.urlencoded({ limit: "10mb", extended: true }));
 
+
+app.use(express.json());
+app.use(cookieParser()); // Tambahkan sebelum routes
+
 app.use(
   cors({
-    origin: "*",
+    origin: `${process.env.FRONTED_URL}`,
     credentials: true,
   })
 )
-
-app.use(express.json());
 
 // app.use((req, res, next) => {
 //   let data = [];
@@ -31,8 +34,6 @@ app.use(express.json());
 //     next();
 //   });
 // });
-
-
 app.use('/api/v1', routes);
 
 // not found routes

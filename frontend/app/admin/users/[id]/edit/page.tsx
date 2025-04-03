@@ -68,28 +68,28 @@ const EditUser = () => {
 
     console.log("ini adalah handle user submit", formData);
 
-    // try {
-    //   const response = await axios.put(
-    //     `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/users/${paramUserId}`,
-    //     formData,
-    //     { 
-    //       headers: { 
-    //         "Authorization": `Bearer ${token}`
-    //       },
-    //     }
-    //   );
+    try {
+      const response = await axios.put(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/users/${paramUserId}`,
+        formData,
+        { 
+          headers: { 
+            "Authorization": `Bearer ${token}`
+          },
+        }
+      );
 
-    //   if(response.status === 200) {
-    //     toast.success("User Updated successfully");
-    //     router.push("/admin/users"); 
-    //   } else {
-    //     toast.error(response.data.message || "Failed to add product!");
-    //   }
-    // } catch (error: any) {
-    //   const errorMessage = error.response?.data?.message || "An unexpected error occurred. Please try again.";
-    //   toast.error(errorMessage);
-    //   console.error('Error when submitting new product', error);
-    // }
+      if(response.status === 200) {
+        toast.success("User Updated successfully");
+        router.push("/admin/users"); 
+      } else {
+        toast.error(response.data.message || "Failed to add product!");
+      }
+    } catch (error: any) {
+      const errorMessage = error.response?.data?.message || "An unexpected error occurred. Please try again.";
+      toast.error(errorMessage);
+      console.error('Error when submitting new product', error);
+    }
   }
 
   return (
