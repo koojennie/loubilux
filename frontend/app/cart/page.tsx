@@ -2,12 +2,9 @@
 
 import Navbar from "@/components/organisms/Navbar/Navbar";
 import Image from "next/image";
-import { useState } from "react";
-import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from "@headlessui/react";
-import { TbRosetteDiscount } from "react-icons/tb";
+import Link from "next/link";
 
 export default function page() {
-  const [isOpen, setIsOpen] = useState(false);
   return (
     <>
     <Navbar />
@@ -87,60 +84,20 @@ export default function page() {
             </div>
         </div>
         <div className="flex items-center flex-col sm:flex-row justify-center gap-4 mt-8">
-            <button onClick={() => setIsOpen(true)}
-                className="!rounded-full py-4 w-full max-w-[280px] flex items-center bg-[#f8f5f2] justify-center transition-all duration-500 hover:bg-[#f4ebe1]">
-                <span className="px-2 font-semibold text-lg leading-8 text-[#493628]">Add Coupon Code</span>
-                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none">
-                    <path d="M8.25324 5.49609L13.7535 10.9963L8.25 16.4998" stroke="#493628" strokeWidth="1.6"
-                        strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-            </button>
-            <button
-                className="!rounded-full w-full max-w-[280px] py-4 text-center justify-center items-center bg-[#493628] font-semibold text-lg text-white flex transition-all duration-500 hover:bg-[#705C53]">Continue
-                to Payment
-                <svg className="ml-2" xmlns="http://www.w3.org/2000/svg" width="23" height="22" viewBox="0 0 23 22"
-                    fill="none">
-                    <path d="M8.75324 5.49609L14.2535 10.9963L8.75 16.4998" stroke="white" strokeWidth="1.6"
-                        strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-            </button>
+            <Link href="/checkout">
+                <button 
+                    className="!rounded-full w-full max-w-[280px] py-4 px-4 text-center justify-center items-center bg-[#493628] font-semibold text-lg text-white flex transition-all duration-500 hover:bg-[#705C53]">Continue
+                    to Checkout
+                    <svg className="ml-2" xmlns="http://www.w3.org/2000/svg" width="23" height="22" viewBox="0 0 23 22"
+                        fill="none">
+                        <path d="M8.75324 5.49609L14.2535 10.9963L8.75 16.4998" stroke="white" strokeWidth="1.6"
+                            strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                </button>
+            </Link>
         </div>
       </div>
   </section>
-  <Dialog open={isOpen} onClose={() => setIsOpen(false)} className="relative z-50">
-        {/* Backdrop dengan efek blur */}
-        <DialogBackdrop className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm" />
-
-        {/* Modal Content */}
-        <div className="fixed inset-0 flex items-center justify-center p-4">
-          <DialogPanel className="relative max-w-lg w-full bg-white rounded-lg shadow-lg p-6">
-            <div className="flex flex-col items-center text-center">
-              <div className="mx-auto flex size-12 items-center justify-center rounded-full bg-[#f8f5f2]">
-                <TbRosetteDiscount className="size-6 text-[#AB886D]" />
-              </div>
-              <DialogTitle className="text-lg font-semibold text-gray-900 mt-3">Apply Coupon</DialogTitle>
-              <p className="text-sm text-gray-500">Enter your coupon code to get a discount.</p>
-              <input
-                type="text"
-                className="mt-3 px-4 py-2 border rounded-lg w-full outline-none focus:ring-2 focus:ring-[#493628]"
-                placeholder="Enter coupon code"
-              />
-            </div>
-
-            {/* Buttons */}
-            <div className="mt-4 flex justify-end gap-3">
-              <button
-                onClick={() => setIsOpen(false)}
-                className="px-4 py-2 !rounded-full max-w-[280px] bg-[#f8f5f2] transition-all duration-500 hover:bg-[#f4ebe1] font-medium text-[#493628]"
-              >
-                Cancel
-              </button>
-              <button className="px-4 py-2 !rounded-full bg-[#493628] text-white transition-all duration-500 font-medium hover:bg-[#705C53]
-              ">Apply</button>
-            </div>
-          </DialogPanel>
-        </div>
-    </Dialog>
   </>                                    
   )
 }
