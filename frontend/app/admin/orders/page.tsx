@@ -42,28 +42,29 @@ interface Order {
 const OrdersPage = () => {
   const router = useRouter();
 
-  const [orders, setOrders] = useState<Order[]>([]);
+  const [user, setUser] = useState(null);
   const [token, setToken] = useState<string | null>(null);
+  const [orders, setOrders] = useState<Order[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isModalConfirmationDeleteOpen, setIsModalConfirmationDeleteOpen] = useState<boolean>(false);
   const [isModalViewDetailOpen, setIsModalViewDetailOpen] = useState<boolean>(true);
   const [selectedViewDetailOrder, setSelectedViewDetailOrder] = useState<Order | null>(null);
   const [selectedDeleted, setSelectedDeleted] = useState<Order | null>(null);
 
-  const fetchToken = async () => {
-    try {
-      const response = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/auth/login`, {
-        username: 'saniadmin1',
-        password: 'saniadmin1.P'
-      });
-      const token = response.data.token;
-      setToken(token);
-      console.log('done get token', token);
+  // const fetchToken = async () => {
+  //   try {
+  //     const response = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/auth/login`, {
+  //       username: 'saniadmin1',
+  //       password: 'saniadmin1.P'
+  //     });
+  //     const token = response.data.token;
+  //     setToken(token);
+  //     console.log('done get token', token);
 
-    } catch (error) {
-      console.error('Error fetching token', error);
-    }
-  };
+  //   } catch (error) {
+  //     console.error('Error fetching token', error);
+  //   }
+  // };
 
   const fetchAllOrders = async () => {
 
@@ -91,8 +92,8 @@ const OrdersPage = () => {
   }
 
   useEffect(() => {
-    fetchToken();
-  }, [])
+    // fetchToken();
+  }, []);
 
   useEffect(() => {
     if (token) {
