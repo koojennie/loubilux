@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import NavbarAdmin from "@/components/organisms/Navbar/NavbarAdmin";
 import SidebarAdmin from "@/components/organisms/Sidebar/SidebarAdmin";
+import {useRouter} from "next/navigation";
 import axios from "axios";
 import ErrorMessage from "@/components/organisms/Error/ErrorMessage";
 
@@ -10,13 +11,16 @@ interface AdminLayoutProps {
   children: React.ReactNode;
 }
 
+interface User {
+  id: string;
+  role: string;
+  iat: number;
+  exp: number;
+}
+
 const AdminLayout = ({ children }: AdminLayoutProps) => {
-  interface User {
-    id: string;
-    role: string;
-    iat: number;
-    exp: number;
-  }
+
+  const router = useRouter();
 
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
@@ -60,6 +64,21 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  // Function to handle sign out
+  const handleSignOut = async () => {
+    try {
+      await axios.post(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/auth/logout`,
+        {},
+        { withCredentials: true }
+      );
+      // Redirect to login page after successful logout
+      router.push("/login");
+    } catch (err) {
+      console.error("Error during sign out:", err);
+    }
+  };
 
   // Error Handling
   if (loading) return <p className="text-center mt-5">Loading...</p>;
@@ -108,7 +127,7 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
 
   return (
     <div className="flex">
-      <NavbarAdmin isSidebarOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
+      <NavbarAdmin isSidebarOpen={isSidebarOpen} toggleSidebar={toggleSidebar} handleSignOut={handleSignOut} />
       <SidebarAdmin
         isSidebarOpen={isSidebarOpen}
         toggleSidebar={toggleSidebar}
