@@ -144,38 +144,48 @@ const getUserOrders = async (req, res) => {
 };
 
 const getAllOrders = async (req, res) => {
-    try {
-        const orders = await Order.find()
-            .populate("user", "name email")
-            .select("_id user totalPrice status paymentMethod orderDate courier orderId isPaid");
+  try {
+    const { page = 1, limit = 10 } = req.query;
+    const skip = (page - 1) * limit;
 
-        if (!orders.length) {
-            return res.status(404).json({ status: "error", message: "No orders found" });
-        };
+    const totalItems = await Order.countDocuments();
+    const orders = await Order.find()
+      .populate("user", "name email")
+      .select("_id user totalPrice status paymentMethod orderDate courier orderId isPaid")
+      .skip(skip)
+      .limit(parseInt(limit));
 
-        const formattedOrders = orders.map(order => ({
-            _id: order._id,
-            orderId: order.orderId,
-            user: order.user ? order.user.name : "Guest",
-            email: order.user ? order.user.email : "-",
-            totalPrice: order.totalPrice,
-            statusOrder: order.status,
-            isPaid: order.isPaid,
-            paymentMethod: order.paymentMethod,
-            orderDate: new Date(order.orderDate).toLocaleString(),
-            courier: order.courier ? order.courier.name : "Not Assigned",
-        }));
+    if (!orders.length) {
+      return res.status(404).json({ status: "error", message: "No orders found" });
+    };
 
-        res.status(200).json({
-            status: "success",
-            message: "Orders retrieved successfully",
-            data: formattedOrders,
-        });
+    const formattedOrders = orders.map(order => ({
+      _id: order._id,
+      orderId: order.orderId,
+      user: order.user ? order.user.name : "Guest",
+      email: order.user ? order.user.email : "-",
+      totalPrice: order.totalPrice,
+      statusOrder: order.status,
+      isPaid: order.isPaid,
+      paymentMethod: order.paymentMethod,
+      orderDate: new Date(order.orderDate).toLocaleString(),
+      courier: order.courier ? order.courier.name : "Not Assigned",
+    }));
 
-    } catch (error) {
-        console.error("Error retrieving orders:", error);
-        res.status(500).json({ status: "error", message: "Server Error" });
-    }
+    res.status(200).json({
+      status: "success",
+      message: "Orders retrieved successfully",
+      page: parseInt(page),
+      limit: parseInt(limit),
+      totalPages: Math.ceil(totalItems / limit),
+      totalOrders: totalItems,
+      data: formattedOrders,
+    });
+
+  } catch (error) {
+    console.error("Error retrieving orders:", error);
+    res.status(500).json({ status: "error", message: "Server Error" });
+  }
 };
 
 

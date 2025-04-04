@@ -56,12 +56,8 @@ const ProductPage = ({ initialProducts }: ProductsProps) => {
 
   // const [itemsToShow, setItemsToShow] = useState(5);
 
-
-  // fetch ulang data setelah halaman dimuat (CSR)
-  useEffect(() => {
-    
+  useEffect(() => {    
     fetchProducts();
-    fetchToken();
   }, [page, limit, sortBy, orderBy, searchQuery]);
 
   const fetchProducts = async () => {
@@ -77,27 +73,11 @@ const ProductPage = ({ initialProducts }: ProductsProps) => {
         image: product.image || "/icon/loubilux-logo.png",
       }));
       setProducts(results.data);
-      setTotalItems(results.total)
-      console.log("sortby ", orderBy);
+      setTotalItems(results.total);
     } catch (error) {
       console.error("Error fetching products", error);
     }
     setIsLoading(false);
-  };
-
-  const fetchToken = async () => {
-    try {
-      const response = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/auth/login`, {
-        username: 'saniadmin1',
-        password: 'saniadmin1.P'
-      });
-      const token = response.data.token;
-      setToken(token);
-      console.log('done get token', token);
-      
-    } catch (error) {
-      console.error('Error fetching token', error);
-    }
   };
 
   const handleDeleteProduct = async (product: Product | null) => {
@@ -110,9 +90,7 @@ const ProductPage = ({ initialProducts }: ProductsProps) => {
       const response = await axios.delete(
         `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/products/${product._id}`,
         {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          withCredentials: true
         }
       );
 
@@ -149,6 +127,8 @@ const ProductPage = ({ initialProducts }: ProductsProps) => {
         <HeaderContentAdmin
           header="Products"
           subHeader="List of all products"
+          labelAdd="Add Product"
+          tableType="products"
           columns={[
             { key: 'no', label: 'Number' },
             { key: 'productCode', label: 'Product Code' },

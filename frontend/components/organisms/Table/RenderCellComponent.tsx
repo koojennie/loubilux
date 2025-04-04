@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { generateSlug } from '@/utils/generateSlug';
 
 
-export type TableType = 'products' | 'users' | 'transaction' | 'orders';
+export type TableType = 'products' | 'users' | 'transaction' | 'orders'| "categories";
 
 export interface Column<T> {
   key: keyof T | 'actions';
@@ -46,16 +46,16 @@ export const renderCellContent = <T extends { [key: string]: any }>(
       );
     } else if (col.key === 'statusPublish') {
       return (
-        <span
-          className={`px-3 py-1 rounded-md text-xs font-semibold ${value === 'active' ? 'bg-green-200 text-green-800'
-            : value === 'draft'
-              ? 'bg-yellow-200 text-yellow-800'
-              : 'bg-gray-200 text-gray-800'
-            }`}
-        >
-          {typeof value === 'string' ? value.charAt(0).toUpperCase() + value.slice(1) : 'No status'}
-
-        </span>);
+          <span
+            className={`px-3 py-1 rounded-md text-xs font-semibold ${value === 'active' ? 'bg-green-200 text-green-800'
+              : value === 'draft'
+                ? 'bg-yellow-200 text-yellow-800'
+                : 'bg-gray-200 text-gray-800'
+              }`}
+          >
+            {typeof value === 'string' ? value.charAt(0).toUpperCase() + value.slice(1) : 'No status'}
+          </span>
+        );
     }
   } else if (tableType === 'users') {
     if (col.key === 'profilePicture') {

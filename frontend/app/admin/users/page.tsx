@@ -25,7 +25,7 @@ interface UsersProps {
   initialUsers: User[];
 };
 
-const ProductPage = ({ initialUsers }: UsersProps) => {
+const UserPage = ({ initialUsers }: UsersProps) => {
   const router = useRouter();
 
   const [user, setUser] = useState<User[]>(initialUsers);
@@ -49,17 +49,13 @@ const ProductPage = ({ initialUsers }: UsersProps) => {
     try {
       const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/users?sortBy=${sortBy}&sortOrder=${orderBy}&limit=${limit}&page=${page}&searchQuery=${searchQuery}`,
         {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
+          withCredentials: true
         }
       )
       const result = response.data.data.map((user: any)=>({
         id: user._id,
         ...user
       }));
-      console.log(result);
-      
       setUser(result);
       setTotalUsers(response.data.totalUsers)
     } catch (error) {
@@ -68,36 +64,10 @@ const ProductPage = ({ initialUsers }: UsersProps) => {
     setIsLoading(false);
   };
 
-  const fetchToken = async () => {
-    try {
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/auth/login`,
-        {
-          username: "saniadmin1",
-          password: "saniadmin1.P",
-        }
-      );
-      const token = response.data.token;
-      setToken(token);
-      console.log("done get token", token);
-    } catch (error) {
-      console.error("Error fetching token", error);
-    }
-  };
-
   // fetch data
   useEffect(() => {
-    const fetchData = async () => {
-      await fetchToken();
-    };
-    fetchData();
-  }, []);
-
-  useEffect(() => {
-    if (token) {
-      fetchAllUsers();
-    }
-  }, [token, orderBy, sortBy, page, limit, searchQuery]);
+    fetchAllUsers()
+  }, [ orderBy, sortBy, page, limit, searchQuery]);
 
   const handleDeleteUsers = async (user: User | null) => {
     if (!user) {
@@ -109,9 +79,7 @@ const ProductPage = ({ initialUsers }: UsersProps) => {
       const response = await axios.delete(
         `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/users/${user._id}`,
         {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          withCredentials: true
         }
       );
 
@@ -145,6 +113,8 @@ const ProductPage = ({ initialUsers }: UsersProps) => {
         <HeaderContentAdmin
           header="Users"
           subHeader="List of all Users"
+          labelAdd="Add Users"
+          tableType="users"
           columns={[
             { key: "userId", label: "User ID" },
             { key: "name", label: "Name" },
@@ -213,4 +183,4 @@ const ProductPage = ({ initialUsers }: UsersProps) => {
   );
 };
 
-export default ProductPage;
+export default UserPage;

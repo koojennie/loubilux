@@ -17,25 +17,6 @@ const EditUser = () => {
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
-    const fetchToken = async () => {
-      try {
-        const response = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/auth/login`, {
-          username: 'saniadmin1',
-          password: 'saniadmin1.P'
-        });
-        const token = response.data.token;
-        setToken(token);
-        console.log('done get token', token);
-        
-      } catch (error) {
-        console.error('Error fetching token', error);
-      }
-    };
-
-    fetchToken();
-  }, []);
-
-  useEffect(() => {
     const fetchUserDataById = async () => {
       if (!token) return;
 
@@ -43,9 +24,7 @@ const EditUser = () => {
         const response = await axios.get(
           `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/users/${paramUserId}`,
           {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+            withCredentials: true
           }
         );
         setUser(response.data.data);

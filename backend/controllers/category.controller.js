@@ -52,13 +52,52 @@ const createCategory = async (req, res) => {
     }
 }
 
-const getCategories = async (req, res) => {
+const getCategoryById = async (req, res) => {
     try {
-        const categories = await Category.find();
+        const categoryId = req.params.id;
+
+        const category = await Category.findById(categoryId);
+
+        if (!category) {
+            return res.status(404).json({
+                status: 'error',
+                message: 'Category not found'
+            });
+        }
 
         return res.status(200).json({
             status: 'success',
-            message: 'Categories retrieved successfully',  
+            message: 'Category retrieved successfully',
+            data: category
+        });
+
+    } catch (error) {
+        console.error(error.message);
+        return res.status(500).json({
+            status: 'error',
+            message: 'Internal Server Error',
+            error: error.message
+        });
+    }
+}
+
+const getCategories = async (req, res) => {
+    try {
+        const { page = 1, limit = 10 } = req.query;
+        const skip = (page - 1) * limit;
+
+        const totalCategories = await Category.countDocuments();
+        const categories = await Category.find().skip(skip).limit(parseInt(limit));
+
+        const totalPages = Math.ceil(totalCategories / limit);
+
+        return res.status(200).json({
+            status: 'success',
+            message: 'Categories retrieved successfully',
+            total: totalCategories,
+            page: parseInt(page),
+            limit: parseInt(limit),
+            totalPages,
             data: categories
         });
 
@@ -126,4 +165,4 @@ const deleteCategory = async (req, res) => {
     }
 }
 
-module.exports = {createCategory, getCategories ,updateCategory, deleteCategory};
+module.exports = {createCategory, getCategories, getCategoryById, updateCategory, deleteCategory};
