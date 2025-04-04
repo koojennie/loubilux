@@ -2,23 +2,32 @@
 
 import React, { useState } from "react";
 import { Column } from "../Table/RenderCellComponent";
+import { MdAddBox } from "react-icons/md";
+import { IoPersonAdd } from "react-icons/io5";
+import { TbCategoryPlus } from "react-icons/tb";
+
+type TableType = "products" | "users" | "orders" | "categories";
 
 interface HeaderContentAdminProps<T> {
   header: string;
   subHeader: string;
-  columns: Column<T>[]; 
+  labelAdd: string;
+  tableType: TableType;
+  columns: Column<T>[];
   totalItems: number;
   onChangeDropDownSortBy: (value: string) => void;
   onChangeDropDownOrderBy: (value: string) => void;
   onChangeDropDownLimitData: (value: number) => void;
   onChangeSearchQuery: (value: string) => void;
   toAddPage: () => void;
-  searchPlaceholder?: string; 
+  searchPlaceholder?: string;
 }
 
 const HeaderContentAdmin = <T,>({
   header,
   subHeader,
+  labelAdd,
+  tableType,
   toAddPage,
   totalItems,
   columns,
@@ -60,16 +69,25 @@ const HeaderContentAdmin = <T,>({
           <h5 className="text-2xl font-semibold text-blue-gray-900">{header}</h5>
           <p className="mt-1 text-base text-gray-700">{subHeader}</p>
         </div>
-        <button
-          className="flex items-center gap-2 bg-gray-900 py-2 px-4 text-white text-xs font-bold uppercase rounded-lg shadow-md hover:shadow-lg"
-          type="button"
-          onClick={toAddPage}
-        >
-          <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+        {tableType !== 'orders' && (
+          <button
+            className="flex items-center gap-2 bg-gray-900 py-2 px-3 text-white text-xs font-bold uppercase rounded-lg shadow-md hover:shadow-lg"
+            type="button"
+            onClick={toAddPage}
+          >
+            {/* <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
             <path d="M6.25 6.375a4.125 4.125 0 118.25 0 4.125 4.125 0 01-8.25 0zM3.25 19.125a7.125 7.125 0 0114.25 0v.003l-.001.119a.75.75 0 01-.363.63 13.067 13.067 0 01-6.761 1.873c-2.472 0-4.786-.684-6.76-1.873a.75.75 0 01-.364-.63l-.001-.122zM19.75 7.5a.75.75 0 00-1.5 0v2.25H16a.75.75 0 000 1.5h2.25v2.25a.75.75 0 001.5 0v-2.25H22a.75.75 0 000-1.5h-2.25V7.5z"></path>
-          </svg>
-          Add Users
-        </button>
+            </svg> */
+            }
+            {tableType === "products" && <MdAddBox size={19} />}
+            {tableType === "users" && <IoPersonAdd size={14} />}
+            {tableType === "categories" && <TbCategoryPlus size={14} />}
+            {/* {tableType === "orders" && <MdAddBox size={19} style={{ color: "green" }} />} */}
+
+            {labelAdd}
+          </button>
+        )}
+
       </div>
 
       <div className="grid grid-cols-1 mt-3 sm:grid-cols-2 md:grid-cols-4 gap-2">

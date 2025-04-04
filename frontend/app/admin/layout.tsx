@@ -11,7 +11,7 @@ interface AdminLayoutProps {
   children: React.ReactNode;
 }
 
-interface User {
+export interface User {
   id: string;
   role: string;
   iat: number;
@@ -41,7 +41,7 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
         if (err.response) {
           setError(err.response.status);
         } else {
-          setError(500); // Internal server error
+          setError(500); 
         }
       } finally {
         setLoading(false);
@@ -49,7 +49,7 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
     };
 
     fetchUser();
-  }, []); // Runs only once when the component mounts
+  }, []); 
 
   // Handle window resizing
   useEffect(() => {
@@ -74,7 +74,7 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
         { withCredentials: true }
       );
       // Redirect to login page after successful logout
-      router.push("/login");
+      router.push("/sign-in");
     } catch (err) {
       console.error("Error during sign out:", err);
     }
@@ -132,6 +132,7 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
         isSidebarOpen={isSidebarOpen}
         toggleSidebar={toggleSidebar}
         setIsSidebarOpen={setIsSidebarOpen}
+        userRole={user.role}
       />
       <div className="w-full">
         <div

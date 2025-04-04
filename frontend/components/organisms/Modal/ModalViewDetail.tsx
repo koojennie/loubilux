@@ -9,7 +9,7 @@ import "swiper/css/pagination";
 import "swiper/css/navigation";
 import { IoCloseSharp } from "react-icons/io5";
 
-export type TableType = "products" | "users" | "orders";
+export type TableType = "products" | "users" | "orders" | "categories";
 
 export interface Column<T> {
   key: keyof T | "actions";
@@ -106,7 +106,7 @@ const ModalViewDetails: React.FC<ModalViewDetailsProps> = ({ isOpen, onClose, da
           </div>
 
 
-          <div className={`grid grid-cols-1 ${tableType !== "orders" ? "md:grid-cols-2" : ""} gap-4 md:gap-6`}>
+          <div className={`grid grid-cols-1 ${(tableType !== "orders" && tableType != "categories") ? "md:grid-cols-2" : ""} gap-4 md:gap-6`}>
             {/* Details Section */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               {columns.map(({ key, label }) => (
@@ -118,7 +118,7 @@ const ModalViewDetails: React.FC<ModalViewDetailsProps> = ({ isOpen, onClose, da
             </div>
 
             {/* Image Preview Section */}
-            {tableType !== 'orders' && (
+            {(tableType !== 'orders' && tableType !== "categories") && (
               <div className="flex flex-col items-center">
                 <p className="font-semibold text-sm sm:text-base text-slate-700">{tableType === 'users' ? "Profile Picture" : "Preview Image"}</p>
 

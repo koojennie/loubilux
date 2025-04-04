@@ -42,9 +42,12 @@ interface Order {
 const OrdersPage = () => {
   const router = useRouter();
 
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [page, setPage] = useState<number>(1);
+  const [totalItems, setTotalItems] = useState<number>(1);
+  const [limit, setLimit] = useState<number>(5);
   const [user, setUser] = useState(null);
   const [token, setToken] = useState<string | null>(null);
-  const [orders, setOrders] = useState<Order[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isModalConfirmationDeleteOpen, setIsModalConfirmationDeleteOpen] = useState<boolean>(false);
   const [isModalViewDetailOpen, setIsModalViewDetailOpen] = useState<boolean>(true);
@@ -73,10 +76,17 @@ const OrdersPage = () => {
           withCredentials: true
         }
       );
-      setOrders(response.data.data);
-      console.log("it is all orders ", response.data.data);
+      const result = response.data.data.map((user: any) => (
+        {
+          id: user._id,
+          ...user
+        }
+      ))
 
-
+      setOrders(result);
+      setPage(response.data.page);
+      setTotalItems(response.data.totalOrders);
+      setLimit(response.data.limit);
     } catch (error) {
       console.error('error when fetch all orders :', error);
 
@@ -95,8 +105,8 @@ const OrdersPage = () => {
 
   const handleOpenCloseModalViewDetail = (order?: Order) => {
     console.log('ini adalah orders yang dipilih', order);
-    setSelectedViewDetailOrder(order || null)
-    setIsModalViewDetailOpen(!isModalViewDetailOpen);
+    // setSelectedViewDetailOrder(order || null)
+    // setIsModalViewDetailOpen(!isModalViewDetailOpen);
   }
 
 
@@ -105,6 +115,8 @@ const OrdersPage = () => {
       <HeaderContentAdmin<Order>
         header="Orders"
         subHeader="All List of Orders"
+        tableType="orders"
+        labelAdd=""
         columns={[
           { key: 'orderId', label: 'Order Id' as keyof Order },
           { key: 'user', label: 'Customer' as keyof Order },
@@ -133,18 +145,18 @@ const OrdersPage = () => {
           // { key: 'category', label: 'Category' },
         ]}
         tableType="orders"
-        onInfo={(id) => { handleOpenCloseModalViewDetail(orders.find(order=>order.id === id)) }}
+        onInfo={(id) => { handleOpenCloseModalViewDetail(orders.find(order => order.id === id)) }}
         onEdit={() => { }}
         onDelete={() => { }}
-        page={1}
-        limit={5}
-        totalItems={orders.length}
+        page={page}
+        limit={limit}
+        totalItems={totalItems}
         onPageChange={(newPage) => {
           console.log('Page changed to:', newPage);
         }}
       />
 
-      <ModalViewDetails
+      {/* <ModalViewDetails
         isOpen={isModalViewDetailOpen}
         onClose={handleOpenCloseModalViewDetail}
         data={selectedViewDetailOrder}
@@ -156,7 +168,7 @@ const OrdersPage = () => {
           { key: 'statusOrder', label: 'Status Order' as keyof Order },
           { key: 'paymentMethod', label: 'Payment Status' as keyof Order },
         ]}
-      />
+      /> */}
     </div>
   );
 };
