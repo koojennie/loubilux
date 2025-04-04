@@ -10,6 +10,15 @@ export default function page() {
     <Navbar />
     <section className="py-10 relative">
     <div className="w-full max-w-7xl px-4 md:px-5 lg-6 mx-auto">
+        <div className="flex flex-col -pb-12 top-4 left-4">
+            <Link href="/">
+                <button className="bg-[#493628] text-white !rounded-full w-12 h-12 flex items-center justify-center">
+                    <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7m0 0l7-7"></path>
+                    </svg>
+                </button>
+            </Link>
+        </div>
         <h2 className="fw-bold text-4xl mb-30 text-center !text-[#493628]">Shopping Cart
         </h2>
         <div className="hidden lg:grid grid-cols-2 py-6">
