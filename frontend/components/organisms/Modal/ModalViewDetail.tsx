@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import React from "react";
+import React, { forwardRef } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Navigation } from "swiper/modules";
 import "swiper/css";
@@ -78,7 +78,7 @@ const renderDataDetail = (colKey: string, value: any, tableType: TableType) => {
               : 'bg-gray-200 text-gray-800'
           }`}
         >
-          {value === 'superadmin' ? String('Super Admin') : value === 'admin' ? String('Admin') : value === 'user' ? String('User'): String(value)
+          {value === 'superadmin' ? String('Super Admin') : value === 'admin' ? String('Admin') : value === 'user' ? String('User') : String(value)
           }
         </span>
       )
@@ -87,40 +87,57 @@ const renderDataDetail = (colKey: string, value: any, tableType: TableType) => {
   return <p className="text-gray-500 text-sm">{value ?? "N/A"}</p>;
 };
 
-const ModalViewDetails: React.FC<ModalViewDetailsProps> = ({ isOpen, onClose, data, columns, tableType }) => {
+const ModalViewDetails = forwardRef<HTMLDivElement, ModalViewDetailsProps>(({ isOpen, onClose, data, columns, tableType }, ref) => {
   if (!isOpen || !data) return null;
 
   const images = data.images ?? []; // Array gambar
   const profilePicture = data.profilePicture ?? ""; // Single image
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-xs transition-opacity duration-300 z-50">
-      <div className="relative flex flex-col w-[90%] max-w-screen-sm sm:max-w-screen-md lg:max-w-screen-lg rounded-xl bg-white shadow-lg">
+    <div
+      className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-xs transition-opacity duration-300 z-50"
+    >
+      <div className="relative flex flex-col w-[90%] max-w-screen-sm sm:max-w-screen-md lg:max-w-screen-lg rounded-xl bg-white shadow-lg" ref={ref}>
         <div className="flex flex-col p-4 sm:p-6">
           {/* Close Button and Title */}
           <div className="flex justify-between items-center mb-4">
-            <p className="font-bold text-xl sm:text-2xl text-slate-700">{data.name || data.orderId || "Detail"}</p>
-            <button className="text-gray-500 hover:bg-gray-300 p-2 rounded-full" onClick={onClose}>
+            <p className="font-bold text-xl sm:text-2xl text-slate-700">
+              {data.name || data.orderId || "Detail"}
+            </p>
+            <button
+              className="text-gray-500 hover:bg-gray-300 p-2 rounded-full"
+              onClick={onClose}
+            >
               <IoCloseSharp size={24} />
             </button>
           </div>
 
-
-          <div className={`grid grid-cols-1 ${(tableType !== "orders" && tableType != "categories") ? "md:grid-cols-2" : ""} gap-4 md:gap-6`}>
+          <div
+            className={`grid grid-cols-1 ${tableType !== "orders" && tableType != "categories"
+              ? "md:grid-cols-2"
+              : ""
+              } gap-4 md:gap-6`}
+          >
             {/* Details Section */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               {columns.map(({ key, label }) => (
                 <div key={String(key)} className="mb-2">
-                  <p className="font-semibold text-gray-600 text-sm sm:text-base">{label}</p>
+                  <p className="font-semibold text-gray-600 text-sm sm:text-base">
+                    {label}
+                  </p>
                   {renderDataDetail(String(key), data[key], tableType)}
                 </div>
               ))}
             </div>
 
             {/* Image Preview Section */}
-            {(tableType !== 'orders' && tableType !== "categories") && (
+            {tableType !== "orders" && tableType !== "categories" && (
               <div className="flex flex-col items-center">
-                <p className="font-semibold text-sm sm:text-base text-slate-700">{tableType === 'users' ? "Profile Picture" : "Preview Image"}</p>
+                <p className="font-semibold text-sm sm:text-base text-slate-700">
+                  {tableType === "users"
+                    ? "Profile Picture"
+                    : "Preview Image"}
+                </p>
 
                 {/* Jika ada banyak gambar (array) */}
                 {images.length > 0 ? (
@@ -133,7 +150,13 @@ const ModalViewDetails: React.FC<ModalViewDetailsProps> = ({ isOpen, onClose, da
                     {images.map((image: string, index: number) => (
                       <SwiperSlide key={index}>
                         <div className="relative w-full h-48 sm:h-64 flex justify-center items-center">
-                          <Image src={image} alt={`Image ${index + 1}`} fill objectFit="contain" className="rounded-lg" />
+                          <Image
+                            src={image}
+                            alt={`Image ${index + 1}`}
+                            fill
+                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                            className="rounded-lg"
+                          />
                         </div>
                       </SwiperSlide>
                     ))}
@@ -141,7 +164,13 @@ const ModalViewDetails: React.FC<ModalViewDetailsProps> = ({ isOpen, onClose, da
                 ) : profilePicture ? (
                   // Jika hanya ada satu gambar (profilePicture)
                   <div className="relative w-40 h-40 sm:w-64 sm:h-64 flex justify-center items-center">
-                    <Image src={profilePicture} alt="Profile Picture" fill objectFit="contain" className="rounded-lg" />
+                    <Image
+                      src={profilePicture}
+                      alt="Profile Picture"
+                      fill
+                      sizes=""
+                      className="rounded-lg"
+                    />
                   </div>
                 ) : (
                   // Jika tidak ada gambar sama sekali
@@ -154,6 +183,9 @@ const ModalViewDetails: React.FC<ModalViewDetailsProps> = ({ isOpen, onClose, da
       </div>
     </div>
   );
-};
+}
+);
+
+ModalViewDetails.displayName = "ModalViewDetails";
 
 export default ModalViewDetails;

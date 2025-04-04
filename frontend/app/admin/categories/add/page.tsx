@@ -30,7 +30,7 @@ const AddPageCategory = () => {
       );
 
       if (response.status === 201) {
-        toast.success("Category Created successfully");
+        toast.success("Category Created successfully", {duration: 2000});
         setTimeout(() => {
           router.push("/admin/categories");
         }, 1000);

@@ -29,8 +29,8 @@ const CategoriesPage = () => {
   const [page, setPage] = useState<number>(1);
   const [limit, setLimit] = useState<number>(10);
   const [total, setTotal] = useState<number>(1);
-  const [sortBy, setSortBy] = useState<string>("");
-  const [orderBy, setOrderBy] = useState<string>("");
+  const [sortBy, setSortBy] = useState<string>("createdAt");
+  const [orderBy, setOrderBy] = useState<string>("asc");
   const [searchQuery, setSearchQuery] = useState<string>("");
 
 
@@ -58,7 +58,7 @@ const CategoriesPage = () => {
 
   useEffect(() => {
     fetchAllCategories();
-  }, []);
+  }, [page, total, orderBy, sortBy, searchQuery]);
 
   const handleDeletedCategory = async (category: Category | null) => {
     if (!category) {
@@ -117,10 +117,10 @@ const CategoriesPage = () => {
             { key: "description", label: "description" }
           ]}
           totalItems={total}
-          onChangeDropDownLimitData={() => { }}
-          onChangeDropDownOrderBy={() => { }}
-          onChangeDropDownSortBy={() => { }}
-          onChangeSearchQuery={() => { }}
+          onChangeDropDownLimitData={setLimit}
+          onChangeDropDownOrderBy={setOrderBy}
+          onChangeDropDownSortBy={setSortBy}
+          onChangeSearchQuery={setSearchQuery}
           // backPage={() => { console.log("Back") }}
           toAddPage={() => router.push('/admin/categories/add')}
         />

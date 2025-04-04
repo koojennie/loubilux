@@ -13,8 +13,9 @@ interface HeaderContentAdminProps<T> {
   subHeader: string;
   labelAdd: string;
   tableType: TableType;
-  columns: Column<T>[];
   totalItems: number;
+  limitOptions?: number[];
+  columns: Column<T>[];
   onChangeDropDownSortBy: (value: string) => void;
   onChangeDropDownOrderBy: (value: string) => void;
   onChangeDropDownLimitData: (value: number) => void;
@@ -30,6 +31,7 @@ const HeaderContentAdmin = <T,>({
   tableType,
   toAddPage,
   totalItems,
+  limitOptions = [5, 10, 20, totalItems],
   columns,
   onChangeDropDownLimitData,
   onChangeDropDownSortBy,
@@ -99,7 +101,7 @@ const HeaderContentAdmin = <T,>({
             value={selectedLimit}
             onChange={(e) => handleSelectLimit(Number(e.target.value))}
           >
-            {[5, 10, 20, totalItems].map((value, index) => (
+            {limitOptions.map((value, index) => (
               <option key={`${value}-${index}`} value={value}>
                 {value === totalItems ? "All" : `${value} Data`}
               </option>

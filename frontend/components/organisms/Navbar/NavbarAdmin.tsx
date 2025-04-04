@@ -1,5 +1,5 @@
 "use client"
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { IoPersonCircleSharp } from "react-icons/io5";
 import { FaGear } from "react-icons/fa6";
@@ -13,6 +13,29 @@ interface SidebarAdminProps {
 
 const NavbarAdmin = ({ isSidebarOpen, toggleSidebar, handleSignOut }: SidebarAdminProps) => {
   const [openCloseDropDown, setOpenCloseDropDown] = useState<boolean>(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setOpenCloseDropDown(false);
+      }
+    };
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setOpenCloseDropDown(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, []);
 
   return (
     <div>
@@ -55,7 +78,8 @@ const NavbarAdmin = ({ isSidebarOpen, toggleSidebar, handleSignOut }: SidebarAdm
               {openCloseDropDown && (
                 <div
                   className="absolute z-10 min-w-[150px] overflow-auto rounded-lg border border-slate-200 bg-white p-1.5 shadow-lg focus:outline-none top-14"
-                // style={{ top: '50px', right: '10px' }} // Adjust these values as needed
+                  // style={{ top: '50px', right: '10px' }} // Adjust these values as needed
+                  ref={dropdownRef}
                 >
                   <li
                     role="menuitem"
@@ -92,7 +116,8 @@ const NavbarAdmin = ({ isSidebarOpen, toggleSidebar, handleSignOut }: SidebarAdm
                       </button>
                     </p>
                   </li>
-                </div>)}
+                </div>
+              )}
             </div>
           </div>
         </div>

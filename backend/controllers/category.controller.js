@@ -83,13 +83,30 @@ const getCategoryById = async (req, res) => {
 
 const getCategories = async (req, res) => {
     try {
-        const { page = 1, limit = 10 } = req.query;
-        const skip = (page - 1) * limit;
+        let { page, limit, sortOrder, sortBy, searchQuery } = req.query;
+        page = parseInt(page) || 1; 
+        limit = parseInt(limit) || 10; 
+        sortOrder = sortOrder === 'desc' ? -1 : 1;
+        
+        const sortOptions = {};
+        if (sortBy) {
+            sortOptions[sortBy] = sortOrder;
+        }
 
-        const totalCategories = await Category.countDocuments();
-        const categories = await Category.find().skip(skip).limit(parseInt(limit));
+        const query = {};
+        if (searchQuery) {
+            query.name = { $regex: searchQuery, $options: 'i' }; 
+        }
 
+        const totalCategories = await Category.countDocuments(query);
         const totalPages = Math.ceil(totalCategories / limit);
+
+        const categories = await Category.find(query)
+            .sort(sortOptions)
+            .skip((page-1) * limit)
+            .limit(parseInt(limit))
+            .lean();
+
 
         return res.status(200).json({
             status: 'success',

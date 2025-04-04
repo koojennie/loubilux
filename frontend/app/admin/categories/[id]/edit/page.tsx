@@ -47,7 +47,7 @@ const EditPageCategory = () => {
       );
 
       if(response.status === 200) {
-        toast.success("Category Updated successfully");
+        toast.success("Category Updated successfully", {duration: 2000});
         setTimeout(() => {
           router.push("/admin/categories");
         }, 1000); 

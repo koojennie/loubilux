@@ -1,9 +1,9 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import axios from "axios";
-import toast, {Toaster} from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
 import TableComponents from "@/components/organisms/Table/TableComponents";
 import HeaderContentAdmin from "@/components/organisms/HeaderContetntAdmin/HeaderContentAdmin";
 import ModalConfirmationDelete from "@/components/organisms/Modal/ModalConfirmationDelete";
@@ -26,7 +26,7 @@ export type Product = {
   price: number;
   statusPublish: string;
   images: string[];
-  description:string;
+  description: string;
   category: Category;
 }
 
@@ -48,17 +48,47 @@ const ProductPage = ({ initialProducts }: ProductsProps) => {
   const [sortBy, setSortBy] = useState<string>('createdAt');
   const [orderBy, setOrderBy] = useState<string>('asc');
   const [searchQuery, setSearchQuery] = useState<string>('');
-  const [isModalConfirmationDeleteOpen, setIsModalConfirmationDeleteOpen] = useState<boolean>(false);
   const [isModalViewDetailOpen, setIsModalViewDetailOpen] = useState<boolean>(false);
-  const [token, setToken] = useState<string>('');
-  
+  const [isModalConfirmationDeleteOpen, setIsModalConfirmationDeleteOpen] = useState<boolean>(false);
+  const modalViewDetailRef = useRef<HTMLDivElement>(null);
+  const modalConfirmationDeleteRef = useRef<HTMLDivElement>(null);
+
+
   // const limit = 5;
 
   // const [itemsToShow, setItemsToShow] = useState(5);
-
-  useEffect(() => {    
+  useEffect(() => {
     fetchProducts();
   }, [page, limit, sortBy, orderBy, searchQuery]);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (modalViewDetailRef.current && !modalViewDetailRef.current.contains(event.target as Node)) {
+        setIsModalViewDetailOpen(false);
+      } else if (modalConfirmationDeleteRef.current && !modalConfirmationDeleteRef.current.contains(event.target as Node)) {
+        setIsModalConfirmationDeleteOpen(false);
+      }
+    };
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        if (isModalViewDetailOpen) {
+          setIsModalViewDetailOpen(false);
+        } else if (isModalConfirmationDeleteOpen) {
+          setIsModalConfirmationDeleteOpen(false);
+        }
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [isModalViewDetailOpen, isModalConfirmationDeleteOpen]);
+  // }, []);
 
   const fetchProducts = async () => {
     setIsLoading(true);
@@ -68,7 +98,7 @@ const ProductPage = ({ initialProducts }: ProductsProps) => {
       results.data = results.data.map((product: any, index: number) => ({
         id: product._id,
         ...product,
-        no: (page - 1) * limit + (index + 1), 
+        no: (page - 1) * limit + (index + 1),
         category: product.category?.name || " ",
         image: product.image || "/icon/loubilux-logo.png",
       }));
@@ -82,7 +112,7 @@ const ProductPage = ({ initialProducts }: ProductsProps) => {
 
   const handleDeleteProduct = async (product: Product | null) => {
     if (!product) {
-      console.log("No product selected for deletion");  
+      console.log("No product selected for deletion");
       return;
     }
 
@@ -97,16 +127,16 @@ const ProductPage = ({ initialProducts }: ProductsProps) => {
       toast.success('Deleted Sucessfully');
 
       fetchProducts();
-      
+
       setIsModalConfirmationDeleteOpen(!isModalConfirmationDeleteOpen);
     } catch (error) {
       console.error('Error when deleting products ', error);
-    } 
-    
-  };
-  
+    }
 
-  const handleOpenCloseModalConfirmationDelete = (product?:Product) => {
+  };
+
+
+  const handleOpenCloseModalConfirmationDelete = (product?: Product) => {
     setSelectedDeleteProduct(product || null);
     setIsModalConfirmationDeleteOpen(!isModalConfirmationDeleteOpen);
   };
@@ -148,27 +178,27 @@ const ProductPage = ({ initialProducts }: ProductsProps) => {
         />
 
         {!isLoading ? (
-        <TableComponents
-          data={products}
-          columns={[
-            { key: 'no', label: 'Number' },
-            { key: 'productCode', label: 'Product Code' },
-            { key: 'name', label: 'Name' },
-            { key: 'quantity', label: 'Quantity' },
-            { key: 'price', label: 'Price' },
-            { key: 'statusPublish', label: 'Status' },
-            { key: 'category', label: 'Category' },
-          ]}
-          onInfo={(id) => handleOpenCloseModalViewDetail(products.find(product => product.id === id))}
-          onEdit={handleToPageEdit}
-          onDelete={(id) => handleOpenCloseModalConfirmationDelete(products.find(product => product.id === id))}
-          tableType="products"
-          page={page}
-          limit={limit}
-          totalItems={totalItems}
-          onPageChange={setPage}
-        />
-        ): (<div>Loading...</div>)}
+          <TableComponents
+            data={products}
+            columns={[
+              { key: 'no', label: 'Number' },
+              { key: 'productCode', label: 'Product Code' },
+              { key: 'name', label: 'Name' },
+              { key: 'quantity', label: 'Quantity' },
+              { key: 'price', label: 'Price' },
+              { key: 'statusPublish', label: 'Status' },
+              { key: 'category', label: 'Category' },
+            ]}
+            onInfo={(id) => handleOpenCloseModalViewDetail(products.find(product => product.id === id))}
+            onEdit={handleToPageEdit}
+            onDelete={(id) => handleOpenCloseModalConfirmationDelete(products.find(product => product.id === id))}
+            tableType="products"
+            page={page}
+            limit={limit}
+            totalItems={totalItems}
+            onPageChange={setPage}
+          />
+        ) : (<div>Loading...</div>)}
 
       </div>
 
@@ -185,16 +215,18 @@ const ProductPage = ({ initialProducts }: ProductsProps) => {
           { key: 'statusPublish', label: 'Status' },
           { key: 'category', label: 'Category' },
         ]}
+        ref={modalViewDetailRef}
       />
 
       <ModalConfirmationDelete
         isOpen={isModalConfirmationDeleteOpen}
         onClose={handleOpenCloseModalConfirmationDelete}
         // onConfirm={() => handleDeleteProduct} 
-        onConfirm={() => handleDeleteProduct(selectedDeleteProduct)} 
-        />
+        onConfirm={() => handleDeleteProduct(selectedDeleteProduct)}
+        ref={modalConfirmationDeleteRef}
+      />
 
-        <Toaster />
+      <Toaster />
     </>
   );
 };
