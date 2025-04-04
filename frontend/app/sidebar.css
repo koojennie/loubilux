@@ -21,11 +21,22 @@
     position: relative;
 }
 
-.sidebar .menus .item.active a,
-.sidebar .menus .item:hover a{
-    color: #0C145A;
+.sidebar .menus .item a{
+    color: #BFB29E;
+    font-weight: 500;
+    transition: all 0.2s linear;
+}
+
+.sidebar .menus .item.active a {
+    color: #493628;
+    font-weight: 600;
+}
+
+.sidebar .menus .item:hover a { 
+    color: #705C53;
     font-weight: 500;
 }
+
 
 .sidebar .menus .item.active > svg path,
 .sidebar .menus .item:hover > svg path{
@@ -42,12 +53,6 @@
     position: absolute;
     background-color: #00BAFF;
     right: 0;
-    transition: all 0.2s linear;
-}
-
-
-.sidebar .menus .item a{
-    color: #7E8CAC;
     transition: all 0.2s linear;
 }
 

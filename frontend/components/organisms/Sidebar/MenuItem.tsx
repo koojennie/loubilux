@@ -1,6 +1,6 @@
-import Image from "next/image";
 import cx from "classnames";
 import Link from "next/link";
+import { FaReceipt, FaUserPen, FaArrowRightFromBracket } from "react-icons/fa6";
 
 interface MenuItemProps {
     title: string;
@@ -9,6 +9,12 @@ interface MenuItemProps {
     active?: boolean;
 }
 
+const iconMap = {
+  'ic-menu-transactions': FaReceipt,
+  'ic-menu-profile': FaUserPen,
+  'ic-menu-logout': FaArrowRightFromBracket,
+};
+
 export default function MenuItem(props: Partial<MenuItemProps>) {
   const { title, icon, href, active } = props;
   const classItem = cx({
@@ -16,11 +22,15 @@ export default function MenuItem(props: Partial<MenuItemProps>) {
     'mb-30': true,
     active,
   })
+  const IconComponent = icon ? iconMap[icon] : null;
+
   return (
     <div className={classItem}>
-      <div className="me-3">
-        <Image src={`/icon/${icon}.svg`} width={25} height={25} alt="" />
-      </div>
+      {IconComponent && (
+        <div className="me-3">
+          <IconComponent size={24} className="text-[#493628]" />
+        </div>
+      )}
       <p className="item-title m-0">
         <Link
           href={href || '/'}
