@@ -1,9 +1,11 @@
+import Link from "next/link";
+
 export default function SignUpForm() {
   return (
     <>
       <h2 className="text-4xl fw-bold color-palette-1 mb-10">Sign Up</h2>
       <p className="text-lg color-palette-1 m-0">
-        Daftar dan bergabung dengan kami
+        Please sign up to purchase our products.
       </p>
       <div className="pt-50">
         <label
@@ -14,7 +16,7 @@ export default function SignUpForm() {
         </label>
         <input
           type="text"
-          className="form-control rounded-pill text-lg"
+          className="form-control !rounded-lg text-lg"
           id="name"
           name="name"
           aria-describedby="name"
@@ -30,7 +32,7 @@ export default function SignUpForm() {
         </label>
         <input
           type="text"
-          className="form-control rounded-pill text-lg"
+          className="form-control !rounded-lg text-lg"
           id="username"
           name="username"
           aria-describedby="username"
@@ -46,7 +48,7 @@ export default function SignUpForm() {
         </label>
         <input
           type="email"
-          className="form-control rounded-pill text-lg"
+          className="form-control !rounded-lg text-lg"
           id="email"
           name="email"
           aria-describedby="email"
@@ -62,11 +64,11 @@ export default function SignUpForm() {
         </label>
         <input
           type="password"
-          className="form-control rounded-pill text-lg"
+          className="form-control !rounded-lg text-lg"
           id="password"
           name="password"
           aria-describedby="password"
-          placeholder="Your password"
+          placeholder="Enter your password"
         />
       </div>
       <div className="pt-30">
@@ -78,28 +80,27 @@ export default function SignUpForm() {
         </label>
         <input
           type="password"
-          className="form-control rounded-pill text-lg"
+          className="form-control !rounded-lg text-lg"
           id="confirm-password"
           name="confirm-password"
           aria-describedby="confirm-password"
-          placeholder="Confirm password"
+          placeholder="Confirm your password"
         />
       </div>
       <div className="button-group d-flex flex-column mx-auto pt-50">
-        <a
+        <button
           className="btn btn-sign-up fw-medium text-lg text-white rounded-pill mb-16"
-          href="../sign-in"
-          role="button"
+          type="submit"
         >
           Continue
-        </a>
-        <a
-          className="btn btn-sign-in fw-medium text-lg color-palette-1 rounded-pill"
+        </button>
+        <Link
+          className="btn btn-sign-in fw-medium text-lg rounded-pill"
           href="../sign-in"
           role="button"
         >
           Sign In
-        </a>
+        </Link>
       </div>
     </>
   );

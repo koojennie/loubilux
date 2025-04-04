@@ -1,15 +1,17 @@
 /* Navbar */
 .navbar-light .navbar-nav .nav-link.active, .navbar-light .navbar-nav .show>.nav-link{
-    font-weight: 500;
-    color: #705C53;
+    font-weight: 600;
+    color: #493628;
 }
 
 .navbar-light .navbar-nav .nav-link:hover{
     color: #705C53;
+    font-weight: 500;
 }
 
 .navbar-light .navbar-nav .nav-link{
     color: #BFB29E;
+    font-weight: 500;
 }
 
 .navbar-light .btn-sign-in{
@@ -39,12 +41,14 @@
 .navbar .dropdown-item{
     transition: 0.2s;
     padding: 0.5rem 1.25rem;
+    color: #BFB29E;
+    font-weight: 500;
 }
 
-.navbar .dropdown-item:focus, .dropdown-item:hover{
-    color: #4D17E2;
-    text-decoration: underline;
-    background-color: transparent;
+.navbar .dropdown-item:focus, .dropdown-item:hover, .dropdown-item:active {
+    color: #493628;
+    font-weight: 500;
+    background-color: rgba(128, 128, 128, 0.075);
 }
 /*  */
 

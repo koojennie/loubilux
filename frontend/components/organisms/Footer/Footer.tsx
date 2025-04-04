@@ -33,7 +33,7 @@ export default function Footer() {
                     <li className="mb-6">
                       <a
                         href="https://chat.whatsapp.com/DGoYM1AHpH36PYYS2qNRbK"
-                        className="text-lg color-palette-1 !hover:text-black !no-underline"
+                        className="text-lg color-palette-1"
                       >
                         WhatsApp Group
                       </a>
@@ -41,7 +41,7 @@ export default function Footer() {
                     <li className="mb-6">
                       <a
                         href="https://shopee.co.id/loubi.shop24"
-                        className="text-lg color-palette-1 !hover:text-black !no-underline"
+                        className="text-lg color-palette-1"
                       >
                         Shopee
                       </a>
@@ -49,7 +49,7 @@ export default function Footer() {
                     <li className="mb-6">
                       <a
                         href="https://www.tokopedia.com/loukiesshop"
-                        className="text-lg color-palette-1 !hover:text-black !no-underline"
+                        className="text-lg color-palette-1"
                       >
                         Tokopedia
                       </a>
@@ -57,7 +57,7 @@ export default function Footer() {
                     <li className="mb-6">
                       <a
                         href="https://www.instagram.com/loubi.shop24/"
-                        className="text-lg color-palette-1 !hover:text-black !no-underline"
+                        className="text-lg color-palette-1"
                       >
                         Instagram
                       </a>
@@ -72,7 +72,7 @@ export default function Footer() {
                     <li className="mb-6">
                       <a
                         href="/"
-                        className="text-lg color-palette-1 !hover:text-black !no-underline"
+                        className="text-lg color-palette-1"
                       >
                         Home
                       </a>
@@ -80,7 +80,7 @@ export default function Footer() {
                     <li className="mb-6">
                       <a
                         href="/catalog"
-                        className="text-lg color-palette-1 !hover:text-black !no-underline"
+                        className="text-lg color-palette-1"
                       >
                         Catalog
                       </a>
@@ -88,7 +88,7 @@ export default function Footer() {
                     <li className="mb-6">
                       <a
                         href="/about-us"
-                        className="text-lg color-palette-1 !hover:text-black !no-underline"
+                        className="text-lg color-palette-1"
                       >
                         About Us
                       </a>
@@ -103,7 +103,7 @@ export default function Footer() {
                   <li className="mb-6">
                       <a
                         href="https://wa.me/6281212768921"
-                        className="text-lg color-palette-1 !hover:text-black !no-underline"
+                        className="text-lg color-palette-1"
                       >
                         WhatsApp
                       </a>

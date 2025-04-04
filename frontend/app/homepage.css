@@ -181,8 +181,8 @@ footer ul li a{
 }
 
 footer ul li a:hover{
-    color: #4D17E2;
-    text-decoration: underline !important;
+    color: #705C53;
+    text-decoration: none;
     background-color: transparent;
 }
 

@@ -1,5 +1,6 @@
 "use client"
 
+import Link from "next/link";
 import React, { useState } from "react";
 
 interface SignInFormProps{
@@ -26,22 +27,22 @@ export default function SignInForm({onSubmit}: SignInFormProps) {
     <form onSubmit={handleSubmit}>
       <h2 className="text-4xl fw-bold color-palette-1 mb-10">Sign In</h2>
       <p className="text-lg color-palette-1 m-0">
-        Masuk untuk melakukan proses top up
+        Please sign in to purchase our products.
       </p>
       <div className="pt-50">
         <label
-          htmlFor="email"
+          htmlFor="username"
           className="form-label text-lg fw-medium color-palette-1 mb-10"
         >
           Username
         </label>
         <input
           type="text"
-          className="form-control rounded-pill text-lg"
-          id="email"
-          name="email"
-          aria-describedby="email"
-          placeholder="Enter your email address"
+          className="form-control !rounded-lg text-lg"
+          id="username"
+          name="username"
+          aria-describedby="username"
+          placeholder="Enter your username"
           value={username}
           onChange={(e) => {setUsername(e.target.value)}}
           required
@@ -56,11 +57,11 @@ export default function SignInForm({onSubmit}: SignInFormProps) {
         </label>
         <input
           type="password"
-          className="form-control rounded-pill text-lg"
+          className="form-control !rounded-lg text-lg"
           id="password"
           name="password"
           aria-describedby="password"
-          placeholder="Your password"
+          placeholder="Enter your password"
           value={password}
           onChange={(e) => {setPassword(e.target.value)}}
           required
@@ -73,13 +74,9 @@ export default function SignInForm({onSubmit}: SignInFormProps) {
         >
           Continue to Sign In
         </button>
-        <a
-          className="btn btn-sign-up fw-medium text-lg color-palette-1 rounded-pill"
-          href="../sign-up"
-          role="button"
-        >
+        <Link href="../sign-up" className="btn btn-sign-up fw-medium text-lg rounded-pill" role="button">
           Sign Up
-        </a>
+        </Link>
       </div>
     </form>
   );
