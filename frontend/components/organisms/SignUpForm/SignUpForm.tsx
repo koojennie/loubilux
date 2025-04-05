@@ -1,8 +1,38 @@
-import Link from "next/link";
+"use client"
 
-export default function SignUpForm() {
+import Link from "next/link";
+import React, { useState } from "react";
+
+interface SignUpFormProps {
+  onSubmit: (formdata: any) => void;
+}
+
+export default function SignUpForm({ onSubmit }: SignUpFormProps) {
+
+  const [name, setName] = useState<string>("");
+  const [username, setUsername] = useState<string>("");
+  const [email, setEmail] = useState<string>("")
+  const [password, setPassword] = useState<string>("");
+  const [confirmPassword, setConfirmPassword] = useState<string>("");
+
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const formData = {
+      name: name.trim(),
+      username: username.trim(),
+      email: email.trim(),
+      password: password.trim(),
+      confirmPassword: confirmPassword.trim(),
+      role: "user"
+    }
+
+    onSubmit(formData);
+  }
+
   return (
-    <>
+    <form onSubmit={handleSubmit}>
       <h2 className="text-4xl fw-bold color-palette-1 mb-10">Sign Up</h2>
       <p className="text-lg color-palette-1 m-0">
         Please sign up to purchase our products.
@@ -17,10 +47,9 @@ export default function SignUpForm() {
         <input
           type="text"
           className="form-control !rounded-lg text-lg"
-          id="name"
-          name="name"
-          aria-describedby="name"
           placeholder="Enter your full name"
+          value={name}
+          onChange={(e) => { setName(e.target.value) }}
         />
       </div>
       <div className="pt-30">
@@ -33,10 +62,9 @@ export default function SignUpForm() {
         <input
           type="text"
           className="form-control !rounded-lg text-lg"
-          id="username"
-          name="username"
-          aria-describedby="username"
           placeholder="Enter your username"
+          value={username}
+          onChange={(e) => { setUsername(e.target.value) }}
         />
       </div>
       <div className="pt-30">
@@ -49,10 +77,9 @@ export default function SignUpForm() {
         <input
           type="email"
           className="form-control !rounded-lg text-lg"
-          id="email"
-          name="email"
-          aria-describedby="email"
           placeholder="Enter your email address"
+          value={email}
+          onChange={(e) => { setEmail(e.target.value) }}
         />
       </div>
       <div className="pt-30">
@@ -65,10 +92,9 @@ export default function SignUpForm() {
         <input
           type="password"
           className="form-control !rounded-lg text-lg"
-          id="password"
-          name="password"
-          aria-describedby="password"
           placeholder="Enter your password"
+          value={password}
+          onChange={(e) => { setPassword(e.target.value) }}
         />
       </div>
       <div className="pt-30">
@@ -81,10 +107,9 @@ export default function SignUpForm() {
         <input
           type="password"
           className="form-control !rounded-lg text-lg"
-          id="confirm-password"
-          name="confirm-password"
-          aria-describedby="confirm-password"
           placeholder="Confirm your password"
+          value={confirmPassword}
+          onChange={(e) => { setConfirmPassword(e.target.value) }}
         />
       </div>
       <div className="button-group d-flex flex-column mx-auto pt-50">
@@ -102,6 +127,6 @@ export default function SignUpForm() {
           Sign In
         </Link>
       </div>
-    </>
+    </form>
   );
 }
