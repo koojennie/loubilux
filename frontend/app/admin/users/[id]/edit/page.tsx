@@ -18,8 +18,7 @@ const EditUser = () => {
 
   useEffect(() => {
     const fetchUserDataById = async () => {
-      if (!token) return;
-
+      
       try {
         const response = await axios.get(
           `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/users/${paramUserId}`,
@@ -35,26 +34,16 @@ const EditUser = () => {
     };
 
     fetchUserDataById();
-  }, [token]);
+  }, []);
 
 
   const handleUserEdit = async (formData: any) => {
-    if (!token) {
-      console.error('No token available');
-      toast.error("Authentication token is missing. Please try again.");
-      return;
-    }
-
-    console.log("ini adalah handle user submit", formData);
-
     try {
       const response = await axios.put(
         `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/users/${paramUserId}`,
         formData,
         { 
-          headers: { 
-            "Authorization": `Bearer ${token}`
-          },
+          withCredentials: true
         }
       );
 

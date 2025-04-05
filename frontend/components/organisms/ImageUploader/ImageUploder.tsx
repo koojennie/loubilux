@@ -4,9 +4,10 @@ import imageCompression from "browser-image-compression";
 interface ImageUploaderProps {
   image: string; // Base64 string
   setImage: React.Dispatch<React.SetStateAction<string>>;
+  isProfileAdmin?: boolean;
 }
 
-const ImageUploader = ({ image, setImage }: ImageUploaderProps) => {
+const ImageUploader = ({ image, setImage, isProfileAdmin }: ImageUploaderProps) => {
 
   // Function to convert File to Base64
   const convertToBase64 = (file: File): Promise<string> => {
@@ -49,8 +50,9 @@ const ImageUploader = ({ image, setImage }: ImageUploaderProps) => {
     setImage("");
   };
 
-  return (
-    <div className="border rounded-md p-4">
+  if (isProfileAdmin) {
+    return (
+      // <div className="border rounded-md p-4">
       <div className="p-4">
         {/* Display Selected Image */}
         {image ? (
@@ -58,30 +60,70 @@ const ImageUploader = ({ image, setImage }: ImageUploaderProps) => {
             <img
               src={image}
               alt="Selected"
-              className="w-64 h-64 object-cover rounded-lg shadow"
+              className=" w-[200px] h-[200px] object-cover rounded-full shadow"
+            // width={250}
             />
             <button
               type="button"
-              className="mt-2 bg-red-500 text-white rounded-full px-4 py-2 transition-opacity hover:opacity-90 hover:bg-red-700 shadow-md"
+              className="mt-3 bg-red-500 text-white text-sm rounded-full px-4 py-2 transition-opacity hover:opacity-90 hover:bg-red-700 shadow-md"
               onClick={removeImage}
             >
               Remove Image
             </button>
           </div>
         ) : (
-          <label className="w-64 h-64 border-2 border-dashed flex items-center justify-center cursor-pointer rounded-lg text-gray-500 hover:bg-gray-100 transition">
-            +
-            <input
-              type="file"
-              accept="image/*"
-              className="hidden"
-              onChange={handleImageUpload}
-            />
-          </label>
+          <div className="mb-4 flex flex-col items-center">
+            <label className="w-32 h-32 border-2 flex items-center justify-center cursor-pointer rounded-full text-gray-500 hover:bg-gray-100 transition">
+              <img src="/icon/upload.svg" width={250} alt="upload" />
+              <input
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={handleImageUpload}
+              />
+            </label>
+          </div>
         )}
       </div>
-    </div>
-  );
+      // </div>
+    )
+  } else {
+    return (
+      <div className="border rounded-md p-4">
+        <div className="p-4">
+          {/* Display Selected Image */}
+          {image ? (
+            <div className="mb-4 flex flex-col items-center">
+              <img
+                src={image}
+                alt="Selected"
+                className="w-64 h-64 object-cover rounded-lg shadow"
+              />
+              <button
+                type="button"
+                className="mt-2 bg-red-500 text-white rounded-full px-4 py-2 transition-opacity hover:opacity-90 hover:bg-red-700 shadow-md"
+                onClick={removeImage}
+              >
+                Remove Image
+              </button>
+            </div>
+          ) : (
+            <label className="w-64 h-64 border-2 border-dashed flex items-center justify-center cursor-pointer rounded-lg text-gray-500 hover:bg-gray-100 transition">
+              +
+              <input
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={handleImageUpload}
+              />
+            </label>
+          )}
+        </div>
+      </div>
+    );
+
+  }
+
 };
 
 export default ImageUploader;
