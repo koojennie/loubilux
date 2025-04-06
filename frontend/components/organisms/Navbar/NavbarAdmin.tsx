@@ -82,6 +82,7 @@ const NavbarAdmin = ({ isSidebarOpen, toggleSidebar, handleSignOut }: SidebarAdm
               </button>
 
               {/* dropdown item */}
+              {openCloseDropDown && (
               <div
                 className={`absolute z-10 min-w-[150px] overflow-auto rounded-lg border border-slate-200 bg-white p-1.5 shadow-lg focus:outline-none top-14
                             origin-top-right transition-all duration-300 ease-out transform
@@ -128,6 +129,7 @@ const NavbarAdmin = ({ isSidebarOpen, toggleSidebar, handleSignOut }: SidebarAdm
                   </p>
                 </li>
               </div>
+              )}
             </div>
           </div>
         </div>

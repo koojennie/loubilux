@@ -23,7 +23,7 @@
 
 .sidebar .menus .item a{
     color: #BFB29E;
-    font-weight: 500;
+    font-weight: 600;
     transition: all 0.2s linear;
 }
 
@@ -34,37 +34,34 @@
 
 .sidebar .menus .item:hover a { 
     color: #705C53;
-    font-weight: 500;
-}
-
-
-.sidebar .menus .item.active > svg path,
-.sidebar .menus .item:hover > svg path{
-    transition: all 0.2s linear;
-    stroke: #4D17E2;
+    font-weight: 600;
 }
 
 .sidebar .menus .item.active::after{
     content: " ";
-    border: 2px solid #00BAFF;
+    border: 2px solid #493628;
     border-radius: 999px;
     width: 0px;
     height: 100%;
     position: absolute;
-    background-color: #00BAFF;
+    background-color: gray;
     right: 0;
     transition: all 0.2s linear;
 }
 
 .sidebar-footer .footer-card{
-    background-color: #F9FAFF;
+    background-color: #F3EEEA;
     border-radius: 1rem;
     padding: 20px;
 }
 
 .sidebar-footer .btn-get-started{
-    background-color: #4D17E2;
+    background-color: #493628;
     padding: 0.438rem;
+}
+
+.sidebar-footer .btn-get-started:hover {
+    background-color: #705C53;
 }
 
 @media (min-height: 900px){

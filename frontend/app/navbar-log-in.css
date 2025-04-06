@@ -6,12 +6,12 @@
 
 .navbar-light .navbar-nav .nav-link:hover{
     color: #705C53;
-    font-weight: 500;
+    font-weight: 600;
 }
 
 .navbar-light .navbar-nav .nav-link{
     color: #BFB29E;
-    font-weight: 500;
+    font-weight: 600;
 }
 
 .navbar-light .btn-sign-in{
