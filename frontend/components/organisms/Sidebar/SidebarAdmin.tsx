@@ -8,6 +8,7 @@ import { FaBoxArchive } from "react-icons/fa6";
 import { FaBasketShopping } from "react-icons/fa6";
 import { FaUser } from "react-icons/fa";
 import { BiCategory } from "react-icons/bi";
+import { FaCommentDots } from "react-icons/fa6";
 
 interface SidebarAdminProps {
   isSidebarOpen: boolean;

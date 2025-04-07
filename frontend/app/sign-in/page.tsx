@@ -21,13 +21,15 @@ export default function SignIn() {
 
       if (response.status === 200) {
         const { role } = response.data;
-        toast.success("Login successful!");
+        toast.success("Login successful!", { duration: 2000 });
 
-        if (role === "admin" || role === 'superadmin') {
-          window.location.href = "/admin/";
-        } else if(role==="user") {
-          window.location.href = "/";
-        }
+        setTimeout(() => {
+          if (role === "admin" || role === 'superadmin') {
+            window.location.href = "/admin/";
+          } else if (role === "user") {
+            window.location.href = "/";
+          }
+        }, 1000);
 
       } else {
         toast.error("Login failed. Please try again.");

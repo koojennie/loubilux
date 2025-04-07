@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import NavbarAdmin from "@/components/organisms/Navbar/NavbarAdmin";
 import SidebarAdmin from "@/components/organisms/Sidebar/SidebarAdmin";
-import {useRouter} from "next/navigation";
+import { useRouter } from "next/navigation";
 import axios from "axios";
 import ErrorMessage from "@/components/organisms/Error/ErrorMessage";
 
@@ -24,7 +24,7 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
 
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<number | null>(null);
+  const [errorCode, setErrorCode] = useState<number | null>(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
   // Fetch user data
@@ -37,11 +37,11 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
         );
         setUser(response.data.user || null);
       } catch (err: any) {
-        console.error("Error fetching user:", err);
+        console.error("errorCode fetching user:", err);
         if (err.response) {
-          setError(err.response.status);
+          setErrorCode(err.response.status);
         } else {
-          setError(500); 
+          setErrorCode(500);
         }
       } finally {
         setLoading(false);
@@ -49,7 +49,7 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
     };
 
     fetchUser();
-  }, []); 
+  }, []);
 
   // Handle window resizing
   useEffect(() => {
@@ -76,35 +76,38 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
       // Redirect to login page after successful logout
       router.push("/sign-in");
     } catch (err) {
-      console.error("Error during sign out:", err);
+      console.error("errorCode during sign out:", err);
     }
   };
 
-  // Error Handling
+  // errorCode Handling
   if (loading) return <p className="text-center mt-5">Loading...</p>;
 
-  if (error === 401) {
+  if (errorCode === 401) {
     return (
       <ErrorMessage
+        errorCode={errorCode}
         title="Unauthorized"
         message="Anda harus login terlebih dahulu untuk mengakses halaman ini."
       />
     );
   }
 
-  if (error === 403) {
+  if (errorCode === 403) {
     return (
       <ErrorMessage
+        errorCode={errorCode}
         title="Forbidden"
         message="Anda tidak memiliki izin untuk mengakses halaman ini."
       />
     );
   }
 
-  if (error === 500) {
+  if (errorCode === 500) {
     return (
       <ErrorMessage
-        title="Internal Server Error"
+        errorCode={errorCode}
+        title="Internal Server errorCode"
         message="Terjadi kesalahan pada server. Silakan coba beberapa saat lagi."
       />
     );
@@ -114,6 +117,7 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
   if (!user || (user.role !== "admin" && user.role !== "superadmin")) {
     return (
       <ErrorMessage
+        errorCode={403}
         title="Access Denied"
         message="Anda tidak memiliki akses ke halaman ini."
       />
@@ -136,9 +140,8 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
       />
       <div className="w-full">
         <div
-          className={`flex-1 pt-18 transition-all duration-300 ${
-            isSidebarOpen ? "pl-5 md:pl-44" : "pl-5 md:pl-16"
-          }`}
+          className={`flex-1 pt-18 transition-all duration-300 ${isSidebarOpen ? "pl-5 md:pl-44" : "pl-5 md:pl-16"
+            }`}
         >
           {children}
         </div>

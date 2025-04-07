@@ -23,41 +23,46 @@ export interface User {
 
 interface UsersProps {
   initialUsers: User[];
-};
+}
 
 const UserPage = ({ initialUsers }: UsersProps) => {
   const router = useRouter();
 
   const [user, setUser] = useState<User[]>(initialUsers);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [selectedViewDetailUser, setSelectedViewDetailUser] = useState<User | null>(null);
-  const [selectedDeleteUser, setSelectedDeleteUser] = useState<User | null>(null);
+  const [selectedViewDetailUser, setSelectedViewDetailUser] =
+    useState<User | null>(null);
+  const [selectedDeleteUser, setSelectedDeleteUser] = useState<User | null>(
+    null
+  );
   const [page, setPage] = useState<number>(1);
   const [totalUsers, setTotalUsers] = useState<number>(1);
   const [limit, setLimit] = useState<number>(5);
   const [sortBy, setSortBy] = useState<string>("userId");
   const [orderBy, setOrderBy] = useState<string>("asc");
   const [searchQuery, setSearchQuery] = useState<string>("");
-  const [isModalConfirmationDeleteOpen, setIsModalConfirmationDeleteOpen] = useState<boolean>(false);
-  const [isModalViewDetailOpen, setIsModalViewDetailOpen] = useState<boolean>(true);
+  const [isModalConfirmationDeleteOpen, setIsModalConfirmationDeleteOpen] =
+    useState<boolean>(false);
+  const [isModalViewDetailOpen, setIsModalViewDetailOpen] =
+    useState<boolean>(true);
   const [token, setToken] = useState<string>("");
-
 
   const fetchAllUsers = async () => {
     setIsLoading(true);
 
     try {
-      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/users?sortBy=${sortBy}&sortOrder=${orderBy}&limit=${limit}&page=${page}&searchQuery=${searchQuery}`,
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/users?sortBy=${sortBy}&sortOrder=${orderBy}&limit=${limit}&page=${page}&searchQuery=${searchQuery}`,
         {
-          withCredentials: true
+          withCredentials: true,
         }
-      )
-      const result = response.data.data.map((user: any)=>({
+      );
+      const result = response.data.data.map((user: any) => ({
         id: user._id,
-        ...user
+        ...user,
       }));
       setUser(result);
-      setTotalUsers(response.data.totalUsers)
+      setTotalUsers(response.data.totalUsers);
     } catch (error) {
       console.error("Error fetching products", error);
     }
@@ -66,8 +71,8 @@ const UserPage = ({ initialUsers }: UsersProps) => {
 
   // fetch data
   useEffect(() => {
-    fetchAllUsers()
-  }, [ orderBy, sortBy, page, limit, searchQuery]);
+    fetchAllUsers();
+  }, [orderBy, sortBy, page, limit, searchQuery]);
 
   const handleDeleteUsers = async (user: User | null) => {
     if (!user) {
@@ -79,7 +84,7 @@ const UserPage = ({ initialUsers }: UsersProps) => {
       const response = await axios.delete(
         `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/users/${user._id}`,
         {
-          withCredentials: true
+          withCredentials: true,
         }
       );
 
@@ -121,7 +126,7 @@ const UserPage = ({ initialUsers }: UsersProps) => {
             { key: "username", label: "username" },
             { key: "email", label: "email" },
             { key: "phoneNumber", label: "Phone Number" },
-            { key: "role", label: "role" }
+            { key: "role", label: "role" },
           ]}
           totalItems={totalUsers}
           onChangeDropDownLimitData={setLimit}
@@ -129,7 +134,9 @@ const UserPage = ({ initialUsers }: UsersProps) => {
           onChangeDropDownSortBy={setSortBy}
           onChangeSearchQuery={setSearchQuery}
           // backPage={() => { console.log("Back") }}
-          toAddPage={() => router.push("/admin/users/add")}
+          toAddPage={() => {
+            router.push("/admin/users/add");
+          }}
         />
 
         {!isLoading ? (
@@ -142,10 +149,18 @@ const UserPage = ({ initialUsers }: UsersProps) => {
               { key: "email", label: "Email" },
               { key: "role", label: "Role" },
             ]}
-            onInfo={(id) => { handleOpenCloseModalViewDetail(user.find(user => user.id === id)) }}
+            onInfo={(id) => {
+              handleOpenCloseModalViewDetail(
+                user.find((user) => user.id === id)
+              );
+            }}
             // onEdith={handleToPageEdit}
             onEdit={handleToPageEdit}
-            onDelete  ={(id) => {handleOpenCloseModalConfirmationDelete(user.find(user => user.id === id)) }}
+            onDelete={(id) => {
+              handleOpenCloseModalConfirmationDelete(
+                user.find((user) => user.id === id)
+              );
+            }}
             tableType="users"
             page={page}
             limit={limit}

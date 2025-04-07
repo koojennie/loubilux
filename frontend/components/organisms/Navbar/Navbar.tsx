@@ -22,7 +22,7 @@ export default function Navbar(props: NavbarProps) {
                       <Menu title="Home" href="/" active={activeMenu === 'home'}/>
                       <Menu title="Catalog" href="/catalog" active={activeMenu === 'catalog'}/>
                       <Menu title="About Us" href="about-us" active={activeMenu === 'about-us'}/>
-                      <Auth isLogin/>
+                      <Auth />
                   </ul>
               </div>
           </div>
