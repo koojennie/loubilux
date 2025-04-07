@@ -151,17 +151,25 @@ const getAllOrders = async (req, res) => {
     const totalItems = await Order.countDocuments();
     const orders = await Order.find()
       .populate("user", "name email")
+      .populate({
+      path: "orderlineitems",
+      populate: {
+        path: "product",
+        select: "name price",
+      },
+      })
       .select("_id user totalPrice status paymentMethod orderDate courier orderId isPaid")
       .skip(skip)
       .limit(parseInt(limit));
 
     if (!orders.length) {
       return res.status(404).json({ status: "error", message: "No orders found" });
-    };
+    }
 
     const formattedOrders = orders.map(order => ({
       _id: order._id,
       orderId: order.orderId,
+      userId: order.user ? order.user._id : "Guest",
       user: order.user ? order.user.name : "Guest",
       email: order.user ? order.user.email : "-",
       totalPrice: order.totalPrice,
@@ -170,6 +178,13 @@ const getAllOrders = async (req, res) => {
       paymentMethod: order.paymentMethod,
       orderDate: new Date(order.orderDate).toLocaleString(),
       courier: order.courier ? order.courier.name : "Not Assigned",
+      items: order.orderlineitems.map(item => ({
+      productId: item.product ? item.product._id : "",
+      productName: item.product ? item.product.name : "Deleted Product",
+      productPrice: item.product ? item.product.price : 0,
+      quantity: item.quantity,
+      subPrice: item.subPrice,
+      })),
     }));
 
     res.status(200).json({
@@ -184,7 +199,7 @@ const getAllOrders = async (req, res) => {
 
   } catch (error) {
     console.error("Error retrieving orders:", error);
-    res.status(500).json({ status: "error", message: "Server Error" });
+    res.status(500).json({ status: "error", message: "Server Error", error: error.message });
   }
 };
 
