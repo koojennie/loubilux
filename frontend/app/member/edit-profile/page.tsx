@@ -1,5 +1,6 @@
 import Input from "@/components/organisms/Input/Input";
 import Sidebar from "@/components/organisms/Sidebar/Sidebar";
+import { FaRegTrashCan } from "react-icons/fa6";
 
 export default function EditProfile() {
   return (
@@ -8,14 +9,14 @@ export default function EditProfile() {
         <main className="main-wrapper">
             <div className="ps-lg-0">
                 <h2 className="text-4xl fw-bold color-palette-1 mb-30">Settings</h2>
-                <div className="bg-card pt-30 ps-30 pe-30 pb-30">
-                    <form action="">
+                <div className="bg-card p-[1.875rem] w-full max-w-xl">
+                    <form action="" className="w-full max-w-xl">
                         <div className="photo d-flex">
                             <div className="position-relative me-20">
                                 <img src="/img/user-loubilux.svg" width="90" height="90" className="avatar img-fluid" />
                                 <div
                                     className="avatar-overlay position-absolute top-0 d-flex justify-content-center align-items-center">
-                                    <img src="/icon/delete.svg" alt="upload" />
+                                    <FaRegTrashCan width={32} height={32} className={`text-white`}/>
                                 </div>
                             </div>
                             <div className="image-upload">

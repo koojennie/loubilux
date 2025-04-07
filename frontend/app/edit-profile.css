@@ -21,7 +21,7 @@
 }
 
 .edit-profile main .avatar-overlay{
-    background-color: rgba(12, 20, 90, 0.7);
+    background-color: rgb(73, 54, 40, 0.5);
     width: 90px;
     height: 90px;
     border-radius: 999px;
@@ -43,16 +43,17 @@
 .edit-profile input[type="tel"],
 .edit-profile input[type="email"],
 .edit-profile input[type="text"]{
-    border: 1px solid #0C145A;
-    padding: 0.75rem 1.625rem;
-    color: #0C145A;
+    border: 1px solid #dee2e6;
+    padding: 0.75rem 1.25rem;
     max-width: 467px;
 }
 
 .edit-profile input[type="tel"]:focus-within,
 .edit-profile input[type="email"]:focus-within,
 .edit-profile input[type="text"]:focus-within{
-    color: #0C145A;
+    color: black;
+    outline: 3px solid #493628;
+    box-shadow: none;
 }
 
 .edit-profile input[type="tel"]::placeholder,
@@ -63,7 +64,11 @@
 
 .edit-profile .btn-save{
     padding: 0.75rem;
-    background-color: #4D17E2;
+    background-color: #493628;
+}
+
+.edit-profile .btn-save:hover {
+    background-color: #705C53;
 }
 
 .edit-profile .button-group{

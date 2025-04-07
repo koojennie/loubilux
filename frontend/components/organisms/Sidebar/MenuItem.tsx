@@ -27,7 +27,7 @@ export default function MenuItem(props: Partial<MenuItemProps>) {
   return (
     <div className={classItem}>
       {IconComponent && (
-        <div className="me-3">
+        <div className="me-3 cursor-pointer">
           <IconComponent size={24} className="text-[#493628]" />
         </div>
       )}

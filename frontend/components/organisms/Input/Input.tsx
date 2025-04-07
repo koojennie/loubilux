@@ -14,7 +14,7 @@ export default function Input(props: InputProps) {
       </label>
       <input
         type="text"
-        className="form-control rounded-pill text-lg"
+        className="form-control !rounded-lg text-lg"
         id="name"
         name="name"
         aria-describedby="name"
