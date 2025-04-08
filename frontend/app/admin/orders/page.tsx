@@ -6,6 +6,7 @@ import { Product } from "../products/page";
 import HeaderContentAdmin from "@/components/organisms/HeaderContetntAdmin/HeaderContentAdmin";
 import TableComponents from "@/components/organisms/Table/TableComponents";
 import ModalViewDetails from "@/components/organisms/Modal/ModalViewDetail";
+import ModalReport from "@/components/organisms/Modal/ModalReport";
 
 interface User {
   name: string;
@@ -47,29 +48,21 @@ const OrdersPage = () => {
   const [totalItems, setTotalItems] = useState<number>(1);
   const [limit, setLimit] = useState<number>(5);
   const [user, setUser] = useState(null);
-  const [token, setToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isModalConfirmationDeleteOpen, setIsModalConfirmationDeleteOpen] = useState<boolean>(false);
   const [isModalViewDetailOpen, setIsModalViewDetailOpen] = useState<boolean>(true);
   const [selectedViewDetailOrder, setSelectedViewDetailOrder] = useState<Order | null>(null);
   const [selectedDeleted, setSelectedDeleted] = useState<Order | null>(null);
+  const [isModaReport, setIsModalReport]= useState<boolean>(false);
 
-  // const fetchToken = async () => {
-  //   try {
-  //     const response = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/auth/login`, {
-  //       username: 'saniadmin1',
-  //       password: 'saniadmin1.P'
-  //     });
-  //     const token = response.data.token;
-  //     setToken(token);
-  //     console.log('done get token', token);
-
-  //   } catch (error) {
-  //     console.error('Error fetching token', error);
-  //   }
-  // };
+  // paramter for fetch report  
+  const [monthReport, setMonthReport] = useState<string>("");
+  const [yearReport, setYearReport] = useState<string>("");
+  const [starDateReport, setStartDateReport] = useState<string>("");
+  const [endDateReport, setEndDateReport] = useState<string>("");
 
   const fetchAllOrders = async () => {
+    setIsLoading(true);
     try {
       const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/orders/all`,
         {
@@ -89,24 +82,39 @@ const OrdersPage = () => {
       setLimit(response.data.limit);
     } catch (error) {
       console.error('error when fetch all orders :', error);
-
     }
+
+    setIsLoading(false);
   }
 
   useEffect(() => {
     fetchAllOrders();
   }, []);
 
-  // useEffect(() => {
-  //   if (token) {
-  //     fetchAllOrders
-  //   }
-  // }, [token])
-
   const handleOpenCloseModalViewDetail = (order?: Order) => {
     console.log('ini adalah orders yang dipilih', order);
     // setSelectedViewDetailOrder(order || null)
     // setIsModalViewDetailOpen(!isModalViewDetailOpen);
+  }
+
+  const exportReport = async () => {
+    try {
+      let url = `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/orders/report`;
+
+      if(monthReport && yearReport){
+        url += `?month=${monthReport}&year=${yearReport}`;
+      } else if(starDateReport && endDateReport){
+        url += `?startDate=${starDateReport}&endDate=${endDateReport}`;
+      } else if (!monthReport && yearReport){
+        url += `?year=${yearReport}`;
+      }
+
+      const response = await axios.get(url);
+      console.log(response);
+      
+    } catch (error: any) {
+      console.error("Failed to export report", error)
+    }
   }
 
 
@@ -116,7 +124,7 @@ const OrdersPage = () => {
         header="Orders"
         subHeader="All List of Orders"
         tableType="orders"
-        labelAdd=""
+        labelAdd="Generate Excel"
         columns={[
           { key: 'orderId', label: 'Order Id' as keyof Order },
           { key: 'user', label: 'Customer' as keyof Order },
@@ -130,8 +138,8 @@ const OrdersPage = () => {
         onChangeDropDownOrderBy={() => { }}
         onChangeDropDownSortBy={() => { }}
         onChangeSearchQuery={() => { }}
-        toAddPage={() => { }}
-        totalItems={12}
+        toAddPage={() => {setIsModalReport(true)}}
+        totalItems={totalItems}
       />
 
       <TableComponents
@@ -169,6 +177,7 @@ const OrdersPage = () => {
           { key: 'paymentMethod', label: 'Payment Status' as keyof Order },
         ]}
       /> */}
+      <ModalReport isOpen={isModaReport} setIsOpen={setIsModalReport}/>
     </div>
   );
 };

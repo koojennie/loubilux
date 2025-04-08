@@ -5,6 +5,8 @@ import { Column } from "../Table/RenderCellComponent";
 import { MdAddBox } from "react-icons/md";
 import { IoPersonAdd } from "react-icons/io5";
 import { TbCategoryPlus } from "react-icons/tb";
+import { FaFileExcel } from "react-icons/fa6";
+
 
 type TableType = "products" | "users" | "orders" | "categories";
 
@@ -71,7 +73,6 @@ const HeaderContentAdmin = <T,>({
           <h5 className="text-2xl font-semibold text-blue-gray-900">{header}</h5>
           <p className="mt-1 text-base text-gray-700">{subHeader}</p>
         </div>
-        {tableType !== 'orders' && (
           <button
             className="flex items-center gap-2 bg-gray-900 py-2 px-3 text-white text-xs font-bold uppercase rounded-lg shadow-md hover:shadow-lg"
             type="button"
@@ -84,11 +85,10 @@ const HeaderContentAdmin = <T,>({
             {tableType === "products" && <MdAddBox size={19} />}
             {tableType === "users" && <IoPersonAdd size={14} />}
             {tableType === "categories" && <TbCategoryPlus size={14} />}
-            {/* {tableType === "orders" && <MdAddBox size={19} style={{ color: "green" }} />} */}
+            {tableType === "orders" && <FaFileExcel size={14}/>}
 
             {labelAdd}
           </button>
-        )}
 
       </div>
 
