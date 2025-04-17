@@ -203,6 +203,69 @@ const getAllOrders = async (req, res) => {
   }
 };
 
+const getFilteredOrdersReport = async (req, res) => {
+  try {
+    const { month, year, startDate, endDate } = req.query;
+
+    const filter = {};
+
+    if (month && year) {
+      const start = new Date(year, month - 1, 1);
+      const end = new Date(year, month, 0, 23, 59, 59); // Akhir bulan
+      filter.orderDate = { $gte: start, $lte: end };
+    } else if (startDate && endDate) {
+      // Rentang tanggal
+      filter.orderDate = {
+        $gte: new Date(startDate),
+        $lte: new Date(endDate),
+      };
+    } else if (year) {
+      // Tahun penuh
+      const start = new Date(year, 0, 1);
+      const end = new Date(year, 11, 31, 23, 59, 59);
+      filter.orderDate = { $gte: start, $lte: end };
+    }
+
+    const orders = await Order.find(filter)
+      .populate("user", "name email")
+      .populate({
+        path: "orderlineitems",
+        populate: {
+          path: "product",
+          select: "name price",
+        },
+      })
+      .select("_id user totalPrice status paymentMethod orderDate courier orderId isPaid");
+
+    const formattedOrders = orders.map(order => ({
+      orderId: order.orderId,
+      user: order.user?.name || "Guest",
+      email: order.user?.email || "-",
+      totalPrice: order.totalPrice,
+      statusOrder: order.status,
+      isPaid: order.isPaid,
+      paymentMethod: order.paymentMethod,
+      orderDate: new Date(order.orderDate).toLocaleString(),
+      courier: order.courier?.name || "Not Assigned",
+      items: order.orderlineitems.map(item => ({
+        productName: item.product?.name || "Deleted Product",
+        productPrice: item.product?.price || 0,
+        quantity: item.quantity,
+        subPrice: item.subPrice,
+      })),
+    }));
+
+    res.status(200).json({
+      status: "success",
+      totalOrders: orders.length,
+      data: formattedOrders,
+    });
+  } catch (error) {
+    console.error("Error getting filtered report:", error);
+    res.status(500).json({ status: "error", message: "Server Error" });
+  }
+};
+
 
 const updateOrderStatus = async (req, res) => {
   try {
@@ -252,4 +315,5 @@ module.exports = {
   getUserOrders,
   getAllOrders,
   updateOrderStatus,
+  getFilteredOrdersReport
 };
