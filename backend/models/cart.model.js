@@ -1,38 +1,26 @@
-const mongose = require('mongoose');
+const { Sequelize, DataTypes } = require('sequelize');
+const { sequelize } = require('../lib/connection');
 
-const cartSchema = new mongose.Schema(
-    {
-        user: {
-            type: mongose.Schema.Types.ObjectId,
-            ref: 'User',
-            required: true,
-        },
-        products: [
-            {
-                product: {
-                    type: mongose.Schema.Types.ObjectId,
-                    ref: 'Product',
-                    required: true,
-                },
-                quantity: {
-                    type: Number,
-                    default: 1,
-                },
-                price: {
-                    type: Number,
-                    required: true,
-                },
-            },
-        ],
-        totalPrice: {
-            type: Number,
-            default: 0,
-        },
+const Cart = sequelize.define('Cart', {
+  userId: {
+    type: DataTypes.INTEGER,
+    references: {
+      model: 'Users', // Foreign key for Users
+      key: 'id', // Foreign key
     },
-    { timestamps: true }
-);
+    allowNull: false,
+  },
+  totalPrice: {
+    type: DataTypes.FLOAT,
+    defaultValue: 0,
+    allowNull: false,
+  },
+}, {
+  timestamps: true,
+});
 
-
-const Cart = mongose.model('Cart', cartSchema);
+// Establishing many-to-many relationship with products through CartProducts table
+// Cart.belongsToMany(Product, { through: 'CartProduct', foreignKey: 'cartId' });
+// Product.belongsToMany(Cart, { through: 'CartProduct', foreignKey: 'productId' });
 
 module.exports = Cart;

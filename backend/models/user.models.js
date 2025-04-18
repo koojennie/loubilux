@@ -1,62 +1,62 @@
-const mongoose = require("mongoose");
+const { Sequelize, DataTypes } = require('sequelize');
+const { sequelize } = require('../lib/connection');
 
-const userSchema = new mongoose.Schema(
-  {
-    userId: {
-      type: String,
-      required: true,
-    },
-    name: {
-      type: String,
-      required: true,
-    },
-    username: {
-      type: String,
-      required: true,
-      unique: true,
-    },
-    password: {
-      type: String,
-      required: true,
-    },
-    email: {
-      type: String,
-      required: true,
-      unique: true,
-    },
-    phoneNumber: {
-      type: String,
-    },
-    role: {
-      type: String,
-      default: "user",
-      enum: ["user", "admin", "superadmin"],
-    },
-    profilePicture: {
-      type: String,
-      default: "",
-    },
-    isVerified: {
-      type: Boolean,
-      default: false,
+const User = sequelize.define('User', {
+  userId: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    unique: true,
+  },
+  name: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  username: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    unique: true,
+  },
+  password: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  email: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    unique: true,
+  },
+  phoneNumber: {
+    type: DataTypes.STRING,
+  },
+  role: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    defaultValue: 'user',
+    validate: {
+      isIn: [['user', 'admin', 'superadmin']],
     },
   },
-  { timestamps: true }
-);
-
-userSchema.pre("validate", async function (next) {
-  if (!this.userId) {
-    try {
-      const lastUser = await this.constructor.findOne().sort({ createdAt: -1 });
-      const lastNumber = lastUser ? parseInt(lastUser.userId.split("-")[1]) : 0;
-      this.userId = `USR-${String(lastNumber + 1).padStart(4, "0")}`;
-    } catch (err) {
-      return next(err);
-    }
-  }
-  next();
+  profilePicture: {
+    type: DataTypes.STRING,
+    defaultValue: '',
+  },
+  isVerified: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false,
+  },
+}, {
+  timestamps: true,
 });
 
-const User = mongoose.model("User", userSchema);
+// Auto-generate userId before save if not provided
+User.beforeValidate(async (user, options) => {
+  if (!user.userId) {
+    const lastUser = await User.findOne({
+      order: [['createdAt', 'DESC']],
+    });
+    const lastNumber = lastUser ? parseInt(lastUser.userId.split('-')[1]) : 0;
+    user.userId = `USR-${String(lastNumber + 1).padStart(4, '0')}`;
+  }
+});
 
 module.exports = User;

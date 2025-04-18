@@ -1,27 +1,34 @@
-const mongoose = require('mongoose');
+const { Sequelize, DataTypes } = require('sequelize');
+const { sequelize } = require('../lib/connection');
 
-const orderLineItemSchema = new mongoose.Schema({
-    orderId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Order',
-        required: true,
+const OrderLineItem = sequelize.define('OrderLineItem', {
+  orderId: {
+    type: DataTypes.INTEGER,
+    references: {
+      model: 'Orders', 
+      key: 'id', 
     },
-    product: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Product',
-        required: true,
+    allowNull: false,
+  },
+  productId: {
+    type: DataTypes.INTEGER,
+    references: {
+      model: 'Products', 
+      key: 'id', 
     },
-    quantity: {
-        type: Number,
-        required: true,
-        default: 1,
-    },
-    subPrice: {
-        type: Number,
-        required: true,
-    },
-}, {timestamps: true});
-
-const OrderLineItem = mongoose.model('OrderLineItem', orderLineItemSchema);
+    allowNull: false,
+  },
+  quantity: {
+    type: DataTypes.INTEGER,
+    defaultValue: 1,
+    allowNull: false,
+  },
+  subPrice: {
+    type: DataTypes.FLOAT,
+    allowNull: false,
+  },
+}, {
+  timestamps: true,
+});
 
 module.exports = OrderLineItem;

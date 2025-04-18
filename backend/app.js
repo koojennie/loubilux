@@ -1,7 +1,8 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const cors = require('cors');
-const { connectDB } = require('./lib/connection');
+const { connectDB, sequelize } = require('./lib/connection');
+const {CartProduct} = require('./models/index');
 const cookieParser = require("cookie-parser");
 
 const app = express();
@@ -44,7 +45,21 @@ app.use((req, res, next) => {
   });
 });
 
-app.listen(port, () => {
-  console.log(`App listening at http://localhost:${port}`);
-  connectDB();
-});
+const startServer = async () => {
+  try {
+    await sequelize.sync({ alter: true });
+    console.log('✅ Database Sync!');
+
+    app.listen(port, () => {
+      connectDB();
+      console.log(`App listening at http://localhost:${port}`);
+    });
+    
+  } catch (error) {
+    console.error('Error start server:', error);
+  }
+}
+
+
+startServer();
+

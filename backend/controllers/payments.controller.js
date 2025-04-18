@@ -1,4 +1,4 @@
-const Order = require("../models/order.models");
+const Order = require("../models/order.model");
 const snap = require("../lib/midtransPayments");
 
 const sendRequestPaymentToken = async (req, res) => {
