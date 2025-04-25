@@ -1,32 +1,42 @@
-const User = require("../models/user.models");
+const User = require("../models/user.model");
 // const bcrypt = require('bcrypt');
 // const jwt = require('jsonwebtoken');
 const cloudinary = require("../lib/cloudinary");
+const Sequelize = require('sequelize');
 
 exports.getAllUsers = async (req, res) => {
   try {
     let { sortBy, sortOrder, limit, page, searchQuery } = req.query;
 
-    sortOrder = sortOrder === "desc" ? -1 : 1;
+    sortOrder = sortOrder === "desc" ? "DESC" : "ASC";
     limit = parseInt(limit) || 10;
     page = parseInt(page) || 1;
 
-    const query = {};
+    const whereClause = {};
     if (searchQuery) {
-      query.name = { $regex: searchQuery, $options: "i" };
+      whereClause.name = { [Sequelize.Op.iLike]: `%${searchQuery}%` };
     }
 
-    const totalUsers = await User.countDocuments(query);
+    const totalUsers = await User.count({ where: whereClause });
     const totalPages = Math.ceil(totalUsers / limit);
 
-    const users = await User.find(query)
-      .select(
-        "userId name username email phoneNumber role profilePicture createdAt updatedAt"
-      )
-      .sort({ [sortBy]: sortOrder })
-      .skip((page - 1) * limit)
-      .limit(limit)
-      .lean();
+    const users = await User.findAll({
+      attributes: [
+        "userId",
+        "name",
+        "username",
+        "email",
+        "phoneNumber",
+        "role",
+        "profilePicture",
+        "createdAt",
+        "updatedAt",
+      ],
+      where: whereClause,
+      order: [[sortBy || "createdAt", sortOrder]],
+      offset: (page - 1) * limit,
+      limit: limit,
+    });
 
     return res.status(200).json({
       status: "success",
@@ -51,17 +61,25 @@ exports.getAllUsers = async (req, res) => {
 exports.getUserbyId = async (req, res) => {
   try {
     const userId = req.params.id;
-    const user = await User.findById(userId);
+    const user = await User.findOne({ where: { id: userId } });
+
+    if (!user) {
+      return res.status(404).json({
+        status: "error",
+        message: "User not found",
+      });
+    }
+
     return res.status(200).json({
       status: "success",
-      message: `User found successfully`,
+      message: "User found successfully",
       data: user,
     });
   } catch (error) {
     console.error(error.message);
     return res.status(500).json({
       status: "error",
-      message: "Internal Server Error message ",
+      message: "Internal Server Error",
       error: error.message,
     });
   }
@@ -72,8 +90,8 @@ exports.updateUser = async (req, res) => {
   try {
     const userId = req.params.id;
 
-    // Check apakah user ada
-    const user = await User.findById(userId);
+    // Check if user exists
+    const user = await User.findOne({ where: { id: userId } });
     if (!user) {
       return res.status(404).json({
         status: "error",
@@ -89,36 +107,32 @@ exports.updateUser = async (req, res) => {
     if (req.body.role) updates.role = req.body.role;
     if (req.body.password) updates.password = req.body.password;
 
-    // image
-    const { profilePicture, newImage, oldImage, deletedImage, keepImage } =
-      req.body;
+    // Handle profile picture updates
+    const { profilePicture, newImage, deletedImage, keepImage } = req.body;
 
-    // case 2 & case 3 delete image
+    // Case 2 & Case 3: Delete image
     if (deletedImage) {
-      try{
-        const publicId = imageUrl.split("/").pop().split(".")[0];
+      try {
+        const publicId = profilePicture.split("/").pop().split(".")[0];
         await cloudinary.uploader.destroy(`users/${publicId}`);
-        updates.profilePicture = "";
-      } catch(error) {
+        updates.profilePicture = null;
+      } catch (error) {
         return res.status(500).json({
           status: "error",
-          message: "Deleted Image failed",
-          error: error.message
+          message: "Failed to delete image",
+          error: error.message,
         });
       }
     }
-    
-    // case 1 & case 3
-    if(newImage){
+
+    // Case 1 & Case 3: Upload new image
+    if (newImage) {
       try {
-        const uploadedResponse = await cloudinary.uploader.upload(
-          profilePicture,
-          {
-            folder: "users",
-            upload_preset: "ml_default",
-          }
-        );
-        updates.profilePicture = uploadedResponse.secure_url; // Save the URL to the user's profile
+        const uploadedResponse = await cloudinary.uploader.upload(profilePicture, {
+          folder: "users",
+          upload_preset: "ml_default",
+        });
+        updates.profilePicture = uploadedResponse.secure_url;
       } catch (error) {
         console.error("Cloudinary Upload Error", error);
         return res.status(500).json({
@@ -129,22 +143,22 @@ exports.updateUser = async (req, res) => {
       }
     }
 
-    // case 4
-
-    if(keepImage){
+    // Case 4: Keep existing image
+    if (keepImage) {
       updates.profilePicture = profilePicture;
     }
 
-
-    if(profilePicture === "") {
-      updates.profilePictureUrl =
+    // Default profile picture if none is provided
+    if (!profilePicture) {
+      updates.profilePicture =
         "https://res.cloudinary.com/dqjlprqcy/image/upload/v1742188549/user-loubilux_ldr7fh.svg";
     }
 
-    const updatedUser = await User.findByIdAndUpdate(userId, updates, {
-      new: true,
-      runValidators: true,
-    });
+    // Update user in the database
+    await User.update(updates, { where: { id: userId } });
+
+    // Fetch the updated user
+    const updatedUser = await User.findOne({ where: { id: userId } });
 
     return res.status(200).json({
       status: "success",
@@ -160,13 +174,12 @@ exports.updateUser = async (req, res) => {
     });
   }
 };
-// delete user
 exports.deleteUser = async (req, res) => {
   try {
     const userId = req.params.id;
 
     // Check if user exists
-    const user = await User.findById(userId);
+    const user = await User.findOne({ where: { id: userId } });
     if (!user) {
       return res.status(404).json({
         status: "error",
@@ -175,22 +188,26 @@ exports.deleteUser = async (req, res) => {
     }
 
     // Delete profile picture from Cloudinary if it exists
-    if (user.profilePicture && user.profilePicture !== "https://res.cloudinary.com/dqjlprqcy/image/upload/v1742188549/user-loubilux_ldr7fh.svg") {
+    if (
+      user.profilePicture &&
+      user.profilePicture !==
+        "https://res.cloudinary.com/dqjlprqcy/image/upload/v1742188549/user-loubilux_ldr7fh.svg"
+    ) {
       try {
-      const publicId = user.profilePicture.split("/").pop().split(".")[0];
-      await cloudinary.uploader.destroy(`users/${publicId}`);
+        const publicId = user.profilePicture.split("/").pop().split(".")[0];
+        await cloudinary.uploader.destroy(`users/${publicId}`);
       } catch (error) {
-      console.error("Cloudinary Deletion Error", error);
-      return res.status(500).json({
-        status: "error",
-        message: "Failed to delete profile picture from Cloudinary",
-        error: error.message,
-      });
+        console.error("Cloudinary Deletion Error", error);
+        return res.status(500).json({
+          status: "error",
+          message: "Failed to delete profile picture from Cloudinary",
+          error: error.message,
+        });
       }
     }
 
     // Remove user from database
-    await User.findByIdAndDelete(userId);
+    await User.destroy({ where: { id: userId } });
 
     return res.status(200).json({
       status: "success",
@@ -208,7 +225,9 @@ exports.deleteUser = async (req, res) => {
 
 exports.generateUserId = async (req, res) => {
   try {
-    const lastUser = await User.findOne().sort({ createdAt: -1 });
+    const lastUser = await User.findOne({
+      order: [["createdAt", "DESC"]],
+    });
 
     let lastNumber = 0;
     if (lastUser && lastUser.userId) {

@@ -4,7 +4,7 @@ const {authenticateUser, authorizeRoles} = require('../middleware/auth.middlewar
 
 const router = express.Router();
 
-router.post('/create', authenticateUser, authorizeRoles('user'), createOrderFromCart);
+router.post('/create', authenticateUser, authorizeRoles('user', 'admin', 'superadmin'), createOrderFromCart);
 router.get('/all', authenticateUser,authorizeRoles('admin', 'superadmin'), getAllOrders);
 router.get('/order',authenticateUser, getUserOrders);
 router.put('/update-status', authenticateUser, authorizeRoles('admin', 'superadmin'), updateOrderStatus);

@@ -1,13 +1,12 @@
-const mongoose = require('mongoose');
-const Product = require('../models/product.model');
-const Category = require('../models/category.model');
+const { Op } = require('sequelize');
 const cloudinary = require('../lib/cloudinary');
+const {Category, Product} = require('../models');
+// const Product = require("../models/products.model");
 
 const createProduct = async (req, res) => {
-
     try {
         let { productCode, name, quantity, price, description, images, category } = req.body;
-        
+
         quantity = Number(quantity);
         price = Number(price);
 
@@ -15,13 +14,11 @@ const createProduct = async (req, res) => {
             return res.status(400).json({ status: 'error', message: 'Product Code, Name, quantity, price, and category are required' });
         }
 
-        if (!mongoose.isValidObjectId(category)) {
-            return res.status(400).json({ status: 'error', message: 'Invalid category ID' });
+        const categoryExists = await Category.findByPk(category);
+        if (!categoryExists) {
+            return res.status(404).json({ status: 'error', message: 'Category not found' });
         }
 
-        console.log("ini adalah quantity", typeof(quantity));
-
-        
         if (!Number.isInteger(quantity) || quantity < 0) {
             return res.status(400).json({ status: 'error', message: 'Quantity must be a non-negative integer' });
         }
@@ -34,35 +31,29 @@ const createProduct = async (req, res) => {
             return res.status(400).json({ status: 'error', message: 'Description must not exceed 200 characters' });
         }
 
-        const categoryExists = await Category.findById(category).lean();
-        if (!categoryExists) {
-            return res.status(404).json({ status: 'error', message: 'Category not found' });
-        }
-
         let imageUrls = [];
-
         if (images && images.length > 0) {
             for (const imageBase64 of images) {
-            try {
-                const uploadedResponse = await cloudinary.uploader.upload(imageBase64, {
-                folder: 'products',
-                upload_preset: "ml_default",
-                });
-                imageUrls.push(uploadedResponse.secure_url);
-            } catch (error) {
-                console.error("Cloudinary Upload Error:", error);
-            }
+                try {
+                    const uploadedResponse = await cloudinary.uploader.upload(imageBase64, {
+                        folder: 'products',
+                        upload_preset: "ml_default",
+                    });
+                    imageUrls.push(uploadedResponse.secure_url);
+                } catch (error) {
+                    console.error("Cloudinary Upload Error:", error);
+                }
             }
         }
 
         const newProduct = await Product.create({
-        productCode,
-        name,
-        quantity,
-        price,
-        description,
-        images: imageUrls.length > 0 ? imageUrls : [], 
-        category,
+            productCode,
+            name,
+            quantity,
+            price,
+            description,
+            images: imageUrls.length > 0 ? imageUrls : [],
+            categoryId: category,
         });
 
         return res.status(201).json({ status: 'success', message: 'Product created successfully', data: newProduct });
@@ -76,38 +67,33 @@ const createProduct = async (req, res) => {
 const getAllProducts = async (req, res) => {
     try {
         let { page, limit, sortOrder, sortBy, searchQuery } = req.query;
-        page = parseInt(page) || 1; 
-        limit = parseInt(limit) || 10; 
-        sortOrder = sortOrder === 'desc' ? -1 : 1; // Default ascending (1), descending (-1)
-        
-        const sortOptions = {};
-        if (sortBy) {
-            sortOptions[sortBy] = sortOrder;
-        }
+        page = parseInt(page) || 1;
+        limit = parseInt(limit) || 10;
+        sortOrder = sortOrder === 'desc' ? 'DESC' : 'ASC';
 
-        const query = {};
+        const where = {};
         if (searchQuery) {
-            query.name = { $regex: searchQuery, $options: 'i' }; // Case-insensitive search
+            where.name = { [Op.iLike]: `%${searchQuery}%` }; // Case-insensitive search
         }
 
-        const totalProducts = await Product.countDocuments(query); 
-        const totalPages = Math.ceil(totalProducts / limit);
+        const { count: totalProducts, rows: products } = await Product.findAndCountAll({
+            where,
+            include: [{ model: Category, attributes: ['name', 'description'] }],
+            order: sortBy ? [[sortBy, sortOrder]] : [],
+            offset: (page - 1) * limit,
+            limit,
+        });
 
-        const products = await Product.find(query)
-            .populate('category', 'name description')
-            .sort(sortOptions)
-            .skip((page - 1) * limit) 
-            .limit(limit) 
-            .lean();
+        const totalPages = Math.ceil(totalProducts / limit);
 
         return res.status(200).json({
             status: 'success',
             message: 'Products retrieved successfully',
-            total: totalProducts, 
+            total: totalProducts,
             page,
             limit,
-            totalPages, 
-            data: products
+            totalPages,
+            data: products,
         });
     } catch (error) {
         console.error('Error retrieving products:', error);
@@ -115,16 +101,13 @@ const getAllProducts = async (req, res) => {
     }
 };
 
-
 const getProductById = async (req, res) => {
     try {
         const { id } = req.params;
 
-        if (!mongoose.isValidObjectId(id)) {
-            return res.status(400).json({ status: 'error', message: 'Invalid product ID' });
-        }
-
-        const product = await Product.findById(id).populate('category', 'name description').lean();
+        const product = await Product.findByPk(id, {
+            include: [{ model: Category, attributes: ['name', 'description'] }],
+        });
         if (!product) {
             return res.status(404).json({ status: 'error', message: 'Product not found' });
         }
@@ -142,11 +125,7 @@ const updateProduct = async (req, res) => {
         const { id } = req.params;
         const { productCode, name, quantity, price, description, newImages = [], deletedImages = [], category, statusPublish, oldImagesStillExists = [] } = req.body;
 
-        if (!mongoose.isValidObjectId(id)) {
-            return res.status(400).json({ status: 'error', message: 'Invalid product ID' });
-        }
-
-        const product = await Product.findById(id);
+        const product = await Product.findByPk(id);
         if (!product) {
             return res.status(404).json({ status: 'error', message: 'Product not found' });
         }
@@ -157,10 +136,10 @@ const updateProduct = async (req, res) => {
         if (quantity !== undefined) updates.quantity = quantity;
         if (price !== undefined) updates.price = price;
         if (description) updates.description = description;
-        if (category) updates.category = category;
+        if (category) updates.categoryId = category;
         if (statusPublish) updates.statusPublish = statusPublish;
 
-        // **Hapus Gambar dari Cloudinary jika ada**
+        // Delete images from Cloudinary
         if (deletedImages.length > 0) {
             for (const imageUrl of deletedImages) {
                 try {
@@ -170,22 +149,17 @@ const updateProduct = async (req, res) => {
                     console.error("Error deleting image from Cloudinary:", error);
                 }
             }
-
-            // **Hapus Gambar dari MongoDB**
-            await Product.findByIdAndUpdate(id, {
-                $pull: { images: { $in: deletedImages } }
-            });
         }
 
-        // **Update gambar yang masih ada (oldImagesStillExists)**
+        // Update images
         updates.images = oldImagesStillExists;
 
-        // **Upload Gambar Baru ke Cloudinary jika ada**
+        // Upload new images to Cloudinary
         if (newImages.length > 0) {
             for (const imageBase64 of newImages) {
                 try {
                     const uploadResponse = await cloudinary.uploader.upload(imageBase64, {
-                        folder: 'products'
+                        folder: 'products',
                     });
 
                     if (uploadResponse && uploadResponse.secure_url) {
@@ -197,10 +171,10 @@ const updateProduct = async (req, res) => {
             }
         }
 
-        // **Update Product di MongoDB**
-        const updatedProduct = await Product.findByIdAndUpdate(id, updates, { new: true, runValidators: true }).lean();
+        // Update product in the database
+        await product.update(updates);
 
-        return res.status(200).json({ status: 'success', message: 'Product updated successfully', data: updatedProduct });
+        return res.status(200).json({ status: 'success', message: 'Product updated successfully', data: product });
 
     } catch (error) {
         console.error('Error updating product:', error);
@@ -208,20 +182,16 @@ const updateProduct = async (req, res) => {
     }
 };
 
-
-
 const deleteProduct = async (req, res) => {
     try {
         const { id } = req.params;
 
-        if (!mongoose.isValidObjectId(id)) {
-            return res.status(400).json({ status: 'error', message: 'Invalid product ID' });
-        }
-
-        const product = await Product.findByIdAndDelete(id);
+        const product = await Product.findByPk(id);
         if (!product) {
             return res.status(404).json({ status: 'error', message: 'Product not found' });
         }
+
+        await product.destroy();
 
         return res.status(200).json({ status: 'success', message: 'Product deleted successfully' });
 
@@ -234,24 +204,24 @@ const deleteProduct = async (req, res) => {
 const countProductByCategory = async (req, res) => {
     try {
         const { categoryId } = req.query;
-        if(!categoryId){
-            return res.status(400).json({status: "error", message:"Category ID is required"});
+        if (!categoryId) {
+            return res.status(400).json({ status: "error", message: "Category ID is required" });
         }
 
-        const category = await Category.findById(categoryId);
+        const category = await Category.findByPk(categoryId);
 
-        if(!category){
-            return res.status(404).json({status: "error", message: "category not found"});
+        if (!category) {
+            return res.status(404).json({ status: "error", message: "Category not found" });
         }
 
-        const countProductByCategory = await Product.countDocuments({ category: categoryId });
+        const countProductByCategory = await Product.count({ where: { categoryId } });
 
-        return res.status(200).json({status: "success", prefix: category.prefix, countProductByCategory});
-        
+        return res.status(200).json({ status: "success", prefix: category.prefix, countProductByCategory });
+
     } catch (error) {
-        return res.status(500).json({status: 'error', message: 'error fetching product count', error: error.mesage})
+        return res.status(500).json({ status: 'error', message: 'Error fetching product count', error: error.message });
     }
-}
+};
 
 module.exports = {
     createProduct,
@@ -259,5 +229,5 @@ module.exports = {
     getProductById,
     updateProduct,
     deleteProduct,
-    countProductByCategory
+    countProductByCategory,
 };

@@ -1,55 +1,62 @@
-const mongoose = require("mongoose");
-const Order = require("../models/order.model");
-const OrderLineItem = require("../models/orderlineitem.model");
-const Cart = require("../models/cart.model");
+const { Op } = require("sequelize");
+const { Order, User, OrderLineItem, Product, Cart, CartItem } = require("../models");
 
-// function for generateOrdersID
+
 const generateOrdersId = async () => {
-    const datePart = new Date().toISOString().split('T')[0].replace(/-/g, ''); // Format: YYYYMMDD
-    const orderCount = await mongoose.model('Order').countDocuments({ orderDate: { $gte: new Date().setHours(0, 0, 0, 0) } });
-    return `ORD-${datePart}-${String(orderCount + 1).padStart(3, '0')}`;
+  const datePart = new Date().toISOString().split('T')[0].replace(/-/g, '');
+  const orderCount = await Order.count({
+    where: {
+      createdAt: {
+        [Op.gte]: new Date().setHours(0, 0, 0, 0),
+      },
+    },
+  });
+  return `ORD-${datePart}-${String(orderCount + 1).padStart(3, '0')}`;
 };
+
 
 const createOrderFromCart = async (req, res) => {
   try {
     const userId = req.user.id;
     const selectedProductIds = req.body.selectedProducts;
 
-    if (!selectedProductIds || selectedProductIds.length === 0) {
-      return res
-        .status(400)
-        .json({ message: "No products selected for checkout" });
+    if (!selectedProductIds?.length) {
+      return res.status(400).json({ message: "No products selected for checkout" });
     }
 
-    // Fetch the user's cart
-    const cart = await Cart.findOne({ user: userId }).populate(
-      "products.product"
-    );
-    if (!cart || cart.products.length === 0) {
+    const cart = await Cart.findOne({
+      where: { userId },
+      include: {
+        model: CartItem,
+        as: "cartItems",
+        include: { model: Product, as: "product" }
+      }
+    });
+
+    if (!cart || !cart.cartItems.length) {
       return res.status(400).json({ message: "Cart is empty" });
     }
 
-    // Filter only selected products
-    const selectedProducts = cart.products.filter((item) =>
-      selectedProductIds.includes(item.product._id.toString())
+    const selectedItems = cart.cartItems.filter(item =>
+      selectedProductIds.includes(item.productId) && item.product !== null
     );
 
-    if (selectedProducts.length === 0) {
-      return res
-        .status(400)
-        .json({ message: "Selected products are not in the cart" });
+    if (!selectedItems.length) {
+      return res.status(400).json({ message: "Selected products are not in the cart" });
     }
 
-    // Calculate total price for selected items
-    const totalPrice = selectedProducts.reduce(
-      (sum, item) => sum + item.price * item.quantity,
-      0
-    );
+    const totalPrice = selectedItems.reduce((sum, item) => {
+      if (item.product) {
+        return sum + item.product.price * item.quantity;
+      }
+      return sum;
+    }, 0);
 
     const orderId = await generateOrdersId();
-    const newOrder = new Order({
-      _id: orderId,
-      user: userId,
+
+    const newOrder = await Order.create({
+      orderId,
+      userId,
       totalPrice,
       status: "Pending",
       paymentMethod: req.body.paymentMethod || "COD",
@@ -62,128 +69,122 @@ const createOrderFromCart = async (req, res) => {
       },
     });
 
-    await newOrder.save();
+    for (const item of selectedItems) {
+      await OrderLineItem.create({
+        orderId: newOrder.id,
+        productId: item.productId,
+        quantity: item.quantity,
+        subPrice: item.product.price * item.quantity,
+      });
+    }
 
-    const orderLineItems = await Promise.all(
-      selectedProducts.map(async (item) => {
-        const orderLineItem = new OrderLineItem({
-          orderId: newOrder._id,
-          product: item.product._id,
-          quantity: item.quantity,
-          subPrice: item.price * item.quantity,
-        });
-        await orderLineItem.save();
-        return orderLineItem._id; // Store the ID
-      })
-    );
+    // Remove ordered items from cart
+    await CartItem.destroy({
+      where: {
+      cartId: cart.id,
+      productId: selectedProductIds,
+      },
+    });
 
-    await Order.findByIdAndUpdate(newOrder._id, { orderlineitems: orderLineItems });
-
-    const remainingProducts = cart.products.filter(
-      (item) => !selectedProductIds.includes(item.product._id.toString())
-    );
-
-    cart.products = remainingProducts;
-    cart.totalPrice = remainingProducts.reduce(
-      (sum, item) => sum + item.price * item.quantity,
-      0
-    );
+    // Update cart total to 0
+    cart.totalPrice = 0;
     await cart.save();
 
-    res.status(201).json({
+    return res.status(201).json({
       message: "Order created successfully",
       order: newOrder,
     });
+
   } catch (error) {
     console.error("Error creating order:", error);
-    res
-      .status(500)
-      .json({ status: "error", message: "Server Error", error: error.message });
+    res.status(500).json({ status: "error", message: "Server Error", error: error.message });
   }
 };
 
-
 const getUserOrders = async (req, res) => {
   try {
-    const { user } = req;
+    const orders = await Order.findAll({
+      where: { userId: req.user.id },
+      include: {
+        model: OrderLineItem,
+        as: "orderLineItems",
+        include: {
+          model: Product,
+          as: "product",
+          attributes: ["name"],
+        },
+      },
+    });
 
-    const orders = await Order.find({ user: user.id })
-      .populate("orderlineitems")
-      .lean();
-
-    const formattedOrders = orders.map((order) => ({
-      id: order._id,
-      userid: order.user,
+    const data = orders.map(order => ({
+      id: order.id,
+      userId: order.userId,
       totalPrice: order.totalPrice,
       status: order.status,
       paymentMethod: order.paymentMethod,
-      orderDate:  new Date(order.orderDate).toLocaleString(),
-      shippingAddress: order.shippingAddress || null,
-      courier: order.courier || null,
-      items: order.orderlineitems.map((item) => ({
-        id: item._id,
-        product: item.product ? item.product.name : "Deleted Product",
+      orderDate: new Date(order.createdAt).toLocaleString(),
+      shippingAddress: order.shippingAddress,
+      courier: order.courier,
+      items: order.orderLineItems.map(item => ({
+        id: item.id,
+        product: item.product?.name || "Deleted Product",
         quantity: item.quantity,
         subPrice: item.subPrice,
       })),
     }));
 
-    return res.status(200).json({
-      status: "success",
-      message: "Orders retrieved successfully",
-      data: formattedOrders,
-    });
+    res.status(200).json({ status: "success", message: "Orders retrieved", data });
+
   } catch (error) {
-    console.error(error);
-    return res.status(500).json({
-      status: "error",
-      message: "Internal Server Error",
-      error: error.message,
-    });
+    console.error("Error:", error);
+    res.status(500).json({ status: "error", message: "Internal Server Error", error: error.message });
   }
 };
 
 const getAllOrders = async (req, res) => {
   try {
     const { page = 1, limit = 10 } = req.query;
-    const skip = (page - 1) * limit;
+    const offset = (page - 1) * limit;
 
-    const totalItems = await Order.countDocuments();
-    const orders = await Order.find()
-      .populate("user", "name email")
-      .populate({
-      path: "orderlineitems",
-      populate: {
-        path: "product",
-        select: "name price",
-      },
-      })
-      .select("_id user totalPrice status paymentMethod orderDate courier orderId isPaid")
-      .skip(skip)
-      .limit(parseInt(limit));
+    const { count: totalOrders, rows: orders } = await Order.findAndCountAll({
+      offset,
+      limit: parseInt(limit),
+      include: [
+        {
+          model: User,
+          as: "user",
+          attributes: ["id", "name", "email"]
+        },
+        {
+          model: OrderLineItem,
+          as: "orderLineItems",
+          include: {
+            model: Product,
+            as: "product",
+            attributes: ["id", "name", "price"]
+          },
+        },
+      ],
+    });
 
-    if (!orders.length) {
-      return res.status(404).json({ status: "error", message: "No orders found" });
-    }
-
-    const formattedOrders = orders.map(order => ({
-      _id: order._id,
+    const data = orders.map(order => ({
+      id: order.id,
       orderId: order.orderId,
-      userId: order.user ? order.user._id : "Guest",
-      user: order.user ? order.user.name : "Guest",
-      email: order.user ? order.user.email : "-",
+      userId: order.user?.id || "Guest",
+      user: order.user?.name || "Guest",
+      email: order.user?.email || "-",
       totalPrice: order.totalPrice,
       statusOrder: order.status,
       isPaid: order.isPaid,
       paymentMethod: order.paymentMethod,
-      orderDate: new Date(order.orderDate).toLocaleString(),
-      courier: order.courier ? order.courier.name : "Not Assigned",
-      items: order.orderlineitems.map(item => ({
-      productId: item.product ? item.product._id : "",
-      productName: item.product ? item.product.name : "Deleted Product",
-      productPrice: item.product ? item.product.price : 0,
-      quantity: item.quantity,
-      subPrice: item.subPrice,
+      orderDate: new Date(order.createdAt).toLocaleString(),
+      courier: order.courier?.name || "Not Assigned",
+      items: order.orderLineItems.map(item => ({
+        productId: item.product?.id || "",
+        productName: item.product?.name || "Deleted Product",
+        productPrice: item.product?.price || 0,
+        quantity: item.quantity,
+        subPrice: item.subPrice,
       })),
     }));
 
@@ -192,9 +193,9 @@ const getAllOrders = async (req, res) => {
       message: "Orders retrieved successfully",
       page: parseInt(page),
       limit: parseInt(limit),
-      totalPages: Math.ceil(totalItems / limit),
-      totalOrders: totalItems,
-      data: formattedOrders,
+      totalPages: Math.ceil(totalOrders / limit),
+      totalOrders,
+      data
     });
 
   } catch (error) {
@@ -206,38 +207,41 @@ const getAllOrders = async (req, res) => {
 const getFilteredOrdersReport = async (req, res) => {
   try {
     const { month, year, startDate, endDate } = req.query;
-
-    const filter = {};
+    const where = {};
 
     if (month && year) {
       const start = new Date(year, month - 1, 1);
-      const end = new Date(year, month, 0, 23, 59, 59); // Akhir bulan
-      filter.orderDate = { $gte: start, $lte: end };
+      const end = new Date(year, month, 0, 23, 59, 59);
+      where.createdAt = { [Op.between]: [start, end] };
     } else if (startDate && endDate) {
-      // Rentang tanggal
-      filter.orderDate = {
-        $gte: new Date(startDate),
-        $lte: new Date(endDate),
-      };
+      where.createdAt = { [Op.between]: [new Date(startDate), new Date(endDate)] };
     } else if (year) {
-      // Tahun penuh
       const start = new Date(year, 0, 1);
       const end = new Date(year, 11, 31, 23, 59, 59);
-      filter.orderDate = { $gte: start, $lte: end };
+      where.createdAt = { [Op.between]: [start, end] };
     }
 
-    const orders = await Order.find(filter)
-      .populate("user", "name email")
-      .populate({
-        path: "orderlineitems",
-        populate: {
-          path: "product",
-          select: "name price",
+    const orders = await Order.findAll({
+      where,
+      include: [
+        {
+          model: User,
+          as: "user",
+          attributes: ["name", "email"],
         },
-      })
-      .select("_id user totalPrice status paymentMethod orderDate courier orderId isPaid");
+        {
+          model: OrderLineItem,
+          as: "orderLineItems",
+          include: {
+            model: Product,
+            as: "product",
+            attributes: ["name", "price"],
+          },
+        },
+      ],
+    });
 
-    const formattedOrders = orders.map(order => ({
+    const data = orders.map(order => ({
       orderId: order.orderId,
       user: order.user?.name || "Guest",
       email: order.user?.email || "-",
@@ -245,9 +249,9 @@ const getFilteredOrdersReport = async (req, res) => {
       statusOrder: order.status,
       isPaid: order.isPaid,
       paymentMethod: order.paymentMethod,
-      orderDate: new Date(order.orderDate).toLocaleString(),
+      orderDate: new Date(order.createdAt).toLocaleString(),
       courier: order.courier?.name || "Not Assigned",
-      items: order.orderlineitems.map(item => ({
+      items: order.orderLineItems.map(item => ({
         productName: item.product?.name || "Deleted Product",
         productPrice: item.product?.price || 0,
         quantity: item.quantity,
@@ -257,58 +261,46 @@ const getFilteredOrdersReport = async (req, res) => {
 
     res.status(200).json({
       status: "success",
-      totalOrders: orders.length,
-      data: formattedOrders,
+      totalOrders: data.length,
+      data,
     });
+
   } catch (error) {
     console.error("Error getting filtered report:", error);
     res.status(500).json({ status: "error", message: "Server Error" });
   }
 };
 
-
 const updateOrderStatus = async (req, res) => {
   try {
     const { orderId, status } = req.body;
+    const validStatuses = ["Pending", "Processing", "Shipped", "Delivered", "Cancelled"];
 
-    const validStatuses = [
-      "Pending",
-      "Processing",
-      "Shipped",
-      "Delivered",
-      "Cancelled",
-    ];
     if (!validStatuses.includes(status)) {
-      return res
-        .status(400)
-        .json({ status: "error", message: "Invalid order status" });
+      return res.status(400).json({ status: "error", message: "Invalid order status" });
     }
 
-    const order = await Order.findByIdAndUpdate(
-      orderId,
-      { status },
-      { new: true }
-    ).lean();
-    if (!order) {
-      return res
-        .status(404)
-        .json({ status: "error", message: "Order not found" });
-    }
+    const order = await Order.findOne({ where: { id: orderId } });
+    if (!order) return res.status(404).json({ status: "error", message: "Order not found" });
 
-    return res.status(200).json({
+    order.status = status;
+    await order.save();
+
+    res.status(200).json({
       status: "success",
       message: "Order status updated successfully",
       data: order,
     });
+
   } catch (error) {
     console.error(error);
-    return res.status(500).json({
+    res.status(500).json({
       status: "error",
       message: "Internal Server Error",
       error: error.message,
     });
   }
-}
+};
 
 module.exports = {
   createOrderFromCart,

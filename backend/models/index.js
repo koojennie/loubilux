@@ -1,49 +1,43 @@
-const sequelize = require('../lib/connection');
-const User = require('./user.models');
-const Product = require('./product.model');
-const Cart = require('./cart.model');
-const Category = require('./category.model');
-const Order = require('./order.model');
-const OrderLineItem = require('./orderlineitem.model');
-const Review = require('./review.model');
-const CartProduct = require('./cartProduct.model')
+'use strict';
 
-// Relasi antar model
-User.hasMany(Cart, { foreignKey: 'userId' });
-Cart.belongsTo(User, { foreignKey: 'userId' });
+const fs = require('fs');
+const path = require('path');
+const Sequelize = require('sequelize');
+const basename = path.basename(__filename);
+const env = process.env.NODE_ENV || 'development';
+const config = require(__dirname + '/../config/config.js')[env];
+const db = {};
 
-User.hasMany(Order, { foreignKey: 'userId' });
-Order.belongsTo(User, { foreignKey: 'userId' });
+let sequelize;
+if (config.use_env_variable) {
+  sequelize = new Sequelize(process.env[config.use_env_variable], config);
+} else {
+  sequelize = new Sequelize(config.database, config.username, config.password, config);
+}
 
-Order.hasMany(OrderLineItem, { foreignKey: 'orderId' });
-OrderLineItem.belongsTo(Order, { foreignKey: 'orderId' });
+fs
+  .readdirSync(__dirname)
+  .filter(file => {
+    return (
+      file.indexOf('.') !== 0 &&
+      file !== basename &&
+      file.slice(-3) === '.js' &&
+      file.indexOf('.test.js') === -1
+    );
+  })
+  .forEach(file => {
+    const model = require(path.join(__dirname, file));
+    db[model.name] = model;
+  });
 
-Product.hasMany(OrderLineItem, { foreignKey: 'productId' });
-OrderLineItem.belongsTo(Product, { foreignKey: 'productId' });
+// Setup Relasi Disini
+Object.keys(db).forEach(modelName => {
+  if (db[modelName].associate) {
+    db[modelName].associate(db);
+  }
+});
 
-Category.hasMany(Product, { foreignKey: 'categoryId' });
-Product.belongsTo(Category, { foreignKey: 'categoryId' });
+db.sequelize = sequelize;
+db.Sequelize = Sequelize;
 
-Product.hasMany(Review, { foreignKey: 'productId' });
-Review.belongsTo(Product, { foreignKey: 'productId' });
-
-User.hasMany(Review, { foreignKey: 'userId' });
-Review.belongsTo(User, { foreignKey: 'userId' });
-
-// Relasi Many-to-Many Cart-Product melalui CartProduct
-Cart.belongsToMany(Product, { through: CartProduct, foreignKey: 'cartId' });
-Product.belongsToMany(Cart, { through: CartProduct, foreignKey: 'productId' });
-
-
-// EXPORT
-module.exports = {
-  sequelize,
-  User,
-  Product,
-  Cart,
-  Category,
-  Order,
-  OrderLineItem,
-  Review,
-  CartProduct,
-};
+module.exports = db;

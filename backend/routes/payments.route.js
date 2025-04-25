@@ -1,10 +1,10 @@
-const express = require('express');
-const router = express.Router();
+// const express = require('express');
+// const router = express.Router();
 
-const { sendRequestPaymentToken } = require('../controllers/payments.controller');
-const {authenticateUser, authorizeRoles} = require('../middleware/auth.middleware');
+// const { sendRequestPaymentToken } = require('../controllers/payments.controller');
+// const {authenticateUser, authorizeRoles} = require('../middleware/auth.middleware');
 
 
-router.post('/', sendRequestPaymentToken);
+// router.post('/', sendRequestPaymentToken);
 
-module.exports = router;
+// module.exports = router;

@@ -1,40 +1,39 @@
-const Category = require('../models/category.model');
+const { Op } = require('sequelize'); 
+const Category = require('../models/category.model'); 
 
-// Create 
+// Create
 const createCategory = async (req, res) => {
     try {
-        const { name, description, prefix} = req.body;
+        const { name, description, prefix } = req.body;
 
-        if(!name) {
+        if (!name) {
             return res.status(400).json({
                 status: 'error',
                 message: 'Category Name fields are required'
             });
         }
 
-        if(description.length > 200){
+        if (description.length > 200) {
             return res.status(400).json({
                 status: 'error',
                 message: 'Description must be not greater than 200 characters'
             });
         }
 
-        const existingCategory = await Category.findOne({name: name});
+        const existingCategory = await Category.findOne({ where: { name } });
 
-        if(existingCategory) {
+        if (existingCategory) {
             return res.status(400).json({
                 status: 'error',
                 message: 'Category already exists'
             });
         }
 
-        const category = new Category({
+        const category = await Category.create({
             name,
             description,
             prefix
         });
-
-        await category.save();
 
         return res.status(201).json({
             status: 'success',
@@ -50,13 +49,13 @@ const createCategory = async (req, res) => {
             error: error.message
         });
     }
-}
+};
 
 const getCategoryById = async (req, res) => {
     try {
         const categoryId = req.params.id;
 
-        const category = await Category.findById(categoryId);
+        const category = await Category.findByPk(categoryId);
 
         if (!category) {
             return res.status(404).json({
@@ -79,34 +78,28 @@ const getCategoryById = async (req, res) => {
             error: error.message
         });
     }
-}
+};
 
 const getCategories = async (req, res) => {
     try {
         let { page, limit, sortOrder, sortBy, searchQuery } = req.query;
-        page = parseInt(page) || 1; 
-        limit = parseInt(limit) || 10; 
-        sortOrder = sortOrder === 'desc' ? -1 : 1;
-        
-        const sortOptions = {};
-        if (sortBy) {
-            sortOptions[sortBy] = sortOrder;
-        }
+        page = parseInt(page) || 1;
+        limit = parseInt(limit) || 10;
+        sortOrder = sortOrder === 'desc' ? 'DESC' : 'ASC';
 
-        const query = {};
+        const where = {};
         if (searchQuery) {
-            query.name = { $regex: searchQuery, $options: 'i' }; 
+            where.name = { [Op.iLike]: `%${searchQuery}%` }; // Using Sequelize's Op.iLike for case-insensitive search
         }
 
-        const totalCategories = await Category.countDocuments(query);
+        const { count: totalCategories, rows: categories } = await Category.findAndCountAll({
+            where,
+            order: sortBy ? [[sortBy, sortOrder]] : [],
+            offset: (page - 1) * limit,
+            limit
+        });
+
         const totalPages = Math.ceil(totalCategories / limit);
-
-        const categories = await Category.find(query)
-            .sort(sortOptions)
-            .skip((page-1) * limit)
-            .limit(parseInt(limit))
-            .lean();
-
 
         return res.status(200).json({
             status: 'success',
@@ -126,24 +119,26 @@ const getCategories = async (req, res) => {
             error: error.message
         });
     }
-}
+};
 
 const updateCategory = async (req, res) => {
     try {
-        const { name, description } = req.body;
+        const { name, description, prefix } = req.body;
         const categoryId = req.params.id;
 
-        if(!name || !description) {
-            return res.status(400).json({
+        const [updated] = await Category.update(
+            { name, description, prefix },
+            { where: { id: categoryId } }
+        );
+
+        if (!updated) {
+            return res.status(404).json({
                 status: 'error',
-                message: 'Category Name and Description fields are required'
+                message: 'Category not found'
             });
         }
 
-        const category = await Category.findByIdAndUpdate(categoryId, {
-            name,
-            description
-        }, {new: true});
+        const category = await Category.findByPk(categoryId);
 
         return res.status(200).json({
             status: 'success',
@@ -159,13 +154,20 @@ const updateCategory = async (req, res) => {
             error: error.message
         });
     }
-}
+};
 
 const deleteCategory = async (req, res) => {
     try {
         const categoryId = req.params.id;
 
-        await Category.findByIdAndDelete(categoryId);
+        const deleted = await Category.destroy({ where: { id: categoryId } });
+
+        if (!deleted) {
+            return res.status(404).json({
+                status: 'error',
+                message: 'Category not found'
+            });
+        }
 
         return res.status(200).json({
             status: 'success',
@@ -180,6 +182,6 @@ const deleteCategory = async (req, res) => {
             error: error.message
         });
     }
-}
+};
 
-module.exports = {createCategory, getCategories, getCategoryById, updateCategory, deleteCategory};
+module.exports = { createCategory, getCategories, getCategoryById, updateCategory, deleteCategory };

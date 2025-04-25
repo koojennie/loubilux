@@ -1,5 +1,4 @@
-const Cart = require("../models/cart.model");
-const Product = require("../models/product.model");
+const { Cart, Product, CartItem } = require('../models/index')
 
 const addItemToCart = async (req, res) => {
   try {
@@ -10,29 +9,29 @@ const addItemToCart = async (req, res) => {
       return res.status(400).json({ message: "Quantity must be at least 1" });
     }
 
-    const product = await Product.findById(productId);
+    const product = await Product.findByPk(productId);
     if (!product) {
       return res.status(404).json({ message: "Product not found" });
     }
 
-    let cart = await Cart.findOne({ user: user.id });
+    let cart = await Cart.findOne({ where: { userId: user.id } });
+
     if (!cart) {
-      cart = new Cart({
-        user: user.id,
-        products: [],
-        totalPrice: 0,
-      });
+      cart = await Cart.create({ userId: user.id, totalPrice: 0 });
     }
 
-    const productInCart = cart.products.find(
-      (product) => product.product.toString() === productId
-    );
-    if (productInCart) {
-      productInCart.quantity += quantity;
-      productInCart.price += quantity * product.price;
+    let cartItem = await CartItem.findOne({
+      where: { cartId: cart.id, productId: product.id }
+    });
+
+    if (cartItem) {
+      cartItem.quantity += quantity;
+      cartItem.price += quantity * product.price;
+      await cartItem.save();
     } else {
-      cart.products.push({
-        product: productId,
+      cartItem = await CartItem.create({
+        cartId: cart.id,
+        productId: product.id,
         quantity,
         price: quantity * product.price,
       });
@@ -40,47 +39,49 @@ const addItemToCart = async (req, res) => {
 
     cart.totalPrice += quantity * product.price;
     await cart.save();
-    res.json(cart);
+
+    res.json({ message: "Item added to cart", data: cartItem });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({
-      status: "error",
-      message: "Internal Server Error",
-      error: error.message,
-    });
+    return res.status(500).json({ status: "error", message: error.message });
   }
 };
-
+  
 const getCart = async (req, res) => {
   try {
-    const cart = await Cart.findOne({ user: req.user.id }).populate(
-      "products.product"
-    );
+    let cart = await Cart.findOne({
+      where: { userId: req.user.id },
+      include: [
+        {
+          model: CartItem,
+          as: 'cartItems',
+          include: [
+            {
+              model: Product,
+              as: 'product',
+              attributes: ['id', 'name', 'price'],
+            },
+          ],
+        },
+      ],
+    });
 
+    // Kalau cart belum ada, bikin cart baru kosong
     if (!cart) {
-      return res.status(404).json({
-        status: "error",
-        message: "Cart not found",
-      });
+      cart = await Cart.create({ userId: req.user.id, totalPrice: 0 });
     }
 
-    // Count total unique products (length of products array)
-    const totalProductItems = cart.products.length;
+    const totalProductItems = cart.cartItems ? cart.cartItems.length : 0;
 
-    // Format response
     const formattedCart = {
-      _id: cart._id,
-      user: cart.user,
-      totalProductItems, // Add total product count (array length)
-      products: cart.products.map((item) => ({
-        product: {
-          _id: item.product._id,
-          name: item.product.name,
-          price: item.product.price,
-        },
+      id: cart.id,
+      user: cart.userId,
+      totalProductItems,
+      products: cart.cartItems ? cart.cartItems.map(item => ({
+        product: item.product,
         quantity: item.quantity,
         price: item.price,
-      })),
+      })) : [],
       totalPrice: cart.totalPrice,
       createdAt: cart.createdAt,
       updatedAt: cart.updatedAt,
@@ -92,103 +93,100 @@ const getCart = async (req, res) => {
       data: formattedCart,
     });
   } catch (error) {
-    res.status(500).json({ status: "error", message: error.message });
+    console.error(error);
+    return res.status(500).json({ status: "error", message: error.message });
   }
 };
+
 
 const clearCart = async (req, res) => {
   try {
-    const { user } = req;
-    await Cart.findOneAndUpdate(
-      { user: user.id },
-      { products: [], totalPrice: 0 },
-      { new: true }
-    );
+    const cart = await Cart.findOne({ where: { userId: req.user.id } });
 
-    return res.json({ message: "Cart cleared successfully", data: cart });
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({
-      status: "error",
-      message: "Internal Server Error",
-      error: error.message,
-    });
-  }
-};
-
-const removeItemFromCart = async (req, res) => {
-  try {
-    const { user } = req;
-    const { productId } = req.body;
-
-    let cart = await Cart.findOne({ user: user.id });
     if (!cart) {
       return res.status(404).json({ message: "Cart not found" });
     }
 
-    const productInCart = cart.products.find(
-      (product) => product.product.toString() === productId
-    );
-    if (!productInCart) {
+    await CartItem.destroy({ where: { cartId: cart.id } });
+
+    cart.totalPrice = 0;
+    await cart.save();
+
+    res.json({ message: "Cart cleared successfully" });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ status: "error", message: error.message });
+  }
+};
+
+
+const removeItemFromCart = async (req, res) => {
+  try {
+    const { productId } = req.body;
+    const cart = await Cart.findOne({ where: { userId: req.user.id } });
+
+    if (!cart) {
+      return res.status(404).json({ message: "Cart not found" });
+    }
+
+    const cartItem = await CartItem.findOne({
+      where: { cartId: cart.id, productId }
+    });
+
+    if (!cartItem) {
       return res.status(404).json({ message: "Product not found in cart" });
     }
 
-    cart.totalPrice -= productInCart.price;
-    cart.products = cart.products.filter(
-      (product) => product.product.toString() !== productId
-    );
+    cart.totalPrice -= cartItem.price;
+    await cartItem.destroy();
     await cart.save();
-    res.json(cart);
+
+    res.json({ message: "Item removed from cart" });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({
-      status: "error",
-      message: "Internal Server Error",
-      error: error.message,
-    });
+    return res.status(500).json({ status: "error", message: error.message });
   }
 };
 
 const updateCartItemQuantity = async (req, res) => {
   try {
-    const { user } = req;
     const { productId, quantity } = req.body;
 
     if (quantity < 1) {
       return res.status(400).json({ message: "Quantity must be at least 1" });
     }
 
-    let cart = await Cart.findOne({ user: user.id });
+    const cart = await Cart.findOne({ where: { userId: req.user.id } });
     if (!cart) {
       return res.status(404).json({ message: "Cart not found" });
     }
 
-    const productInCart = cart.products.find(
-      (product) => product.product.toString() === productId
-    );
-    if (!productInCart) {
+    const cartItem = await CartItem.findOne({
+      where: { cartId: cart.id, productId }
+    });
+
+    if (!cartItem) {
       return res.status(404).json({ message: "Product not found in cart" });
     }
 
-    const product = await Product.findById(productId);
+    const product = await Product.findByPk(productId);
     if (!product) {
       return res.status(404).json({ message: "Product not found" });
     }
 
-    cart.totalPrice -= productInCart.price;
-    productInCart.quantity = quantity;
-    productInCart.price = quantity * product.price;
-    cart.totalPrice += productInCart.price;
+    // Update
+    cart.totalPrice -= cartItem.price;
+    cartItem.quantity = quantity;
+    cartItem.price = quantity * product.price;
+    cart.totalPrice += cartItem.price;
 
+    await cartItem.save();
     await cart.save();
-    res.json(cart);
+
+    res.json({ message: "Cart item updated successfully" });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({
-      status: "error",
-      message: "Internal Server Error",
-      error: error.message,
-    });
+    return res.status(500).json({ status: "error", message: error.message });
   }
 };
 

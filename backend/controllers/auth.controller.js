@@ -1,12 +1,12 @@
-const User = require("../models/user.models");
+const User = require("../models/user.model");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const mongoose = require("mongoose");
+// const mongoose = require("mongoose");
+const { sequelize } = require('../lib/connection');
 const cloudinary = require('../lib/cloudinary');
+const { Sequelize } = require("sequelize");
 
 exports.register = async (req, res) => {
-  const session = await mongoose.startSession();
-  session.startTransaction();
   try {
     const {
       name,
@@ -61,8 +61,10 @@ exports.register = async (req, res) => {
     }
 
     const existingUser = await User.findOne({
-      $or: [{ username }, { email }],
-    }).session(session);
+      where: {
+      [Sequelize.Op.or]: [{ username }, { email }],
+      },
+    });
     if (existingUser) {
       return res
         .status(400)
@@ -82,46 +84,43 @@ exports.register = async (req, res) => {
         console.error("Cloudinary Upload Error", error);
         return res
           .status(500)
-          .json({ status: "error", message: "Image upload failed", error: error.message});
+          .json({ status: "error", message: "Image upload failed", error: error.message });
       }
     } else {
-      profilePictureUrl = "https://res.cloudinary.com/dqjlprqcy/image/upload/v1742188549/user-loubilux_ldr7fh.svg"
+      profilePictureUrl = "https://res.cloudinary.com/dqjlprqcy/image/upload/v1742188549/user-loubilux_ldr7fh.svg";
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser = await User.create(
-      [
-        {
-          name,
-          username,
-          password: hashedPassword,
-          email,
-          phoneNumber,
-          role,
-          profilePicture: profilePictureUrl,
-          isVerified: false,
-        },
-      ],
-      { session }
-    );
 
-    const token = jwt.sign({ userId: newUser[0]._id }, process.env.JWT_SECRET, {
+    const createdAt = new Date();
+    const updateAt = new Date();
+
+    const newUser = await User.create({
+      name,
+      username,
+      password: hashedPassword,
+      email,
+      phoneNumber,
+      role,
+      profilePicture: profilePictureUrl,
+      isVerified: false,
+      createdAt,
+      updateAt,
+    });
+
+    const token = jwt.sign({ userId: newUser.id }, process.env.JWT_SECRET, {
       expiresIn: "1d",
     });
     // await sendVerificationEmail(email, token);
-    await session.commitTransaction();
-    session.endSession();
 
     res
       .status(201)
       .json({
         status: "success",
         message: "User registered",
-        data: newUser[0],
+        data: newUser,
       });
   } catch (error) {
-    await session.abortTransaction();
-    session.endSession();
     console.error(error);
     res
       .status(500)
@@ -136,29 +135,25 @@ exports.register = async (req, res) => {
 exports.login = async (req, res) => {
   try {
     const { username, password } = req.body;
-    const user = await User.findOne({ username });
+    const user = await User.findOne({
+      where: { username },
+    });
     if (!user || !(await bcrypt.compare(password, user.password))) {
       return res.status(400).json({ message: "Invalid username or password" });
     }
 
     const token = jwt.sign(
-      { id: user._id, role: user.role },
+      { id: user.id, role: user.role },
       process.env.JWT_SECRET,
       { expiresIn: "3d" }
     );
-    // res.cookie("jwtToken", token, {
-    //   httpOnly: true,
-    //   // secure: true,
-    //   maxAge: 3 * 24 * 60 * 60 * 1000,
-    //   sameSite: "None",
-    // });
 
     res.cookie("jwtToken", token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production", // true di production
-      maxAge: 3 * 24 * 60 * 60 * 1000, // 3 hari
+      secure: process.env.NODE_ENV === "production",
+      maxAge: 3 * 24 * 60 * 60 * 1000,
       sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
-    });    
+    });
 
     res
       .status(200)
@@ -190,5 +185,5 @@ exports.me = (req, res) => {
     return res.status(401).json({ message: "Unauthorized" });
   }
 
-  res.status(200).json({message: "Users login", user: req.user});
-}
+  res.status(200).json({ message: "Users login", user: req.user });
+};

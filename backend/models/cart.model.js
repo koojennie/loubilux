@@ -1,26 +1,35 @@
-const { Sequelize, DataTypes } = require('sequelize');
+const { DataTypes, Model } = require('sequelize');
 const { sequelize } = require('../lib/connection');
 
-const Cart = sequelize.define('Cart', {
+class Cart extends Model {
+  static associate(models) {
+    // 1 Cart has many CartItems
+    Cart.hasMany(models.CartItem, { foreignKey: 'cartId', as: 'cartItems' });
+  }
+}
+
+Cart.init({
+  id: {
+    type: DataTypes.UUID,
+    defaultValue: DataTypes.UUIDV4,
+    primaryKey: true,
+  },
   userId: {
-    type: DataTypes.INTEGER,
-    references: {
-      model: 'Users', // Foreign key for Users
-      key: 'id', // Foreign key
-    },
+    type: DataTypes.UUID,
     allowNull: false,
   },
   totalPrice: {
     type: DataTypes.FLOAT,
-    defaultValue: 0,
     allowNull: false,
+    defaultValue: 0,
   },
+  createdAt: DataTypes.DATE,
+  updatedAt: DataTypes.DATE,
 }, {
+  sequelize,
+  modelName: 'Cart',
+  tableName: 'Carts',
   timestamps: true,
 });
-
-// Establishing many-to-many relationship with products through CartProducts table
-// Cart.belongsToMany(Product, { through: 'CartProduct', foreignKey: 'cartId' });
-// Product.belongsToMany(Cart, { through: 'CartProduct', foreignKey: 'productId' });
 
 module.exports = Cart;

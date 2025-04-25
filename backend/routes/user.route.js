@@ -6,7 +6,8 @@ const { register } = require('../controllers/auth.controller');
 const { authenticateUser, authorizeRoles } = require('../middleware/auth.middleware');
 
 router.get('/', authenticateUser, authorizeRoles('superadmin'), getAllUsers);
-router.get("/generateUserId", generateUserId);
+// router.get('/', getAllUsers);
+router.get("/   ", generateUserId);
 router.get('/:id', getUserbyId);
 router.post('/register', register);
 router.put('/:id', authenticateUser, authorizeRoles('superadmin'), updateUser);

@@ -47,8 +47,8 @@ app.use((req, res, next) => {
 
 const startServer = async () => {
   try {
-    await sequelize.sync({ alter: true });
-    console.log('✅ Database Sync!');
+    // await sequelize.sync({ alter: true });
+    // console.log('✅ Database Sync!');
 
     app.listen(port, () => {
       connectDB();
