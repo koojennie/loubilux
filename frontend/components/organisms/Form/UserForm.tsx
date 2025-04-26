@@ -69,7 +69,7 @@ const UserForm: React.FC<UserFormProps> = ({ onSubmit, onEditSubmit, isEdit = fa
 
   const validatePassword = (password: string) => {
     const strongPasswordRegex =
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&.,:;])[A-Za-z\d@$!%*?&.,:;]{8,}$/;
     return strongPasswordRegex.test(password);
   }
 
@@ -103,27 +103,27 @@ const UserForm: React.FC<UserFormProps> = ({ onSubmit, onEditSubmit, isEdit = fa
     let tempKeepImage = false;
 
     // case 1 upload image first time 
-    if(!oldImage && profilePicture && base64Pattern.test(profilePicture)){
+    if (!oldImage && profilePicture && base64Pattern.test(profilePicture)) {
       tempNewImage = profilePicture;
       console.log("case pertama upload");
     }
 
     // case 2: deleted image profile
-    if(!profilePicture && oldImage){
+    if (!profilePicture && oldImage) {
       tempDeletedImage = oldImage;
       console.log("case kedua upload");
     }
 
     // case 3 : replace old profile image
-    if(profilePicture && base64Pattern.test(profilePicture) && oldImage){
+    if (profilePicture && base64Pattern.test(profilePicture) && oldImage) {
       tempNewImage = profilePicture;
       tempDeletedImage = oldImage;
-      
+
       console.log("case ketiga upload");
     }
-    
+
     // case 4 does't change image 
-    if(oldImage === profilePicture){
+    if (oldImage === profilePicture) {
       tempKeepImage = true;
       console.log("case keempat upload = ", tempKeepImage);
     }

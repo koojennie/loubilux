@@ -83,10 +83,10 @@ const ProductForm: React.FC<ProductFormProps> = ({ onSubmit, onEditSubmit ,isEdi
         `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/products/count?categoryId=${categoryId}`
       );
 
-      const { prefix, countProductByCategory } = response.data;
+      const { prefix, paddedNumber } = response.data;
 
       // temporary generate product code
-      const newProductCodeTemporary = String(countProductByCategory + 1).padStart(5, "0");
+      const newProductCodeTemporary = String(paddedNumber).padStart(5, "0");
       setGenerateProductCode(`${prefix}-${newProductCodeTemporary}`);
 
     } catch (error) {
@@ -110,7 +110,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ onSubmit, onEditSubmit ,isEdi
       }
     });
     
-    const imagesToDelete = initialData?.images.filter(
+    const imagesToDelete = initialData?.images?.filter(
       (image: string) => !newImages.includes(image) && !oldImagesStillExists.includes(image)
     );
     setDeletedImages(imagesToDelete);
@@ -226,7 +226,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ onSubmit, onEditSubmit ,isEdi
                     Select a category
                   </option>
                   {optionCategories.map((category: any) => (
-                    <option key={category._id} value={category._id}>
+                    <option key={category.id} value={category.id}>
                       {category.name}
                     </option>
                   ))}

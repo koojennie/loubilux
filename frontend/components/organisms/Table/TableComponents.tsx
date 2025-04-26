@@ -69,7 +69,7 @@ const TableComponents = <T extends Record<string, any>>({
         <tbody>
           {data?.map((row) => (
             <tr
-              key={`${row._id}`} // Pastikan id unik
+              key={`${row.id}`} // Pastikan id unik
               className="hover:bg-slate-50 border border-transparent hover:border-slate-200"
             >
               {columns.map((col) => (

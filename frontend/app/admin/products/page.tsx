@@ -99,7 +99,7 @@ const ProductPage = ({ initialProducts }: ProductsProps) => {
         id: product._id,
         ...product,
         no: (page - 1) * limit + (index + 1),
-        category: product.category?.name || " ",
+        category: product.Category?.name || "N/A",
         image: product.image || "/icon/loubilux-logo.png",
       }));
       setProducts(results.data);
@@ -118,7 +118,7 @@ const ProductPage = ({ initialProducts }: ProductsProps) => {
 
     try {
       const response = await axios.delete(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/products/${product._id}`,
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/products/${product.id}`,
         {
           withCredentials: true
         }

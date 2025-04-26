@@ -3,7 +3,7 @@ const { sequelize } = require('../lib/connection');
 
 class Product extends Model {
   static associate(models) {
-    Product.belongsTo(models.Category, { foreignKey: 'categoryId'});
+    Product.belongsTo(models.Category, { foreignKey: 'categoryId' });
   }
 }
 
@@ -47,6 +47,10 @@ Product.init(
         model: 'Categories',
         key: 'id',
       },
+    },
+    images: {
+      type: DataTypes.ARRAY(DataTypes.STRING),
+      defaultValue: [],
     },
     createdAt: {
       type: DataTypes.DATE,

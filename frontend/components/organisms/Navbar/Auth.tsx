@@ -9,6 +9,7 @@ export default function Auth() {
   const router = useRouter();
 
   const [isAuth, setIsAuth] = useState<boolean>(false);
+  const [role, setRole] = useState<string>("");
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -19,27 +20,28 @@ export default function Auth() {
         );
         if (response.status === 200) {
           setIsAuth(true);
+          setRole(response.data.user.role);
+          
         }
       } catch (err: any) {
         if (axios.isAxiosError(err)) {
           if (err.response?.status === 401) {
             setIsAuth(false);
-            console.warn("Unauthorized: Please login first.");
+            toast.error("Unauthorized: Please login first.");
           } else {
-            console.error("Unexpected error:", err.response?.statusText || err.message);
+            toast.error(`Unexpected error: ${err.response?.statusText || err.message}`);
           }
         } else {
-          console.error("Non-Axios error:", err.message);
+          toast.error(`Non-Axios error: ${err.message}`);
         }
       }
     };
-
     fetchUser();
   }, []);
-
+  
   const handleLogout = async () => {
     try {
-
+      
       await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/auth/logout`,
         {},
         {
@@ -96,6 +98,13 @@ export default function Auth() {
             className="dropdown-menu border-0"
             aria-labelledby="dropdownMenuLink"
           >
+            {(role=='superadmin'||role=='admin') && (
+              <li>
+              <Link className="dropdown-item text-lg color-palette-2" href="/admin">
+                Admin Page
+              </Link>
+            </li>
+            )}
             <li>
               <Link className="dropdown-item text-lg color-palette-2" href="/member/edit-profile">
                 My Profile

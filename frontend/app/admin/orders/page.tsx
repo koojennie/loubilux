@@ -25,7 +25,6 @@ interface OrderLineItem {
 }
 
 interface Order {
-  _id: string;
   id: string;
   user: User;
   orderlineitems: OrderLineItem;
@@ -96,27 +95,6 @@ const OrdersPage = () => {
     // setSelectedViewDetailOrder(order || null)
     // setIsModalViewDetailOpen(!isModalViewDetailOpen);
   }
-
-  const exportReport = async () => {
-    try {
-      let url = `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/orders/report`;
-
-      if(monthReport && yearReport){
-        url += `?month=${monthReport}&year=${yearReport}`;
-      } else if(starDateReport && endDateReport){
-        url += `?startDate=${starDateReport}&endDate=${endDateReport}`;
-      } else if (!monthReport && yearReport){
-        url += `?year=${yearReport}`;
-      }
-
-      const response = await axios.get(url);
-      console.log(response);
-      
-    } catch (error: any) {
-      console.error("Failed to export report", error)
-    }
-  }
-
 
   return (
     <div className="flex flex-col px-8 rounded-2xl shadow-xl bg-white shadow-gray-200">

@@ -4,7 +4,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation"
 import { IoPersonCircleSharp } from "react-icons/io5";
-import { FaGear } from "react-icons/fa6";
+import { FaGear, FaHouseChimney } from "react-icons/fa6";
+
 import { VscSignOut } from "react-icons/vsc";
 
 interface SidebarAdminProps {
@@ -89,6 +90,17 @@ const NavbarAdmin = ({ isSidebarOpen, toggleSidebar, handleSignOut }: SidebarAdm
                             ${openCloseDropDown ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}
                 ref={dropdownRef}
               >
+                <Link href={"/"}>
+                  <li
+                    role="menuitem"
+                    className="cursor-pointer text-slate-800 flex w-full text-sm items-center rounded-md p-3 transition-all hover:bg-slate-100 focus:bg-slate-100 active:bg-slate-100"
+                  >
+                    <FaHouseChimney size={21} className="text-slate-400" />
+                    <p className="text-slate-800 font-medium m-1">
+                      Home Page
+                    </p>
+                  </li>
+                </Link>
                 <Link href={"/admin/profile"}>
                   <li
                     role="menuitem"

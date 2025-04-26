@@ -1,11 +1,11 @@
 const { Op } = require('sequelize');
 const cloudinary = require('../lib/cloudinary');
-const {Category, Product} = require('../models');
+const { Category, Product } = require('../models');
 // const Product = require("../models/products.model");
 
 const createProduct = async (req, res) => {
     try {
-        let { productCode, name, quantity, price, description, images, category } = req.body;
+        let { productCode, name, quantity, price, description, newImages, category } = req.body;
 
         quantity = Number(quantity);
         price = Number(price);
@@ -32,8 +32,8 @@ const createProduct = async (req, res) => {
         }
 
         let imageUrls = [];
-        if (images && images.length > 0) {
-            for (const imageBase64 of images) {
+        if (newImages && newImages.length > 0) {
+            for (const imageBase64 of newImages) {
                 try {
                     const uploadedResponse = await cloudinary.uploader.upload(imageBase64, {
                         folder: 'products',
@@ -51,8 +51,7 @@ const createProduct = async (req, res) => {
             name,
             quantity,
             price,
-            description,
-            images: imageUrls.length > 0 ? imageUrls : [],
+            description : imageUrls.length > 0 ? imageUrls : [],
             categoryId: category,
         });
 
@@ -214,9 +213,23 @@ const countProductByCategory = async (req, res) => {
             return res.status(404).json({ status: "error", message: "Category not found" });
         }
 
-        const countProductByCategory = await Product.count({ where: { categoryId } });
+        const lastProduct = await Product.findOne({
+            where: { categoryId },
+            order: [['createdAt', 'DESC']],
+            attributes: ['productCode'],
+        });
 
-        return res.status(200).json({ status: "success", prefix: category.prefix, countProductByCategory });
+        let nextNumber = 1;
+        if (lastProduct && lastProduct.productCode) {
+            const match = lastProduct.productCode.match(/\d+$/);
+            if (match) {
+                nextNumber = parseInt(match[0], 10) + 1;
+            }
+        }
+
+        const paddedNumber = String(nextNumber).padStart(4, '0');
+
+        return res.status(200).json({ status: "success", prefix: category.prefix, paddedNumber });
 
     } catch (error) {
         return res.status(500).json({ status: 'error', message: 'Error fetching product count', error: error.message });

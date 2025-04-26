@@ -13,48 +13,22 @@ const AddProduct = () => {
   const [token, setToken] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchToken = async () => {
-      try {
-        const response = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/auth/login`, {
-          username: 'saniadmin1',
-          password: 'saniadmin1.P'
-        });
-        const token = response.data.token;
-        setToken(token);
-        console.log('done get token', token);
-        
-      } catch (error) {
-        console.error('Error fetching token', error);
-      }
-    };
-
-    fetchToken();
   }, []);
 
 
   const handleUserSubmit = async (formData: any) => {
-    if (!token) {
-      console.error('No token available');
-      toast.error("Authentication token is missing. Please try again.");
-      return;
-    }
-
-    console.log("ini adalah handle user submit", formData);
-
     try {
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/auth/register`,
         formData,
         { 
-          headers: { 
-            "Authorization": `Bearer ${token}`
-          },
+          withCredentials: true
         }
       );
 
       if(response.status === 201){
         toast.success("User successfully added!");
-        router.push("/admin/products"); 
+        router.push("/admin/users"); 
       } else {
         toast.error(response.data.message || "Failed to add product!");
       }

@@ -108,44 +108,7 @@ export const renderCellContent = <T extends { [key: string]: any }>(
         </span>
       )
     } else if (col.key === 'orderDate') {
-      // const formattedDateStr = value.replace(/\./g, ':');
-
-      // // Parse the date string into a Date object
-      // const date = new Date(formattedDateStr);
-
-      // // Format the date to a human-readable string
-      // const humanReadableDate = date.toLocaleString('en-US', {
-      //   weekday: 'long', // "Monday"
-      //   year: 'numeric', // "2025"
-      //   month: 'long', // "April"
-      //   day: 'numeric', // "1"
-      //   hour: '2-digit', // "04"
-      //   minute: '2-digit', // "18"
-      //   second: '2-digit' // "18"
-      // });
-
-      // Replace the dots with colons for easier parsing
-      const formattedDateStr = value.replace(/\./g, ':');
-
-      // Parse the date string into a Date object
-      const date = new Date(formattedDateStr);
-
-      // Set timezone to Indonesia (WIB) using toLocaleString()
-      const options: Intl.DateTimeFormatOptions = {
-        year: "numeric",
-        month: "2-digit",
-        day: "2-digit",
-        hour: "2-digit",
-        minute: "2-digit",
-        hour12: false, // 24-hour format
-        timeZone: "Asia/Jakarta", // Indonesia timezone
-      };
-
-      const humanReadableDate = date
-        .toLocaleString('id-ID', options)
-        .replace(',', '') // Remove the comma between date and time
-        .replace(/(\d{2}):(\d{2})/, '$1.$2'); // Replace colon in time with a dot
-
+      const humanReadableDate = value;
       return (
         <p className="font-normal text-sm text-slate-800">{humanReadableDate} WIB</p>
       )

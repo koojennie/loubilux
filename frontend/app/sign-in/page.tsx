@@ -3,22 +3,16 @@
 import Image from "next/image";
 import Link from "next/link";
 import axios from "axios";
-import toast, {Toaster} from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
 import SignInForm from "@/components/organisms/SignInForm/SignInForm";
 
 
 export default function SignIn() {
   const handleSigIn = async (formData: any) => {
-    console.log("ini adalah data dari inputan user", formData);
-
     try {
-
       const response = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/auth/login`,
-        formData, {withCredentials: true}
+        formData, { withCredentials: true }
       );
-
-      console.log("Login Berhasil", response);
-
       if (response.status === 200) {
         const { role } = response.data;
         toast.success("Login successful!", { duration: 2000 });
@@ -34,12 +28,11 @@ export default function SignIn() {
       } else {
         toast.error("Login failed. Please try again.");
       }
-      
-      
+
+
     } catch (error: any) {
       const errorMessage = error.response?.data?.message || "An unexpected error occurred. Please try again.";
       toast.error(errorMessage);
-      console.error("Login Error", error)
     }
 
   }
@@ -65,7 +58,7 @@ export default function SignIn() {
           <h2 className="text-4xl fw-bold text-white mb-30">Own the Luxury.<br />
             Embrace the Elegance.</h2>
           <p className="text-white m-0">We bring you branded bags and<br />premium products guaranteed<br />
-          100% original from Germany</p>
+            100% original from Germany</p>
         </div>
       </div>
     </section>

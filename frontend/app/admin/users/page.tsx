@@ -10,7 +10,6 @@ import ModalConfirmationDelete from "@/components/organisms/Modal/ModalConfirmat
 import ModalViewDetail from "@/components/organisms/Modal/ModalViewDetail";
 
 export interface User {
-  _id: string;
   id: string;
   userId: string;
   name: string;
@@ -58,7 +57,7 @@ const UserPage = ({ initialUsers }: UsersProps) => {
         }
       );
       const result = response.data.data.map((user: any) => ({
-        id: user._id,
+        id: user.id,
         ...user,
       }));
       setUser(result);
@@ -82,7 +81,7 @@ const UserPage = ({ initialUsers }: UsersProps) => {
 
     try {
       const response = await axios.delete(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/users/${user._id}`,
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/users/${user.id}`,
         {
           withCredentials: true,
         }
@@ -110,7 +109,7 @@ const UserPage = ({ initialUsers }: UsersProps) => {
   };
 
   const handleToPageEdit = () => { };
-
+  
   return (
     <>
       <div className="flex flex-col px-8 rounded-2xl shadow-xl bg-white shadow-gray-200">

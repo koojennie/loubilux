@@ -10,7 +10,6 @@ import ModalViewDetails from "@/components/organisms/Modal/ModalViewDetail";
 import ModalConfirmationDelete from "@/components/organisms/Modal/ModalConfirmationDelete";
 
 export type Category = {
-  _id: string;
   id: string;
   name: string;
   prefix: string;
@@ -33,7 +32,6 @@ const CategoriesPage = () => {
   const [orderBy, setOrderBy] = useState<string>("asc");
   const [searchQuery, setSearchQuery] = useState<string>("");
 
-
   const fetchAllCategories = async () => {
     setIsLoading(true);
     try {
@@ -41,7 +39,6 @@ const CategoriesPage = () => {
 
       const result = response.data.data.map((category: any) => (
         {
-          id: category._id,
           ...category
         }
       ))
@@ -50,6 +47,7 @@ const CategoriesPage = () => {
       setTotal(response.data.total);
     } catch (error) {
       console.error("error when fetch all categories");
+      toast.error("Error when fetching data categories")
     } finally {
       setIsLoading(false)
     }
@@ -68,7 +66,7 @@ const CategoriesPage = () => {
 
     try {
 
-      const response = await axios.delete(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/categories/${category?._id}`,
+      const response = await axios.delete(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/categories/${category?.id}`,
         {
           withCredentials: true
         }
