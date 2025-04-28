@@ -3,22 +3,20 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useRouter, useParams } from "next/navigation";
-import toast, {Toaster} from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
 import UserForm from "@/components/organisms/Form/UserForm";
-import { User } from "../../page";
+import { User } from "@/types/type";
 
 const EditUser = () => {
 
   const router = useRouter();
-  const paramUserId = useParams<{id:string}>().id;
+  const paramUserId = useParams<{ id: string }>().id;
 
-
-  const [token, setToken] = useState<string | null>(null);
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
     const fetchUserDataById = async () => {
-      
+
       try {
         const response = await axios.get(
           `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/users/${paramUserId}`,
@@ -42,14 +40,14 @@ const EditUser = () => {
       const response = await axios.put(
         `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/users/${paramUserId}`,
         formData,
-        { 
+        {
           withCredentials: true
         }
       );
 
-      if(response.status === 200) {
+      if (response.status === 200) {
         toast.success("User Updated successfully");
-        router.push("/admin/users"); 
+        router.push("/admin/users");
       } else {
         toast.error(response.data.message || "Failed to add product!");
       }
@@ -63,7 +61,7 @@ const EditUser = () => {
   return (
     <div className="p-8 md:p-8 ">
       <div className="relative m-auto flex flex-col rounded-2xl bg-white bg-clip-border text-slate-700 shadow-lg">
-        <UserForm  isEdit={true} onEditSubmit={handleUserEdit} initialData={user}/>
+        <UserForm isEdit={true} onEditSubmit={handleUserEdit} initialData={user} />
         <Toaster />
       </div>
     </div>

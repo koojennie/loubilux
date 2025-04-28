@@ -4,17 +4,11 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Toaster, toast } from 'react-hot-toast'
 import axios from "axios";
+import { Category } from "@/types/type"
 import HeaderContentAdmin from "@/components/organisms/HeaderContetntAdmin/HeaderContentAdmin";
 import TableComponents from "@/components/organisms/Table/TableComponents";
 import ModalViewDetails from "@/components/organisms/Modal/ModalViewDetail";
 import ModalConfirmationDelete from "@/components/organisms/Modal/ModalConfirmationDelete";
-
-export type Category = {
-  id: string;
-  name: string;
-  prefix: string;
-  description: string;
-}
 
 const CategoriesPage = () => {
   const router = useRouter();

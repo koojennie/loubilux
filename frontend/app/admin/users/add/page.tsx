@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from "react";
+import React from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import UserForm from "@/components/organisms/Form/UserForm";
@@ -9,12 +9,6 @@ import toast, {Toaster} from "react-hot-toast";
 const AddProduct = () => {
 
   const router = useRouter();
-
-  const [token, setToken] = useState<string | null>(null);
-
-  useEffect(() => {
-  }, []);
-
 
   const handleUserSubmit = async (formData: any) => {
     try {

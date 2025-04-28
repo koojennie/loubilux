@@ -2,41 +2,12 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import { Product } from "../products/page";
+import { Product } from "@/types/type";
+import { Order } from "@/types/type";
 import HeaderContentAdmin from "@/components/organisms/HeaderContetntAdmin/HeaderContentAdmin";
 import TableComponents from "@/components/organisms/Table/TableComponents";
 import ModalViewDetails from "@/components/organisms/Modal/ModalViewDetail";
 import ModalReport from "@/components/organisms/Modal/ModalReport";
-
-interface User {
-  name: string;
-  username: string;
-  email: string;
-  phoneNumber: string;
-  role: string;
-  profilePicture: string;
-}
-
-interface OrderLineItem {
-  orderId: Order;
-  product: Product;
-  quantity: number;
-  subPrice: number;
-}
-
-interface Order {
-  id: string;
-  user: User;
-  orderlineitems: OrderLineItem;
-  orderId: string;
-  totalPrice: number;
-  isPaid: boolean;
-  orderDate: Date;
-  statusOrder: "Pending" | "Processing" | "Shipped" | "Delivered" | "Cancelled";
-  paymentMethod: "COD" | "CARD";
-  createdAt?: Date;
-  updatedAt?: Date;
-}
 
 
 const OrdersPage = () => {
@@ -52,13 +23,7 @@ const OrdersPage = () => {
   const [isModalViewDetailOpen, setIsModalViewDetailOpen] = useState<boolean>(true);
   const [selectedViewDetailOrder, setSelectedViewDetailOrder] = useState<Order | null>(null);
   const [selectedDeleted, setSelectedDeleted] = useState<Order | null>(null);
-  const [isModaReport, setIsModalReport]= useState<boolean>(false);
-
-  // paramter for fetch report  
-  const [monthReport, setMonthReport] = useState<string>("");
-  const [yearReport, setYearReport] = useState<string>("");
-  const [starDateReport, setStartDateReport] = useState<string>("");
-  const [endDateReport, setEndDateReport] = useState<string>("");
+  const [isModaReport, setIsModalReport] = useState<boolean>(false);
 
   const fetchAllOrders = async () => {
     setIsLoading(true);
@@ -116,7 +81,7 @@ const OrdersPage = () => {
         onChangeDropDownOrderBy={() => { }}
         onChangeDropDownSortBy={() => { }}
         onChangeSearchQuery={() => { }}
-        toAddPage={() => {setIsModalReport(true)}}
+        toAddPage={() => { setIsModalReport(true) }}
         totalItems={totalItems}
       />
 
@@ -155,7 +120,7 @@ const OrdersPage = () => {
           { key: 'paymentMethod', label: 'Payment Status' as keyof Order },
         ]}
       /> */}
-      <ModalReport isOpen={isModaReport} setIsOpen={setIsModalReport}/>
+      <ModalReport isOpen={isModaReport} setIsOpen={setIsModalReport} />
     </div>
   );
 };

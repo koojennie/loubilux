@@ -4,21 +4,11 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
+import { User } from "@/types/type";
 import TableComponents from "@/components/organisms/Table/TableComponents";
 import HeaderContentAdmin from "@/components/organisms/HeaderContetntAdmin/HeaderContentAdmin";
 import ModalConfirmationDelete from "@/components/organisms/Modal/ModalConfirmationDelete";
 import ModalViewDetail from "@/components/organisms/Modal/ModalViewDetail";
-
-export interface User {
-  id: string;
-  userId: string;
-  name: string;
-  username: string;
-  email: string;
-  phoneNumber: string;
-  role: string;
-  profilePicture: string;
-}
 
 interface UsersProps {
   initialUsers: User[];
@@ -29,22 +19,16 @@ const UserPage = ({ initialUsers }: UsersProps) => {
 
   const [user, setUser] = useState<User[]>(initialUsers);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [selectedViewDetailUser, setSelectedViewDetailUser] =
-    useState<User | null>(null);
-  const [selectedDeleteUser, setSelectedDeleteUser] = useState<User | null>(
-    null
-  );
+  const [selectedViewDetailUser, setSelectedViewDetailUser] = useState<User | null>(null);
+  const [selectedDeleteUser, setSelectedDeleteUser] = useState<User | null>(null);
   const [page, setPage] = useState<number>(1);
   const [totalUsers, setTotalUsers] = useState<number>(1);
   const [limit, setLimit] = useState<number>(5);
   const [sortBy, setSortBy] = useState<string>("userId");
   const [orderBy, setOrderBy] = useState<string>("asc");
   const [searchQuery, setSearchQuery] = useState<string>("");
-  const [isModalConfirmationDeleteOpen, setIsModalConfirmationDeleteOpen] =
-    useState<boolean>(false);
-  const [isModalViewDetailOpen, setIsModalViewDetailOpen] =
-    useState<boolean>(true);
-  const [token, setToken] = useState<string>("");
+  const [isModalConfirmationDeleteOpen, setIsModalConfirmationDeleteOpen] = useState<boolean>(false);
+  const [isModalViewDetailOpen, setIsModalViewDetailOpen] = useState<boolean>(true);
 
   const fetchAllUsers = async () => {
     setIsLoading(true);
@@ -109,7 +93,7 @@ const UserPage = ({ initialUsers }: UsersProps) => {
   };
 
   const handleToPageEdit = () => { };
-  
+
   return (
     <>
       <div className="flex flex-col px-8 rounded-2xl shadow-xl bg-white shadow-gray-200">

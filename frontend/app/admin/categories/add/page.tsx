@@ -1,23 +1,14 @@
 'use client';
 
-import React, { useState, useEffect } from "react";
+import React from "react";
 import axios from "axios";
-import { useRouter, useParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import toast, { Toaster } from "react-hot-toast";
 import CategoryForm from "@/components/organisms/Form/CategoryForm";
-import { Category } from "../page"
 
 const AddPageCategory = () => {
 
   const router = useRouter();
-  const paramsCategoryId = useParams<{ id: string }>().id;
-
-  //   const [token, setToken] = useState<string | null>(null);
-  const [category, setCategory] = useState<Category | null>(null);
-
-  useEffect(() => {
-  }, []);
-
 
   const handleAddCategory = async (formData: any) => {
     try {
@@ -30,7 +21,7 @@ const AddPageCategory = () => {
       );
 
       if (response.status === 201) {
-        toast.success("Category Created successfully", {duration: 2000});
+        toast.success("Category Created successfully", { duration: 2000 });
         setTimeout(() => {
           router.push("/admin/categories");
         }, 1000);

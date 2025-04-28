@@ -5,14 +5,13 @@ import axios from "axios";
 import { useRouter, useParams } from "next/navigation";
 import toast, {Toaster} from "react-hot-toast";
 import CategoryForm from "@/components/organisms/Form/CategoryForm";
-import { Category } from "../../page"
+import { Category } from "@/types/type";
 
 const EditPageCategory = () => {
 
   const router = useRouter();
   const paramsCategoryId = useParams<{id:string}>().id;
-
-//   const [token, setToken] = useState<string | null>(null);
+  
   const [category, setCategory] = useState<Category | null>(null);
 
   useEffect(() => {

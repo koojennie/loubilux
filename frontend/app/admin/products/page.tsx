@@ -3,39 +3,20 @@ import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import { Product } from '@/types/type';
 import toast, { Toaster } from "react-hot-toast";
 import TableComponents from "@/components/organisms/Table/TableComponents";
 import HeaderContentAdmin from "@/components/organisms/HeaderContetntAdmin/HeaderContentAdmin";
 import ModalConfirmationDelete from "@/components/organisms/Modal/ModalConfirmationDelete";
 import ModalViewDetails from "@/components/organisms/Modal/ModalViewDetail";
 
-type Category = {
-  _id: string;
-  id: string;
-  name: string;
-  description: string;
-}
-
-export type Product = {
-  _id: string;
-  id: string;
-  no: number;
-  name: string;
-  productCode: string;
-  quantity: number;
-  price: number;
-  statusPublish: string;
-  images: string[];
-  description: string;
-  category: Category;
-}
 
 type ProductsProps = {
   initialProducts: Product[];
 }
 
 const ProductPage = ({ initialProducts }: ProductsProps) => {
-
+  
   const router = useRouter();
 
   const [products, setProducts] = useState<Product[]>(initialProducts);

@@ -3,19 +3,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Toaster, toast } from "react-hot-toast";
 import ProfileFormAdmin from "@/components/organisms/Form/ProfileFormAdmin";
-
-export interface User {
-  _id: string;
-  id: string;
-  userId: string;
-  name: string;
-  username: string;
-  email: string;
-  phoneNumber: string;
-  role: string;
-  profilePicture: string;
-}
-
+import { User } from "@/types/type";
 
 const profileAdmin = () => {
 
