@@ -10,30 +10,45 @@ class CartItem extends Model {
 }
 
 CartItem.init({
-  id: {
-    type: DataTypes.UUID,
-    defaultValue: DataTypes.UUIDV4,
+  cartItemId: {
+    type: DataTypes.STRING,
     primaryKey: true,
+    unique: true,
+    allowNull: false,
   },
   cartId: {
-    type: DataTypes.UUID,
+    type: DataTypes.STRING,
     allowNull: false,
+    references: {
+      model: "Carts",
+      key: "cartId"
+    }
   },
   productId: {
-    type: DataTypes.UUID,
+    type: DataTypes.STRING,
     allowNull: false,
+    references: {
+      model: 'Products',
+      key: 'productId',
+    }
   },
   quantity: {
     type: DataTypes.INTEGER,
     allowNull: false,
     defaultValue: 1,
   },
-  price: {
+  subPrice: {
     type: DataTypes.FLOAT,
     allowNull: false,
   },
-  createdAt: DataTypes.DATE,
-  updatedAt: DataTypes.DATE,
+  createdAt: {
+    type: DataTypes.DATE,
+    allowNull: false,
+  },
+  updatedAt: {
+    type: DataTypes.DATE,
+    allowNull: false,
+  },
 }, {
   sequelize,
   modelName: 'CartItem',

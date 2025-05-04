@@ -10,30 +10,31 @@ module.exports = {
      * await queryInterface.createTable('users', { id: Sequelize.INTEGER });
      */
     await queryInterface.createTable('Reviews', {
-      id: {
-        type: Sequelize.DataTypes.UUID,
-        defaultValue: Sequelize.DataTypes.UUIDV4,
+      reviewId: {
+        type: Sequelize.DataTypes.STRING,
         primaryKey: true,
+        allowNull: false,
+        unique: true,
       },
       userId: {
-        type: Sequelize.DataTypes.UUID,
+        type: Sequelize.DataTypes.STRING,
         references: {
           model: 'Users',
-          key: 'id',
+          key: 'userId',
         },
       },
       productId: {
-        type: Sequelize.DataTypes.UUID,
+        type: Sequelize.DataTypes.STRING,
         references: {
           model: 'Products',
-          key: 'id',
+          key: 'productId',
         },
       },
       orderId: {
-        type: Sequelize.DataTypes.UUID,
+        type: Sequelize.DataTypes.STRING,
         references: {
           model: 'Orders',
-          key: 'id',
+          key: 'orderId',
         },
       },
       rating: {

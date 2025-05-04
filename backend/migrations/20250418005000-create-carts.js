@@ -10,20 +10,22 @@ module.exports = {
      * await queryInterface.createTable('users', { id: Sequelize.INTEGER });
      */
     await queryInterface.createTable('Carts', {
-      id: {
-        type: Sequelize.UUID,
-        defaultValue: Sequelize.UUIDV4,
+      cartId: {
+        type: Sequelize.STRING,
         primaryKey: true,
+        unique: true,
       },
       userId: {
-        type: Sequelize.DataTypes.UUID,
+        type: Sequelize.DataTypes.STRING,
+        allowNull: false,
         references: {
           model: 'Users',
-          key: 'id',
+          key: 'userId',
         },
       },
       totalPrice: {
         type: Sequelize.FLOAT,
+        allowNull: false,
         defaultValue: 0,
       },
       createdAt: {

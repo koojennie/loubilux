@@ -7,23 +7,24 @@ class Order extends Model {
     Order.belongsTo(models.User, { foreignKey: 'userId', as: 'user' });
     // 1 Order has many OrderLineItems
     Order.hasMany(models.OrderLineItem, { foreignKey: 'orderId', as: 'orderLineItems' });
+    Order.belongsTo(models.Address, { foreignKey: 'shippingAddressId', as: 'shippingAddress' });
   }
 }
 
 Order.init(
   {
-    id: {
-      type: DataTypes.UUID,
-      defaultValue: DataTypes.UUIDV4,
-      primaryKey: true,
-    },
     orderId: {
       type: DataTypes.STRING,
       unique: true,
+      primaryKey: true,
     },
     userId: {
-      type: DataTypes.UUID,
+      type: DataTypes.STRING,
       allowNull: false,
+      references: {
+        model: 'Users',
+        key: 'userId',
+      },
     },
     totalPrice: {
       type: DataTypes.FLOAT,
@@ -41,14 +42,16 @@ Order.init(
       type: DataTypes.STRING,
       defaultValue: 'Pending',
     },
-    shippingAddress: DataTypes.JSON,
+    shippingAddressId: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      references: {
+        model: 'Addresses',
+        key: 'addressId',
+      },
+    },
     courier: DataTypes.JSON,
     cancellationReason: DataTypes.STRING,
-    // orderDate: {
-    //   type: DataTypes.DATE,
-    //   allowNull: false,
-    //   defaultValue: DataTypes.NOW,
-    // },
     createdAt: DataTypes.DATE,
     updatedAt: DataTypes.DATE,
   },

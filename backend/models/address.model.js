@@ -1,52 +1,54 @@
-const { DataTypes, Model } = require('sequelize');
+const { DataTypes, Model, Sequelize } = require('sequelize');
 const { sequelize } = require('../lib/connection');
 
-class Product extends Model {
+class Address extends Model {
   static associate(models) {
-    Product.belongsTo(models.Category, { foreignKey: 'categoryId' });
+    Address.hasOne(models.Order, {
+      foreignKey: 'shippingAddressId',
+      as: 'order',
+    });
   }
 }
 
-Product.init(
+Address.init( 
   {
-    productId: {
+    addressId: {
       type: DataTypes.STRING,
       primaryKey: true,
       unique: true,
-    },
-    name: {
-      type: DataTypes.STRING,
       allowNull: false,
     },
-    quantity: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      defaultValue: 0,
-    },
-    price: {
-      type: DataTypes.FLOAT,
-      allowNull: false,
-    },
-    description: {
-      type: DataTypes.STRING,
-      defaultValue: '',
-    },
-    statusPublish: {
-      type: DataTypes.STRING,
-      defaultValue: 'draft',
-    },
-    images: {
-      type: DataTypes.ARRAY(DataTypes.STRING),
-      allowNull: true,
-      defaultValue: [],
-    },
-    categoryId: {
+    userId: {
       type: DataTypes.STRING,
       allowNull: false,
       references: {
-        model: 'Categories',
-        key: 'categoryId',
-      },
+        model: 'Users',
+        key: 'userId',
+      }
+    },
+    receiverName: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    phoneNumber: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    province: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    city: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    postalCode: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    detail: {
+      type: DataTypes.STRING,
+      allowNull: false,
     },
     createdAt: {
       type: DataTypes.DATE,
@@ -61,10 +63,10 @@ Product.init(
   },
   {
     sequelize,
-    modelName: "Product",
-    tableName: "Products",
+    modelName: 'Address',
+    tableName: 'Adresses',
     timestamps: true,
   }
 );
 
-module.exports = Product;
+module.exports = Address;

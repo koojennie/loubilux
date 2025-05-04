@@ -1,4 +1,4 @@
-const { DataTypes, Model } = require("sequelize");
+const { DataTypes, Model, Sequelize } = require("sequelize");
 const { sequelize } = require("../lib/connection"); 
 
 class Category extends Model {
@@ -9,35 +9,33 @@ class Category extends Model {
 
 Category.init(
   {
-    id: {
-      type: DataTypes.UUID,
-      defaultValue: DataTypes.UUIDV4,
+    categoryId: {
+      type: Sequelize.STRING,
       primaryKey: true,
-      allowNull: false,
       unique: true,
+      allowNull: false,
     },
     name: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true,
     },
     description: {
       type: DataTypes.STRING,
       allowNull: true,
+      defaultValue: ''
     },
     prefix: {
       type: DataTypes.STRING,
       allowNull: false,
+      defaultValue: '',
     },
     createdAt: {
       type: DataTypes.DATE,
       allowNull: false,
-      defaultValue: DataTypes.NOW,
     },
     updatedAt: {
       type: DataTypes.DATE,
       allowNull: false,
-      defaultValue: DataTypes.NOW,
     },
   },
   {

@@ -10,23 +10,26 @@ module.exports = {
      * await queryInterface.createTable('users', { id: Sequelize.INTEGER });
      */
     await queryInterface.createTable('OrderLineItems', {
-      id: {
-        type: Sequelize.UUID,
-        defaultValue: Sequelize.UUIDV4,
+      orderLineId: {
+        type: Sequelize.STRING,
         primaryKey: true,
+        unique: true,
+        allowNull:false,
       },
       orderId: {
-        type: Sequelize.DataTypes.UUID,
+        type: Sequelize.DataTypes.STRING,
+        allowNull: false,
         references: {
           model: 'Orders',
-          key: 'id',
+          key: 'orderId',
         },
       },
       productId: {
-        type: Sequelize.DataTypes.UUID,
+        type: Sequelize.DataTypes.STRING,
+        allowNull: false,
         references: {
           model: 'Products',
-          key: 'id',
+          key: 'productId',
         },
       },
       quantity: {

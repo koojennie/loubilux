@@ -4,10 +4,11 @@
 module.exports = {
   async up (queryInterface, Sequelize) {
     await queryInterface.createTable('Categories', {
-      id: {
-        type: Sequelize.DataTypes.UUID,
-        defaultValue: Sequelize.DataTypes.UUIDV4,
+      categoryId: {
+        type: Sequelize.STRING,
         primaryKey: true,
+        unique: true,
+        allowNull: false,
       },
       name: {
         type: Sequelize.STRING,
@@ -15,10 +16,12 @@ module.exports = {
       },
       description: {
         type: Sequelize.STRING,
+        allowNull: true,
         defaultValue: '',
       },
       prefix: {
         type: Sequelize.STRING,
+        allowNull: false,
         defaultValue: '',
       },
       createdAt: {

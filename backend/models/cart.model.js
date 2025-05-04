@@ -9,22 +9,33 @@ class Cart extends Model {
 }
 
 Cart.init({
-  id: {
-    type: DataTypes.UUID,
-    defaultValue: DataTypes.UUIDV4,
+  cartId: {
+    type: DataTypes.STRING,
     primaryKey: true,
+    allowNull: false,
+    unique: true,
   },
   userId: {
-    type: DataTypes.UUID,
+    type: DataTypes.STRING,
     allowNull: false,
+    references: {
+      model: 'Users',
+      key: 'userId',
+    }
   },
   totalPrice: {
     type: DataTypes.FLOAT,
     allowNull: false,
     defaultValue: 0,
   },
-  createdAt: DataTypes.DATE,
-  updatedAt: DataTypes.DATE,
+  createdAt: {
+    type: DataTypes.DATE,
+    allowNull: false,
+  },
+  updatedAt: {
+    type: DataTypes.DATE,
+    allowNull: false,
+  },
 }, {
   sequelize,
   modelName: 'Cart',

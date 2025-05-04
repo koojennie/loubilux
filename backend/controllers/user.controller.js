@@ -22,7 +22,6 @@ exports.getAllUsers = async (req, res) => {
 
     const users = await User.findAll({
       attributes: [
-        "id",
         "userId",
         "name",
         "username",

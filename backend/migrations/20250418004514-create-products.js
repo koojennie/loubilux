@@ -2,7 +2,7 @@
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
-  async up (queryInterface, Sequelize) {
+  async up(queryInterface, Sequelize) {
     /**
      * Add altering commands here.
      *
@@ -10,19 +10,14 @@ module.exports = {
      * await queryInterface.createTable('users', { id: Sequelize.INTEGER });
      */
     await queryInterface.createTable('Products', {
-      id: {
-        type: Sequelize.DataTypes.UUID,
-        defaultValue: Sequelize.DataTypes.UUIDV4,
+      productId: {
+        type: Sequelize.STRING,
         primaryKey: true,
+        unique: true,
       },
       name: {
         type: Sequelize.STRING,
         allowNull: false,
-      },
-      productCode: {
-        type: Sequelize.STRING,
-        allowNull: false,
-        unique: true,
       },
       quantity: {
         type: Sequelize.INTEGER,
@@ -41,11 +36,17 @@ module.exports = {
         type: Sequelize.STRING,
         defaultValue: 'draft',
       },
+      images: {
+        type: Sequelize.ARRAY(Sequelize.STRING),
+        allowNull: true,
+        defaultValue: [],
+      },
       categoryId: {
-        type: Sequelize.DataTypes.UUID,
+        type: Sequelize.STRING,
+        allowNull: false,
         references: {
           model: 'Categories',
-          key: 'id',
+          key: 'categoryId',
         },
       },
       createdAt: {
@@ -59,7 +60,7 @@ module.exports = {
     });
   },
 
-  async down (queryInterface, Sequelize) {
+  async down(queryInterface, Sequelize) {
     /**
      * Add reverting commands here.
      *

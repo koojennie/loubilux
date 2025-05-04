@@ -18,6 +18,6 @@ router.use('/categories', categoryRouter);
 router.use('/cart', cartRouter);
 router.use('/orders', orderRouter)
 // router.use('/review', reviewRouter);
-// router.use('/payments', paymentMidtransRouter);
+router.use('/payments', paymentMidtransRouter);
 
 module.exports = router;
