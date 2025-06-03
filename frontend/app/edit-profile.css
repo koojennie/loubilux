@@ -1,4 +1,3 @@
-
 .edit-profile {
     background-color: #FBFCFD;
 }
@@ -45,7 +44,6 @@
 .edit-profile input[type="text"]{
     border: 1px solid #dee2e6;
     padding: 0.75rem 1.25rem;
-    max-width: 467px;
 }
 
 .edit-profile input[type="tel"]:focus-within,
@@ -69,8 +67,4 @@
 
 .edit-profile .btn-save:hover {
     background-color: #705C53;
-}
-
-.edit-profile .button-group{
-    max-width: 467px;
 }
