@@ -1,5 +1,5 @@
 const { Op } = require("sequelize");
-const { Order, User, OrderLineItem, Product, Cart, CartItem } = require("../models");
+const { Order, User, OrderLineItem, Product, Cart, CartItem, sequelize, Sequelize } = require("../models");
 
 
 const generateOrdersId = async () => {
@@ -14,6 +14,12 @@ const generateOrdersId = async () => {
   return `ORD-${datePart}-${String(orderCount + 1).padStart(3, '0')}`;
 };
 
+const generateOrderLineItemsId = async () => {
+  const datePart = new Date().toISOString().split('T')[0].replace(/-/g, '');
+  const count = await OrderLineItem.count({ where: { createdAt: { [Op.gte]: new Date().setHours(0, 0, 0, 0) } } });
+  const sequence = String(count + 1).padStart(3, '0');
+  return `OLI-${datePart}-${sequence}`;
+};
 
 const createOrderFromCart = async (req, res) => {
   try {
@@ -29,7 +35,10 @@ const createOrderFromCart = async (req, res) => {
       include: {
         model: CartItem,
         as: "cartItems",
-        include: { model: Product, as: "product" }
+        include: {
+          model: Product,
+          as: "product"
+        }
       }
     });
 
@@ -45,48 +54,47 @@ const createOrderFromCart = async (req, res) => {
       return res.status(400).json({ message: "Selected products are not in the cart" });
     }
 
+    // Calculate total price
     const totalPrice = selectedItems.reduce((sum, item) => {
-      if (item.product) {
-        return sum + item.product.price * item.quantity;
-      }
-      return sum;
+      return sum + item.product.price * item.quantity;
     }, 0);
 
+    // Generate order ID
     const orderId = await generateOrdersId();
 
+    // Create the order
     const newOrder = await Order.create({
       orderId,
       userId,
       totalPrice,
       status: "Pending",
+      orderDate: new Date(),
       paymentMethod: req.body.paymentMethod || "COD",
-      shippingAddress: req.body.shippingAddress,
-      courier: req.body.courier || {
-        name: "Standard",
-        shippingCost: 0,
-        trackingNumber: null,
-        estimatedDelivery: null,
-      },
+      // shippingAddressId: req.body.shippingAddressId, // use FK if related
     });
 
+    // Create OrderLineItems
     for (const item of selectedItems) {
+      const orderLineItemId = await generateOrderLineItemsId(); // Make sure it’s unique each time
+
       await OrderLineItem.create({
-        orderId: newOrder.id,
+        orderLineId: orderLineItemId,
+        orderId: newOrder.orderId,
         productId: item.productId,
         quantity: item.quantity,
         subPrice: item.product.price * item.quantity,
       });
     }
 
-    // Remove ordered items from cart
+    // Remove the selected items from cart
     await CartItem.destroy({
       where: {
-      cartId: cart.id,
-      productId: selectedProductIds,
+        cartId: cart.cartId,
+        productId: selectedProductIds,
       },
     });
 
-    // Update cart total to 0
+    // Optional: update cart total to reflect removed items
     cart.totalPrice = 0;
     await cart.save();
 
@@ -97,14 +105,17 @@ const createOrderFromCart = async (req, res) => {
 
   } catch (error) {
     console.error("Error creating order:", error);
-    res.status(500).json({ status: "error", message: "Server Error", error: error.message });
+    return res.status(500).json({ status: "error", message: "Server Error", error: error.message });
   }
 };
 
+
 const getUserOrders = async (req, res) => {
+  const { user } = req;
+
   try {
     const orders = await Order.findAll({
-      where: { userId: req.user.id },
+      where: { userId: user.id },
       include: {
         model: OrderLineItem,
         as: "orderLineItems",
@@ -117,7 +128,7 @@ const getUserOrders = async (req, res) => {
     });
 
     const data = orders.map(order => ({
-      id: order.id,
+      orderId: order.orderId,
       userId: order.userId,
       totalPrice: order.totalPrice,
       status: order.status,
@@ -146,14 +157,16 @@ const getAllOrders = async (req, res) => {
     const { page = 1, limit = 10 } = req.query;
     const offset = (page - 1) * limit;
 
-    const { count: totalOrders, rows: orders } = await Order.findAndCountAll({
+    const totalOrders = await Order.count();
+
+    const { rows: orders } = await Order.findAndCountAll({
       offset,
       limit: parseInt(limit),
       include: [
         {
           model: User,
           as: "user",
-          attributes: ["id", "name", "email"]
+          attributes: ["userId", "name", "email"]
         },
         {
           model: OrderLineItem,
@@ -161,18 +174,17 @@ const getAllOrders = async (req, res) => {
           include: {
             model: Product,
             as: "product",
-            attributes: ["id", "name", "price"]
+            attributes: ["productId", "name", "price"]
           },
         },
       ],
     });
 
     const data = orders.map(order => ({
-      id: order.id,
       orderId: order.orderId,
-      userId: order.user?.id || "Guest",
-      user: order.user?.name || "Guest",
-      email: order.user?.email || "-",
+      userId: order.userId,
+      user: order.user?.name,
+      email: order.user?.email,
       totalPrice: order.totalPrice,
       statusOrder: order.status,
       isPaid: order.isPaid,
@@ -180,7 +192,7 @@ const getAllOrders = async (req, res) => {
       orderDate: new Date(order.createdAt).toLocaleString(),
       courier: order.courier?.name || "Not Assigned",
       items: order.orderLineItems.map(item => ({
-        productId: item.product?.id || "",
+        productId: item.productId || "",
         productName: item.product?.name || "Deleted Product",
         productPrice: item.product?.price || 0,
         quantity: item.quantity,
@@ -200,6 +212,71 @@ const getAllOrders = async (req, res) => {
 
   } catch (error) {
     console.error("Error retrieving orders:", error);
+    res.status(500).json({ status: "error", message: "Server Error", error: error.message });
+  }
+};
+
+const getOrderById = async (req, res) => {
+  try {
+    const { orderId } = req.params;
+
+    if (!orderId) {
+      return res.status(400).json({ status: "error", message: "Order ID is required" });
+    }
+
+    const order = await Order.findOne({
+      where: { orderId },
+      include: [
+        {
+          model: User,
+          as: "user",
+          attributes: ["userId", "name", "email"],
+        },
+        {
+          model: OrderLineItem,
+          as: "orderLineItems",
+          include: {
+            model: Product,
+            as: "product",
+            attributes: ["productId", "name", "price", "images"],
+          },
+        },
+      ],
+    });
+
+    if (!order) {
+      return res.status(404).json({ status: "error", message: "Order not found" });
+    }
+
+    const data = {
+      orderId: order.orderId,
+      user: {
+        name: order.user?.name,
+        email: order.user?.email,
+      },
+      totalPrice: order.totalPrice,
+      statusOrder: order.status,
+      isPaid: order.isPaid,
+      paymentMethod: order.paymentMethod,
+      orderDate: new Date(order.createdAt).toLocaleString(),
+      courier: order.courier?.name || "Not Assigned",
+      items: order.orderLineItems.map((item) => ({
+        productId: item.productId || "",
+        name: item.product?.name || "Deleted Product",
+        price: item.product?.price || 0,
+        quantity: item.quantity,
+        subPrice: item.subPrice,
+        images: item.product?.images || [],
+      })),
+    };
+
+    res.status(200).json({
+      status: "success",
+      message: "Order retrieved successfully",
+      data,
+    });
+  } catch (error) {
+    console.error("Error retrieving order:", error);
     res.status(500).json({ status: "error", message: "Server Error", error: error.message });
   }
 };
@@ -302,10 +379,43 @@ const updateOrderStatus = async (req, res) => {
   }
 };
 
+const getMontlyRevenue = async (req, res) => {
+  try {
+
+    const montlyRevenueData = await sequelize.query(`
+      SELECT 
+      TO_CHAR("createdAt", 'YYYY-MM') AS month,
+      SUM("totalPrice") AS totalRevenue
+      FROM "Orders"
+      GROUP BY month
+      ORDER BY month ASC;
+    `, {
+      type: Sequelize.QueryTypes.SELECT
+    });
+
+    res.status(200).json({
+      status: 'success',
+      message: 'Montly Revenue Success',
+      data: montlyRevenueData
+    });
+
+
+  } catch (error) {
+    console.error('Error getMontlyRevenue', error);
+    res.status(500).json({
+      status: 'error',
+      message: "Internal Server Error",
+      error: error.message,
+    })
+  }
+}
+
 module.exports = {
   createOrderFromCart,
   getUserOrders,
   getAllOrders,
+  getOrderById,
   updateOrderStatus,
-  getFilteredOrdersReport
+  getFilteredOrdersReport,
+  getMontlyRevenue,
 };

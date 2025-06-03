@@ -12,7 +12,7 @@ class OrderLineItem extends Model {
 
 OrderLineItem.init(
   {
-    orderLineid: {
+    orderLineId: {
       type: DataTypes.STRING,
       primaryKey: true,
       unique: true,

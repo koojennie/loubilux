@@ -1,4 +1,4 @@
-const { Cart, Product, CartItem } = require('../models/index')
+const { Cart, Product, CartItem, User, Category} = require('../models/index');
 
 const addItemToCart = async (req, res) => {
   try {
@@ -20,37 +20,53 @@ const addItemToCart = async (req, res) => {
       cart = await Cart.create({ userId: user.id, totalPrice: 0 });
     }
 
+    let lastCartItem = await CartItem.findOne({
+      order: [['createdAt', 'DESC']],
+      attributes: ['cartItemId']
+    });
+
+    let cartItemId = null;
+    if (lastCartItem && lastCartItem.cartItemId) {
+      const lastCartItemNumber = parseInt(lastCartItem.cartItemId.split('-')[1], 10);
+      cartItemId = `CARTITEM-${String(lastCartItemNumber + 1).padStart(5, '0')}`;
+    } else {
+      cartItemId = 'CARTITEM-00001';
+    }
+
     let cartItem = await CartItem.findOne({
-      where: { cartId: cart.id, productId: product.id }
+      where: { cartId: cart.cartId, productId: product.productId }
     });
 
     if (cartItem) {
       cartItem.quantity += quantity;
-      cartItem.price += quantity * product.price;
+      cartItem.totalPrice += quantity * product.price;
       await cartItem.save();
     } else {
       cartItem = await CartItem.create({
-        cartId: cart.id,
-        productId: product.id,
+        cartItemId,
+        cartId: cart.cartId,
+        productId: product.productId,
         quantity,
-        price: quantity * product.price,
+        subPrice: quantity * product.price,
       });
     }
 
     cart.totalPrice += quantity * product.price;
     await cart.save();
 
-    res.json({ message: "Item added to cart", data: cartItem });
+    res.json({ message: "Item added to cart", dataCartItem: cartItem, dataCart: cart});
   } catch (error) {
     console.error(error);
     return res.status(500).json({ status: "error", message: error.message });
   }
 };
-  
+
 const getCart = async (req, res) => {
+  const { user } = req;
+
   try {
     let cart = await Cart.findOne({
-      where: { userId: req.user.id },
+      where: { userId: user.id },
       include: [
         {
           model: CartItem,
@@ -59,28 +75,56 @@ const getCart = async (req, res) => {
             {
               model: Product,
               as: 'product',
-              attributes: ['id', 'name', 'price'],
+              attributes: ['productId', 'name', 'price', 'images'],
+              // include: [
+              //   {
+              //     model: Category,
+              //     as: 'category',
+              //     attributes: ['name']
+              //   }
+              // ]
             },
           ],
         },
       ],
     });
 
-    // Kalau cart belum ada, bikin cart baru kosong
+    let userFind = await User.findOne({
+      where: { userId: user.id },
+      attributes: ["userId"]
+    });
+
+    let cartId = null;
+    if (userFind) {
+      const lastCart = await Cart.findOne({
+        order: [['createdAt', 'DESC']],
+        attributes: ['cartId']
+      });
+
+      if (lastCart && lastCart.cartId) {
+        const lastCartNumber = parseInt(lastCart.cartId.split('-')[1], 10);
+        cartId = `CART-${String(lastCartNumber + 1).padStart(4, '0')}`;
+      } else {
+        cartId = 'CART-0001';
+      }
+    }
+
     if (!cart) {
-      cart = await Cart.create({ userId: req.user.id, totalPrice: 0 });
+      cart = await Cart.create({ cartId: cartId, userId: req.user.id, totalPrice: 0 });
     }
 
     const totalProductItems = cart.cartItems ? cart.cartItems.length : 0;
 
     const formattedCart = {
-      id: cart.id,
-      user: cart.userId,
+      cartId: cart.cartId,
+      userId: cart.userId,
       totalProductItems,
       products: cart.cartItems ? cart.cartItems.map(item => ({
+        cartItemId: item.cartItemId,
         product: item.product,
         quantity: item.quantity,
-        price: item.price,
+        subTotal: item.subTotal,
+        images: item.product.images,
       })) : [],
       totalPrice: cart.totalPrice,
       createdAt: cart.createdAt,
@@ -98,7 +142,6 @@ const getCart = async (req, res) => {
   }
 };
 
-
 const clearCart = async (req, res) => {
   try {
     const cart = await Cart.findOne({ where: { userId: req.user.id } });
@@ -107,7 +150,7 @@ const clearCart = async (req, res) => {
       return res.status(404).json({ message: "Cart not found" });
     }
 
-    await CartItem.destroy({ where: { cartId: cart.id } });
+    await CartItem.destroy({ where: { cartId: cart.cartId } });
 
     cart.totalPrice = 0;
     await cart.save();
@@ -119,7 +162,6 @@ const clearCart = async (req, res) => {
   }
 };
 
-
 const removeItemFromCart = async (req, res) => {
   try {
     const { productId } = req.body;
@@ -130,14 +172,14 @@ const removeItemFromCart = async (req, res) => {
     }
 
     const cartItem = await CartItem.findOne({
-      where: { cartId: cart.id, productId }
+      where: { cartId: cart.cartId, productId }
     });
 
     if (!cartItem) {
       return res.status(404).json({ message: "Product not found in cart" });
     }
 
-    cart.totalPrice -= cartItem.price;
+    cart.totalPrice -= cartItem.subTotal;
     await cartItem.destroy();
     await cart.save();
 
@@ -162,7 +204,7 @@ const updateCartItemQuantity = async (req, res) => {
     }
 
     const cartItem = await CartItem.findOne({
-      where: { cartId: cart.id, productId }
+      where: { cartId: cart.cartId, productId }
     });
 
     if (!cartItem) {
@@ -174,11 +216,10 @@ const updateCartItemQuantity = async (req, res) => {
       return res.status(404).json({ message: "Product not found" });
     }
 
-    // Update
-    cart.totalPrice -= cartItem.price;
+    cart.totalPrice -= cartItem.subTotal;
     cartItem.quantity = quantity;
-    cartItem.price = quantity * product.price;
-    cart.totalPrice += cartItem.price;
+    cartItem.subTotal = quantity * product.price;
+    cart.totalPrice += cartItem.subTotal;
 
     await cartItem.save();
     await cart.save();

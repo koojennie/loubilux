@@ -52,6 +52,7 @@ Order.init(
     },
     courier: DataTypes.JSON,
     cancellationReason: DataTypes.STRING,
+    orderDate: DataTypes.DATE,
     createdAt: DataTypes.DATE,
     updatedAt: DataTypes.DATE,
   },

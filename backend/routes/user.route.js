@@ -8,7 +8,7 @@ const { authenticateUser, authorizeRoles } = require('../middleware/auth.middlew
 router.get('/', authenticateUser, authorizeRoles('superadmin'), getAllUsers);
 // router.get('/', getAllUsers);
 router.get("/generateuserid", generateUserId);
-router.get('/:id', getUserbyId);
+router.get('/userbyid/:id', getUserbyId);
 router.post('/register', register);
 router.put('/:id', authenticateUser, authorizeRoles('superadmin'), updateUser);
 router.delete('/:id', authenticateUser, authorizeRoles('superadmin'), deleteUser);
