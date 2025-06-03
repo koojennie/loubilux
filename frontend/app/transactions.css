@@ -23,12 +23,21 @@
 
 .transactions .btn-status.btn-active{
     color: #FFFFFF;
-    background-color: #0C145A;
+    background-color: #493628;
+    font-weight: 600;
 }
 
 .transactions .btn-status{
-    color: #0C145A;
-    background-color: #E7EAF5;
+    color: #493628;
+    background-color: white;
+    border: 2px solid #493628;
+    font-weight: 600;
+    transition: 0.3s ease-in-out
+}
+
+.transactions .btn-status:hover {
+    color: #FFFFFF;
+    background-color: #493628;
 }
 
 .transactions .latest-transaction .main-content-table{

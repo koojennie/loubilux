@@ -1,3 +1,4 @@
+'use client'
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -132,7 +133,7 @@ export default function Auth() {
   return (
     <li className="nav-item my-auto">
       <Link
-        className="btn btn-sign-in d-flex justify-content-center ms-lg-2 rounded-pill"
+        className=" d-flex flex-column mx-auto !rounded-full py-3 px-7 text-center bg-[#493628] font-semibold text-lg text-white flex transition-all duration-500 hover:bg-[#705C53]"
         role="button" href="/sign-in"
       >
         Sign In
