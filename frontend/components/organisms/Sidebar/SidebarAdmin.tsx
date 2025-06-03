@@ -8,7 +8,8 @@ import { FaBoxArchive } from "react-icons/fa6";
 import { FaBasketShopping } from "react-icons/fa6";
 import { FaUser } from "react-icons/fa";
 import { BiCategory } from "react-icons/bi";
-import { FaCommentDots } from "react-icons/fa6";
+import { HiOutlineDocumentMagnifyingGlass } from "react-icons/hi2";
+
 
 interface SidebarAdminProps {
   isSidebarOpen: boolean;
@@ -132,6 +133,30 @@ const SidebarAdmin = ({ isSidebarOpen, toggleSidebar, setIsSidebarOpen, userRole
                           className="pl-3 text-dark-500 text-sm font-semibold"
                         >
                           Orders
+                        </span>
+                      ) : (<span></span>)}
+                    </div>
+                  </li>
+                </Link>
+
+                {/* orders */}
+                <Link href={'/admin/opname'}
+                  style={{ textDecoration: 'none', color: 'inherit' }}
+                >
+                  <li className="mt-2">
+                    <div
+                      className={` ${pathName === '/admin/opname' ? 'bg-white shadow-lg ' : ''} ${isSidebarOpen ? "pl-2" : ""} flex items-center py-2.5 text-base font-normal text-dark-500 rounded-lg hover:bg-gray-200 group shadow-gray-200 transition-all duration-200 no-underline`}
+
+                    >
+                      <div className={` ${pathName === '/admin/opname' ? 'bg-fuchsia-400' : ''} shadow-lg shadow-gray-300 !text-white  text-dark-700 w-8 h-8 mr-1 rounded-lg text-center grid place-items-center bg-white `}>
+                        <HiOutlineDocumentMagnifyingGlass  className="text-slate-700" />
+                      </div>
+
+                      {isSidebarOpen ? (
+                        <span
+                          className="pl-3 text-dark-500 text-sm font-semibold"
+                        >
+                          Opname
                         </span>
                       ) : (<span></span>)}
                     </div>
