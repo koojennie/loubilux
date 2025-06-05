@@ -33,34 +33,34 @@ exports.getGenerateOpnameId = async (req, res) => {
 }
 
 exports.createOpname = async (req, res) => {
-    try {
-        const { opnameId, productId, physicalStock, note } = req.body;
+  try {
+    const { opnameId, productId, physicalStock, note } = req.body;
 
-        const product = await Product.findByPk(productId);
-        if (!product) return res.status(404).json({ message: 'Product not found' });
+    const product = await Product.findByPk(productId);
+    if (!product) return res.status(404).json({ message: 'Product not found' });
 
-        const recordedStock = product.quantity;
-        const difference = physicalStock - recordedStock;
+    const recordedStock = product.quantity;
+    const difference = physicalStock - recordedStock;
 
-        // const opnameId = await generateOpnameId();
+    // const opnameId = await generateOpnameId();
 
-        const opname = await Opname.create({
-            opnameId,
-            productId,
-            recordedStock,
-            physicalStock,
-            difference,
-            note
-        });
+    const opname = await Opname.create({
+      opnameId,
+      productId,
+      recordedStock,
+      physicalStock,
+      difference,
+      note
+    });
 
-        // Optional update
-        product.quantity = physicalStock;
-        await product.save();
+    // Optional update
+    product.quantity = physicalStock;
+    await product.save();
 
-        return res.status(201).json({ message: 'Opname created', data: opname });
-    } catch (err) {
-        res.status(500).json({ message: 'Error creating opname', error: err.message });
-    }
+    return res.status(201).json({ message: 'Opname created', data: opname });
+  } catch (err) {
+    res.status(500).json({ message: 'Error creating opname', error: err.message });
+  }
 };
 
 exports.getAllOpnames = async (req, res) => {
@@ -69,47 +69,55 @@ exports.getAllOpnames = async (req, res) => {
     const limit = parseInt(req.query.limit) || 10;
     const offset = (page - 1) * limit;
 
-    // Get sortBy and orderBy from query, default to opnameDate and DESC
-    const sortBy = req.query.sortBy || 'opnameDate';
+    const sortBy = req.query.sortBy || 'createdAt';
     const orderBy = req.query.orderBy && ['ASC', 'DESC'].includes(req.query.orderBy.toUpperCase())
       ? req.query.orderBy.toUpperCase()
       : 'DESC';
 
-    // Search query
     const searchQuery = req.query.searchQuery || '';
 
-    // Build where clause for search
+    // Default where clause
     const where = {};
+
+    // Filtering by Opname fields
     if (searchQuery) {
       where[Op.or] = [
-        { opnameId: { [require('sequelize').Op.like]: `%${searchQuery}%` } },
-        { note: { [require('sequelize').Op.like]: `%${searchQuery}%` } }
+        { opnameId: { [Op.like]: `%${searchQuery}%` } },
+        { note: { [Op.like]: `%${searchQuery}%` } }
       ];
     }
 
+    // Prepare include for Product model
+    const includeProduct = {
+      model: Product,
+      attributes: ['name'],
+      required: false,
+      where: searchQuery
+        ? {
+          name: { [Op.like]: `%${searchQuery}%` }
+        }
+        : undefined
+    };
+
+    // Handle sort by 'productName'
+    const orderClause =
+      sortBy === 'productName'
+        ? [[{ model: Product }, 'name', orderBy]]
+        : [[sortBy, orderBy]];
+
     const { count, rows: opnames } = await Opname.findAndCountAll({
       where,
-      include: [
-        {
-          model: Product,
-          attributes: ['name'],
-          where: searchQuery
-            ? { name: { [require('sequelize').Op.like]: `%${searchQuery}%` } }
-            : undefined,
-          required: false
-        }
-      ],
-      order: [[sortBy, orderBy]],
+      include: [includeProduct],
+      order: orderClause,
       limit,
       offset
     });
 
-    // Map opnames to replace 'Product' with 'productName'
     const formattedOpnames = opnames.map(opname => {
-      const opnameData = opname.toJSON();
+      const data = opname.toJSON();
       return {
-        ...opnameData,
-        productName: opnameData.Product ? opnameData.Product.name : null
+        ...data,
+        productName: data.Product ? data.Product.name : null
       };
     });
 
@@ -125,6 +133,7 @@ exports.getAllOpnames = async (req, res) => {
   }
 };
 
+
 exports.getOpnameById = async (req, res) => {
   try {
     const { id } = req.params;
@@ -135,7 +144,14 @@ exports.getOpnameById = async (req, res) => {
     });
     if (!opname) return res.status(404).json({ message: 'Opname not found' });
 
-    res.json({ message: 'Opname details', data: opname });
+
+    const opnameData = opname.toJSON();
+    const formattedOpname = {
+      ...opnameData,
+      productName: opnameData.Product ? opnameData.Product.name : null
+    };
+
+    res.json({ message: 'Opname details', data: formattedOpname });
   } catch (err) {
     res.status(500).json({ message: 'Error fetching opname details', error: err.message });
   }
@@ -146,7 +162,7 @@ exports.updateOpname = async (req, res) => {
     const { id } = req.params;
     const { physicalStock, note } = req.body;
 
-    const opname = await StockOpname.findByPk(id, { include: [Product] });
+    const opname = await Opname.findByPk(id, { include: [Product] });
     if (!opname) return res.status(404).json({ message: 'Opname not found' });
 
     const recordedStock = opname.recordedStock;
@@ -173,7 +189,7 @@ exports.updateOpname = async (req, res) => {
 exports.deleteOpname = async (req, res) => {
   try {
     const { id } = req.params;
-    const opname = await StockOpname.findByPk(id);
+    const opname = await Opname.findByPk(id);
     if (!opname) return res.status(404).json({ message: 'Opname not found' });
 
     await opname.destroy();
