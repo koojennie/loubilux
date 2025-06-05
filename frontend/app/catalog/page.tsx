@@ -16,7 +16,13 @@ import {
 import { HiSearch } from "react-icons/hi";
 import { HiChevronDown, HiFunnel, HiMinus, HiPlus, HiSquares2X2, HiOutlineXMark } from "react-icons/hi2";
 import Navbar from "@/components/organisms/Navbar/Navbar";
+import ProductItem from "@/components/organisms/Products/ProductItem";
+import products from "@/utils/data";
 
+const [selectedFilters, setSelectedFilters] = useState({
+  category: new Set<string>(),
+  price: new Set<string>(),
+});
 const sortOptions = [
   { name: 'Most Popular', href: '#', current: true },
   { name: 'Best Rating', href: '#', current: false },
@@ -238,7 +244,7 @@ export default function page() {
               </form>
 
               {/* Product grid */}
-              <div className="lg:col-span-3">{/* Your content */}</div>
+              <div className="lg:col-span-3"><ProductItem products={products} /></div>
             </div>
           </section>
         </main>
