@@ -13,8 +13,8 @@ import {
   MenuItem,
   MenuItems,
 } from '@headlessui/react'
-import { HiOutlineXMark } from "react-icons/hi2";
-import { HiChevronDown, HiFunnel, HiMinus, HiPlus, HiSquares2X2 } from "react-icons/hi2";
+import { HiSearch } from "react-icons/hi";
+import { HiChevronDown, HiFunnel, HiMinus, HiPlus, HiSquares2X2, HiOutlineXMark } from "react-icons/hi2";
 import Navbar from "@/components/organisms/Navbar/Navbar";
 
 const sortOptions = [
@@ -24,49 +24,29 @@ const sortOptions = [
   { name: 'Price: Low to High', href: '#', current: false },
   { name: 'Price: High to Low', href: '#', current: false },
 ]
-const subCategories = [
-  { name: 'Bag', href: '#' },
-  { name: 'Shoes', href: '#' },
-  { name: 'Wallet', href: '#' },
-  { name: 'Wrist Watch', href: '#' },
-  { name: 'Bracelet', href: '#' },
-  { name: 'Sunglasses', href: '#' },
-  { name: 'Bodycare', href: '#' },
-]
 const filters = [
-  {
-    id: 'color',
-    name: 'Color',
-    options: [
-      { value: 'white', label: 'White', checked: false },
-      { value: 'beige', label: 'Beige', checked: false },
-      { value: 'blue', label: 'Blue', checked: true },
-      { value: 'brown', label: 'Brown', checked: false },
-      { value: 'green', label: 'Green', checked: false },
-      { value: 'purple', label: 'Purple', checked: false },
-    ],
-  },
   {
     id: 'category',
     name: 'Category',
     options: [
-      { value: 'new-arrivals', label: 'New Arrivals', checked: false },
-      { value: 'sale', label: 'Sale', checked: false },
-      { value: 'travel', label: 'Travel', checked: true },
-      { value: 'organization', label: 'Organization', checked: false },
-      { value: 'accessories', label: 'Accessories', checked: false },
+      { value: 'bag', label: 'Bag', checked: false },
+      { value: 'shoes', label: 'Shoes', checked: false },
+      { value: 'wallet', label: 'Wallet', checked: true },
+      { value: 'wrist-watch', label: 'Wrist Watch', checked: false },
+      { value: 'bracelet', label: 'Bracelet', checked: false },
+      { value: 'sunglasses', label: 'Sunglasses', checked: false },
+      { value: 'bodycare', label: 'Bodycare', checked: false },
     ],
   },
   {
-    id: 'size',
-    name: 'Size',
+    id: 'price',
+    name: 'Price',
     options: [
-      { value: '2l', label: '2L', checked: false },
-      { value: '6l', label: '6L', checked: false },
-      { value: '12l', label: '12L', checked: false },
-      { value: '18l', label: '18L', checked: false },
-      { value: '20l', label: '20L', checked: false },
-      { value: '40l', label: '40L', checked: true },
+      { value: 'under-250k', label: 'Under IDR 250K', checked: false },
+      { value: '250k-500k', label: 'IDR 250K – 500K', checked: false },
+      { value: '500k-1m', label: 'IDR 500K – 1M', checked: true },
+      { value: '1m-2m', label: 'IDR 1M – 2.5M', checked: false },
+      { value: 'over-2m', label: 'Over IDR 2.5M', checked: false },
     ],
   },
 ]
@@ -109,19 +89,8 @@ export default function page() {
 
               {/* Filters */}
               <form className="mt-4 border-t border-gray-200">
-                <h3 className="sr-only">Categories</h3>
-                <ul role="list" className="!py-3 !font-medium !text-xl !text-gray-900 !pl-0 !mb-0">
-                  {subCategories.map((category) => (
-                    <li key={category.name}>
-                      <a href={category.href} className="block px-4 py-3 !font-medium text-lg sm:text-sm">
-                        {category.name}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-
                 {filters.map((section) => (
-                  <Disclosure key={section.id} as="div" className="border-t border-gray-200 px-4 py-6">
+                  <Disclosure key={section.id} as="div" className="border-t border-gray-200 px-4 py-1">
                     <h3 className="-mx-2 -my-3 flow-root">
                       <DisclosureButton className="group flex w-full items-center justify-between bg-white px-1 py-3 text-gray-400 hover:text-gray-500">
                         <span className="font-semibold text-[#493628] text-lg">{section.name}</span>
@@ -131,8 +100,8 @@ export default function page() {
                         </span>
                       </DisclosureButton>
                     </h3>
-                    <DisclosurePanel className="pt-6">
-                      <div className="space-y-6">
+                    <DisclosurePanel className="">
+                      <div className="pb-3">
                         {section.options.map((option, optionIdx) => (
                           <div key={option.value} className="flex gap-3 flex-row items-center">
                             <div className="flex h-5 shrink-0 items-center">
@@ -163,11 +132,17 @@ export default function page() {
           </div>
         </Dialog>
 
+        {/* 🍭 large screen */}
         <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex items-baseline justify-between border-b border-gray-200 pt-6 pb-6">
             <h1 className="text-4xl !font-semibold tracking-tight text-gray-900">Products Catalog</h1>
-
-            <div className="flex items-center">
+              <div className="flex items-center">
+                <div className="relative w-full pr-5">
+                  <input type="text" id="search"
+                      className="bg-white text-lg font-medium rounded-full border px-10 py-2 transition-all ease-in duration-300 w-full focus:outline-primary"
+                      placeholder="Search here..." />
+                  <HiSearch className="absolute left-3 top-1/2 -translate-y-1/2 size-6" />
+                </div>
               <Menu as="div" className="relative inline-block text-left">
                 <div>
                   <MenuButton className="group inline-flex justify-center text-lg font-medium text-gray-700 hover:text-gray-900">
@@ -224,15 +199,6 @@ export default function page() {
             <div className="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-4">
               {/* Filters */}
               <form className="hidden lg:block">
-                <h3 className="sr-only">Categories</h3>
-                <ul role="list" className="border-b border-gray-200 !pl-3 pb-6 font-medium text-gray-900 !mb-0">
-                  {subCategories.map((category) => (
-                    <li key={category.name}>
-                      <a className="!font-medium text-lg" href={category.href}>{category.name}</a>
-                    </li>
-                  ))}
-                </ul>
-
                 {filters.map((section) => (
                   <Disclosure key={section.id} as="div" className="border-b border-gray-200 py-6">
                     <h3 className="-my-3 flow-root !mb-0">
