@@ -41,7 +41,7 @@ const UserPage = ({ initialUsers }: UsersProps) => {
         }
       );
       const result = response.data.data.map((user: any) => ({
-        id: user.id,
+        id: user.userId,
         ...user,
       }));
       setUser(result);

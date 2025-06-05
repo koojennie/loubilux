@@ -77,11 +77,11 @@ const ProductPage = ({ initialProducts }: ProductsProps) => {
       const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/products?page=${page}&limit=${limit}&sortBy=${sortBy}&sortOrder=${orderBy}&searchQuery=${searchQuery}`);
       const results = await response.json();
       results.data = results.data.map((product: any, index: number) => ({
-        id: product._id,
+        id: product.productId,
         ...product,
         no: (page - 1) * limit + (index + 1),
         category: product.Category?.name || "N/A",
-        image: product.image || "/icon/loubilux-logo.png",
+        // image: product.image || "/icon/loubilux-logo.png",
       }));
       setProducts(results.data);
       setTotalItems(results.total);
@@ -141,8 +141,8 @@ const ProductPage = ({ initialProducts }: ProductsProps) => {
           labelAdd="Add Product"
           tableType="products"
           columns={[
-            { key: 'no', label: 'Number' },
-            { key: 'productCode', label: 'Product Code' },
+            // { key: 'no', label: 'Number' },
+            { key: 'productId', label: 'Product Code' },
             { key: 'name', label: 'Name' },
             { key: 'quantity', label: 'Quantity' },
             { key: 'price', label: 'Price' },
@@ -162,8 +162,8 @@ const ProductPage = ({ initialProducts }: ProductsProps) => {
           <TableComponents
             data={products}
             columns={[
-              { key: 'no', label: 'Number' },
-              { key: 'productCode', label: 'Product Code' },
+              // { key: 'no', label: 'Number' },  
+              { key: 'productId', label: 'Product Code' },
               { key: 'name', label: 'Name' },
               { key: 'quantity', label: 'Quantity' },
               { key: 'price', label: 'Price' },
@@ -189,7 +189,7 @@ const ProductPage = ({ initialProducts }: ProductsProps) => {
         tableType="products"
         data={selectedViewDetailProduct}
         columns={[
-          { key: 'productCode', label: 'Product Code' },
+          { key: 'productId', label: 'Product Code' },
           { key: 'name', label: 'Name' },
           { key: 'quantity', label: 'Quantity' },
           { key: 'price', label: 'Price' },

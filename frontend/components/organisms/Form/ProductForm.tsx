@@ -18,11 +18,11 @@ const ProductForm: React.FC<ProductFormProps> = ({ onSubmit, onEditSubmit ,isEdi
 
   // state Option Category
   const [optionCategories, setOptionCategories] = useState([]);
-
+  
   // state form
-  const [generatedProductCode, setGenerateProductCode] = useState(initialData?.productCode || "");
+  const [generatedProductCode, setGenerateProductCode] = useState(initialData?.productId || "");
   const [productName, setProductName] = useState(initialData?.name || "");
-  const [selectedCategory, setSelectedCategory] = useState(initialData?.category || "");
+  const [selectedCategory, setSelectedCategory] = useState(initialData?.categoryId || "");
   const [quantity, setQuantity] = useState(initialData?.quantity?.toString() || "");
   const [price, setPrice] = useState(initialData?.price?.toString() || "");
   const [displayPrice, setDisplayPrice] = useState(initialData?.price ? new Intl.NumberFormat("id-ID").format(initialData.price) : "");
@@ -40,7 +40,12 @@ const ProductForm: React.FC<ProductFormProps> = ({ onSubmit, onEditSubmit ,isEdi
   const fetchCategories = async () => {
     try {
       const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/categories`);
-      setOptionCategories(response.data.data);
+      // setOptionCategories(response.data.data);
+      const result = response.data.data.map((category: any) => ({
+        id: category.categoryId,
+        ...category,
+      }));
+      setOptionCategories(result);
     } catch (error) {
       console.error("Error fetching categories:", error);
     }
@@ -48,16 +53,18 @@ const ProductForm: React.FC<ProductFormProps> = ({ onSubmit, onEditSubmit ,isEdi
 
   useEffect(() => {
     if (isEdit && initialData) {
-      setGenerateProductCode(initialData.productCode || "");
+      
+      setGenerateProductCode(initialData.productCode || initialData.productId || "");
       setProductName(initialData.name || "");
-      setSelectedCategory(initialData.category || "");
+      setSelectedCategory(initialData.categoryId || "");
       setQuantity(initialData.quantity?.toString() || "");
       setPrice(initialData.price?.toString() || "");
       setDisplayPrice(initialData.price ? new Intl.NumberFormat("id-ID").format(initialData.price) : "");
       setStatusPublish(initialData.statusPublish || "draft");
       setDescriptionProduct(initialData.description || "");
       setImages(initialData.images || []);
-      // setDeletedImages(initialData.images || []);
+      // setDeletedImages(initialData.images || []);;
+      
     }
     fetchCategories();
   }, [initialData, isEdit]);
@@ -72,6 +79,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ onSubmit, onEditSubmit ,isEdi
   const handleCategoryChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
     const categoryId: string = e.target.value;
     setSelectedCategory(categoryId);
+    
 
     if (!categoryId) {
       setGenerateProductCode("");
@@ -143,7 +151,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ onSubmit, onEditSubmit ,isEdi
       <form onSubmit={handleSubmit} action="">
         <div className="flex flex-col py-8 pt-8 mb-12 px-8 ">
           <h4 className="flex text-lg mb-1 font-semibold text-slate-700">
-            Add New Products
+            {isEdit ? `Edit Product ${generatedProductCode}`: 'Add New Product'}
           </h4>
           <p className="mb-4 text-sm mt-1 text-slate-400">
             Fill in the information below to add a new product.

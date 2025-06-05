@@ -48,6 +48,7 @@ const CategoryForm: React.FC<CategoryFormProps> = ({ onSubmit, onEditSubmit, isE
     e.preventDefault();
 
     const formData = {
+      categoryId: prefixName,
       name: categoryName,
       prefix: prefixName,
       description: descriptionCategory,

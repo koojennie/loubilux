@@ -33,14 +33,8 @@ const OrdersPage = () => {
           withCredentials: true
         }
       );
-      const result = response.data.data.map((user: any) => (
-        {
-          id: user._id,
-          ...user
-        }
-      ))
 
-      setOrders(result);
+      setOrders(response.data.data);
       setPage(response.data.page);
       setTotalItems(response.data.totalOrders);
       setLimit(response.data.limit);
@@ -57,7 +51,7 @@ const OrdersPage = () => {
 
   const handleOpenCloseModalViewDetail = (order?: Order) => {
     console.log('ini adalah orders yang dipilih', order);
-    // setSelectedViewDetailOrder(order || null)
+    setSelectedViewDetailOrder(order || null)
     // setIsModalViewDetailOpen(!isModalViewDetailOpen);
   }
 
@@ -92,11 +86,11 @@ const OrdersPage = () => {
           { key: 'user', label: 'Customer' as keyof Order },
           { key: 'orderDate', label: 'Order Date' as keyof Order },
           { key: 'statusOrder', label: 'Status Order' as keyof Order },
-          { key: 'paymentMethod', label: 'Payment Status' as keyof Order },
+          // { key: 'paymentMethod', label: 'Payment Status' as keyof Order },
           // { key: 'category', label: 'Category' },
         ]}
         tableType="orders"
-        onInfo={(id) => { handleOpenCloseModalViewDetail(orders.find(order => order.id === id)) }}
+        onInfo={(i) => { }}
         onEdit={() => { }}
         onDelete={() => { }}
         page={page}
@@ -115,11 +109,14 @@ const OrdersPage = () => {
         columns={[
           { key: 'orderId', label: 'Order Id' as keyof Order },
           { key: 'user', label: 'Customer' as keyof Order },
+          { key: 'email', label: 'Email' as keyof Order },
           { key: 'orderDate', label: 'Order Date' as keyof Order },
           { key: 'statusOrder', label: 'Status Order' as keyof Order },
           { key: 'paymentMethod', label: 'Payment Status' as keyof Order },
+          { key: 'totalPrice', label: 'Total Price' as keyof Order },
+          { key: 'items', label: 'Items' as keyof Order },
         ]}
-      /> */}
+      />  */}
       <ModalReport isOpen={isModaReport} setIsOpen={setIsModalReport} />
     </div>
   );

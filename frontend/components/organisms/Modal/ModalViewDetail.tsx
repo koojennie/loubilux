@@ -68,6 +68,24 @@ const renderDataDetail = (colKey: string, value: any, tableType: TableType) => {
       return (
         <p className="text-gray-500 text-sm">{humanReadableDate} WIB</p>
       )
+    } else if (colKey === "items" && Array.isArray(value)) {
+      return (
+        <div className="space-y-2 mt-2">
+          {value.map((item, index) => (
+            <div
+              key={index}
+              className="border p-2 rounded-md bg-gray-50 text-sm text-gray-700 overflow-y-auto"
+            >
+              <p><strong>Product:</strong> {item.productName}</p>
+              <p><strong>Qty:</strong> {item.quantity}</p>
+              <p><strong>Price:</strong> {formatCurrency(item.productPrice)}</p>
+              <p><strong>Subtotal:</strong> {formatCurrency(item.subPrice)}</p>
+            </div>
+          ))}
+        </div>
+      );
+    } else if (colKey === "totalPrice") {
+      return <p className="text-slate-500 text-sm truncate">{formatCurrency(value)}</p>;
     }
   } else if (tableType === 'users') {
     if (colKey === 'role') {

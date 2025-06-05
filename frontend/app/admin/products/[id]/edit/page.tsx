@@ -12,40 +12,39 @@ const EditProduct = () => {
   const router = useRouter();
   const paramsProductId = useParams<{ id: string }>().id;
 
-  const [token, setToken] = useState<string | null>(null);
   const [product, setProduct] = useState<Product>();
 
-  useEffect(() => {
+  const fetchProduct = async () => {
+    try {
+      const fetchProduct = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/products/${paramsProductId}`);
+      const product = fetchProduct.data.data;
 
-    const fetchProduct = async () => {
-      try {
-        const fetchProduct = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/products/${paramsProductId}`);
-        setProduct(fetchProduct.data.data);
-      } catch (error) {
-        console.error('Error fetching product', error);
-      }
+      // Format objek produk
+      const formattedProduct = {
+        ...product,
+        // category: product.Category?.name || 'N/A',
+      };
+      
+      setProduct(formattedProduct);
+    } catch (error) {
+      console.error('Error fetching product', error);
     }
+  }
 
+
+  useEffect(() => {
     fetchProduct()
   }, []);
 
 
   // handle edit product
   const handleEditProduct = async (formData: any) => {
-    if (!token) {
-      console.error('No token available');
-      return;
-    }
-
-    console.log('data yang dikirim buat edit', formData);
     try {
       const response = await axios.put(
         `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/products/edit/${paramsProductId}`,
         formData,
         {
-          headers: {
-            "Authorization": `Bearer ${token}`
-          },
+          withCredentials: true,
         }
       );
 

@@ -7,7 +7,7 @@ import Link from 'next/link';
 import { generateSlug } from '@/utils/generateSlug';
 
 
-export type TableType = 'products' | 'users' | 'transaction' | 'orders'| "categories";
+export type TableType = 'products' | 'users' | 'transaction' | 'orders' | "categories" | "opname";
 
 export interface Column<T> {
   key: keyof T | 'actions';
@@ -47,16 +47,16 @@ export const renderCellContent = <T extends { [key: string]: any }>(
       );
     } else if (col.key === 'statusPublish') {
       return (
-          <span
-            className={`px-3 py-1 rounded-md text-xs font-semibold ${value === 'active' ? 'bg-green-200 text-green-800'
-              : value === 'draft'
-                ? 'bg-yellow-200 text-yellow-800'
-                : 'bg-gray-200 text-gray-800'
-              }`}
-          >
-            {typeof value === 'string' ? value.charAt(0).toUpperCase() + value.slice(1) : 'No status'}
-          </span>
-        );
+        <span
+          className={`px-3 py-1 rounded-md text-xs font-semibold ${value === 'active' ? 'bg-green-200 text-green-800'
+            : value === 'draft'
+              ? 'bg-yellow-200 text-yellow-800'
+              : 'bg-gray-200 text-gray-800'
+            }`}
+        >
+          {typeof value === 'string' ? value.charAt(0).toUpperCase() + value.slice(1) : 'No status'}
+        </span>
+      );
     }
   } else if (tableType === 'users') {
     if (col.key === 'profilePicture') {
@@ -121,6 +121,32 @@ export const renderCellContent = <T extends { [key: string]: any }>(
         </span>
       )
     }
+  } else if (tableType === 'opname') {
+    if (col.key === 'createdAt') {
+      const date = new Date(value);
+      const formattedDate = date.toLocaleDateString('id-ID', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      });
+      return (
+        <p className="font-normal text-sm text-slate-800">{formattedDate}</p>
+      );
+    } else if (col.key === 'difference') {
+      const num = Number(value);
+      return (
+        <span
+          className={`px-3 py-1 rounded-md text-xs font-semibold ${num < 0
+              ? 'bg-red-200 text-red-800'
+              : num > 0
+                ? 'bg-yellow-200 text-yellow-800'
+                : 'bg-green-200 text-green-800'
+            }`}
+        >
+          {String(value)}
+        </span>
+      );
+    }
   }
 
   if (col.key === 'actions' && actions) {
@@ -129,15 +155,25 @@ export const renderCellContent = <T extends { [key: string]: any }>(
 
     return (
       <div className="flex space-x-2">
-        {actions.onInfo && (
+        {actions.onInfo && tableType === 'orders' ? (
+          <Link href={`/admin/orders/${row.orderId}`} passHref>
+            <button
+              type="button"
+              className="text-white bg-cyan-500 font-light text-xs !rounded-lg p-2.5 m-1 text-center inline-flex items-center shadow-md shadow-gray-300 hover:scale-[1.09] transition-transform"
+            >
+              Info
+            </button>
+          </Link>
+        ) : actions.onInfo && (
           <button
             type="button"
             className="text-white bg-cyan-500 font-light text-xs !rounded-lg p-2.5 m-1 text-center inline-flex items-center shadow-md shadow-gray-300 hover:scale-[1.09] transition-transform"
-            onClick={() => actions.onInfo?.(row.id)} // Ensure onInfo is called with row.id
+            onClick={() => actions.onInfo?.(row.id)}
           >
             Info
           </button>
         )}
+
         {actions.onEdit && (
           <Link href={`/admin/${tableType}/${row.id}/edit`}>
             <button

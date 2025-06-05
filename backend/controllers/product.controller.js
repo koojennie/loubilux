@@ -5,7 +5,7 @@ const { Category, Product } = require('../models');
 
 const createProduct = async (req, res) => {
     try {
-        let { productCode, name, quantity, price, description, newImages, category } = req.body;
+        let { productCode, name, quantity, price,statusPublish, description, newImages, category } = req.body;
 
         quantity = Number(quantity);
         price = Number(price);
@@ -47,11 +47,13 @@ const createProduct = async (req, res) => {
         }
 
         const newProduct = await Product.create({
-            productCode,
+            productId: productCode,
             name,
             quantity,
             price,
-            description : imageUrls.length > 0 ? imageUrls : [],
+            description,
+            statusPublish,
+            images : imageUrls.length > 0 ? imageUrls : [],
             categoryId: category,
         });
 
@@ -75,7 +77,9 @@ const getAllProducts = async (req, res) => {
             where.name = { [Op.iLike]: `%${searchQuery}%` }; // Case-insensitive search
         }
 
-        const { count: totalProducts, rows: products } = await Product.findAndCountAll({
+        const totalProducts = await Product.count();
+
+        const { rows: products } = await Product.findAndCountAll({
             where,
             include: [{ model: Category, attributes: ['name', 'description'] }],
             order: sortBy ? [[sortBy, sortOrder]] : [],
@@ -130,7 +134,7 @@ const updateProduct = async (req, res) => {
         }
 
         const updates = {};
-        if (productCode) updates.productCode = productCode;
+        if (productCode) updates.productId = productCode;
         if (name) updates.name = name;
         if (quantity !== undefined) updates.quantity = quantity;
         if (price !== undefined) updates.price = price;
@@ -169,6 +173,8 @@ const updateProduct = async (req, res) => {
                 }
             }
         }
+
+        console.log("dari backend controller update products", updates);
 
         // Update product in the database
         await product.update(updates);
@@ -216,20 +222,22 @@ const countProductByCategory = async (req, res) => {
         const lastProduct = await Product.findOne({
             where: { categoryId },
             order: [['createdAt', 'DESC']],
-            attributes: ['productCode'],
+            attributes: ['productId'],
         });
 
         let nextNumber = 1;
-        if (lastProduct && lastProduct.productCode) {
-            const match = lastProduct.productCode.match(/\d+$/);
+        if (lastProduct && lastProduct.productId) {
+            // Ambil angka dari belakang productId, misalnya SH-0005 → 5
+            const match = lastProduct.productId.match(/\d+$/);
             if (match) {
-                nextNumber = parseInt(match[0], 10) + 1;
+              nextNumber = parseInt(match[0], 10) + 1;
             }
-        }
+          }
+      
+          // Format angka dengan padding nol (misalnya 6 → 0006)
+          const paddedNumber = String(nextNumber).padStart(4, "0");
 
-        const paddedNumber = String(nextNumber).padStart(4, '0');
-
-        return res.status(200).json({ status: "success", prefix: category.prefix, paddedNumber });
+        return res.status(200).json({ status: "success", prefix: category.prefix, paddedNumber});
 
     } catch (error) {
         return res.status(500).json({ status: 'error', message: 'Error fetching product count', error: error.message });

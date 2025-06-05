@@ -33,12 +33,14 @@ const CategoriesPage = () => {
 
       const result = response.data.data.map((category: any) => (
         {
+          id: category.categoryId,
           ...category
         }
       ))
 
       setCategory(result || []);
       setTotal(response.data.total);
+      
     } catch (error) {
       console.error("error when fetch all categories");
       toast.error("Error when fetching data categories")

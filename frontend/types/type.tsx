@@ -25,9 +25,10 @@ export interface Product {
     no?:number;
     id: string;
     name: string;
-    productCode: string;
+    productId: string;
     quantity: number;
     price: number;
+    subPrice: number;
     statusPublish: string;
     images: string[];
     description: string;
@@ -54,6 +55,22 @@ export interface Order {
     statusOrder: string;
     paymentMethod: string;
     paymentStatus: string;
+    totalPrice: number;
+    items: Product[];
+    createdAt?: Date;
+    updatedAt?: Date;
+}
+
+// interface Opname
+export interface Opname {
+    opnameId: string;
+    productId: string;
+    product?: Product;
+    productName: string;
+    recordedStock: number;
+    physicalStock: number;
+    difference: number;
+    note: string;
     createdAt?: Date;
     updatedAt?: Date;
 }

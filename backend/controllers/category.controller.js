@@ -4,7 +4,7 @@ const Category = require('../models/category.model');
 // Create
 const createCategory = async (req, res) => {
     try {
-        const { name, description, prefix } = req.body;
+        const {categoryId ,name, description, prefix } = req.body;
 
         if (!name) {
             return res.status(400).json({
@@ -30,6 +30,7 @@ const createCategory = async (req, res) => {
         }
 
         const category = await Category.create({
+            categoryId,
             name,
             description,
             prefix
@@ -128,7 +129,7 @@ const updateCategory = async (req, res) => {
 
         const [updated] = await Category.update(
             { name, description, prefix },
-            { where: { id: categoryId } }
+            { where: { categoryId } }
         );
 
         if (!updated) {
@@ -160,7 +161,7 @@ const deleteCategory = async (req, res) => {
     try {
         const categoryId = req.params.id;
 
-        const deleted = await Category.destroy({ where: { id: categoryId } });
+        const deleted = await Category.destroy({ where: { categoryId } });
 
         if (!deleted) {
             return res.status(404).json({

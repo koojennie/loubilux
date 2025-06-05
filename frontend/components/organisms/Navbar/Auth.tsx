@@ -5,9 +5,11 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import { FaCartShopping } from "react-icons/fa6";
 import { Toaster, toast } from "react-hot-toast";
+import { useCart } from "@/context/CartContext";
 
 export default function Auth() {
   const router = useRouter();
+  const { totalItems } = useCart();
 
   const [isAuth, setIsAuth] = useState<boolean>(false);
   const [role, setRole] = useState<string>("");
@@ -22,7 +24,7 @@ export default function Auth() {
         if (response.status === 200) {
           setIsAuth(true);
           setRole(response.data.user.role);
-          
+
         }
       } catch (err: any) {
         if (axios.isAxiosError(err)) {
@@ -39,10 +41,11 @@ export default function Auth() {
     };
     fetchUser();
   }, []);
-  
+
+
   const handleLogout = async () => {
     try {
-      
+
       await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/auth/logout`,
         {},
         {
@@ -74,7 +77,8 @@ export default function Auth() {
             <FaCartShopping className="text-3xl color-palette-1 cursor-pointer mb-16 mt-16" href="/cart" />
           </Link>
           <span className="absolute top-2 left-4 md:top-2 md:left-4 lg:top-2 lg:-right-3 bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">
-            0
+            {/* {} */}
+            {totalItems}
           </span>
         </div>
         <div className="sm:relative">
@@ -99,12 +103,12 @@ export default function Auth() {
             className="dropdown-menu border-0"
             aria-labelledby="dropdownMenuLink"
           >
-            {(role=='superadmin'||role=='admin') && (
+            {(role == 'superadmin' || role == 'admin') && (
               <li>
-              <Link className="dropdown-item text-lg color-palette-2" href="/admin">
-                Admin Page
-              </Link>
-            </li>
+                <Link className="dropdown-item text-lg color-palette-2" href="/admin">
+                  Admin Page
+                </Link>
+              </li>
             )}
             <li>
               <Link className="dropdown-item text-lg color-palette-2" href="/member/edit-profile">

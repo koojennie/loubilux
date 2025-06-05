@@ -61,7 +61,7 @@ exports.getAllUsers = async (req, res) => {
 exports.getUserbyId = async (req, res) => {
   try {
     const userId = req.params.id;
-    const user = await User.findOne({ where: { id: userId } });
+    const user = await User.findOne({ where: { userId } });
 
     if (!user) {
       return res.status(404).json({
@@ -91,7 +91,7 @@ exports.updateUser = async (req, res) => {
     const userId = req.params.id;
 
     // Check if user exists
-    const user = await User.findOne({ where: { id: userId } });
+    const user = await User.findOne({ where: { userId } });
     if (!user) {
       return res.status(404).json({
         status: "error",
@@ -155,10 +155,10 @@ exports.updateUser = async (req, res) => {
     }
 
     // Update user in the database
-    await User.update(updates, { where: { id: userId } });
+    await User.update(updates, { where: { userId } });
 
     // Fetch the updated user
-    const updatedUser = await User.findOne({ where: { id: userId } });
+    const updatedUser = await User.findOne({ where: { userId } });
 
     return res.status(200).json({
       status: "success",
@@ -179,7 +179,7 @@ exports.deleteUser = async (req, res) => {
     const userId = req.params.id;
 
     // Check if user exists
-    const user = await User.findOne({ where: { id: userId } });
+    const user = await User.findOne({ where: { userId } });
     if (!user) {
       return res.status(404).json({
         status: "error",
@@ -207,7 +207,7 @@ exports.deleteUser = async (req, res) => {
     }
 
     // Remove user from database
-    await User.destroy({ where: { id: userId } });
+    await User.destroy({ where: { userId } });
 
     return res.status(200).json({
       status: "success",

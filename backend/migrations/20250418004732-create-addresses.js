@@ -45,7 +45,7 @@ module.exports = {
         type: Sequelize.STRING,
       },
       createdAt: Sequelize.DATE,
-      updateAt: Sequelize.DATE,
+      updatedAt: Sequelize.DATE,
     });
   },
 

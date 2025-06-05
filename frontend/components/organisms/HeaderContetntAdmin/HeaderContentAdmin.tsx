@@ -6,9 +6,11 @@ import { MdAddBox } from "react-icons/md";
 import { IoPersonAdd } from "react-icons/io5";
 import { TbCategoryPlus } from "react-icons/tb";
 import { FaFileExcel } from "react-icons/fa6";
+import { MdNoteAdd } from "react-icons/md";
 
 
-type TableType = "products" | "users" | "orders" | "categories";
+
+type TableType = "products" | "users" | "orders" | "categories" | "opname";
 
 interface HeaderContentAdminProps<T> {
   header: string;
@@ -86,6 +88,7 @@ const HeaderContentAdmin = <T,>({
             {tableType === "users" && <IoPersonAdd size={14} />}
             {tableType === "categories" && <TbCategoryPlus size={14} />}
             {tableType === "orders" && <FaFileExcel size={14}/>}
+            {tableType === "opname" && <MdNoteAdd size={14}/>}
 
             {labelAdd}
           </button>
