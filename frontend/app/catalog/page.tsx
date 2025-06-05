@@ -19,10 +19,6 @@ import Navbar from "@/components/organisms/Navbar/Navbar";
 import ProductItem from "@/components/organisms/Products/ProductItem";
 import products from "@/utils/data";
 
-const [selectedFilters, setSelectedFilters] = useState({
-  category: new Set<string>(),
-  price: new Set<string>(),
-});
 const sortOptions = [
   { name: 'Most Popular', href: '#', current: true },
   { name: 'Best Rating', href: '#', current: false },
@@ -63,6 +59,42 @@ function classNames(...classes: string[]) {
 
 export default function page() {
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
+  const [selectedFilters, setSelectedFilters] = useState({
+    category: new Set<string>(),
+    price: new Set<string>(),
+  });
+
+  const filteredProducts = products.filter((product) => {
+  const selectedCategories = selectedFilters.category;
+  const selectedPrices = selectedFilters.price;
+
+  const matchCategory =
+    selectedCategories.size === 0 || selectedCategories.has(product.category);
+
+  const matchPrice =
+    selectedPrices.size === 0 ||
+    Array.from(selectedPrices).some((priceRange) => {
+      const price = product.price;
+      switch (priceRange) {
+        case "under-250k":
+          return price < 250000;
+        case "250k-500k":
+          return price >= 250000 && price <= 500000;
+        case "500k-1m":
+          return price > 500000 && price <= 1000000;
+        case "1m-2m":
+          return price > 1000000 && price <= 2500000;
+        case "over-2m":
+          return price > 2500000;
+        default:
+          return true;
+      }
+    });
+
+    return matchCategory && matchPrice;
+  });
+
+
   return (
     <>
     <Navbar activeMenu="catalog" />
@@ -223,11 +255,26 @@ export default function page() {
                             <div className="flex h-5 shrink-0 items-center">
                               <div className="group grid size-4 grid-cols-1">
                                 <input
-                                  defaultValue={option.value}
-                                  defaultChecked={option.checked}
+                                  type="checkbox"
                                   id={`filter-${section.id}-${optionIdx}`}
                                   name={`${section.id}[]`}
-                                  type="checkbox"
+                                  value={option.value}
+                                  checked={selectedFilters[section.id as keyof typeof selectedFilters]?.has(option.value)}
+                                  onChange={(e) => {
+                                    const filterType = section.id as keyof typeof selectedFilters;
+                                    const newSet = new Set(selectedFilters[filterType]);
+
+                                    if (e.target.checked) {
+                                      newSet.add(option.value);
+                                    } else {
+                                      newSet.delete(option.value);
+                                    }
+
+                                    setSelectedFilters({
+                                      ...selectedFilters,
+                                      [filterType]: newSet,
+                                    });
+                                  }}
                                   className="col-start-1 row-start-1 rounded-sm border border-gray-300 accent-[#493628]"
                                 />
                               </div>
@@ -244,7 +291,7 @@ export default function page() {
               </form>
 
               {/* Product grid */}
-              <div className="lg:col-span-3"><ProductItem products={products} /></div>
+              <div className="lg:col-span-3"><ProductItem products={filteredProducts} /></div>
             </div>
           </section>
         </main>
