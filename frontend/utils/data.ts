@@ -5,7 +5,7 @@ export interface Product {
   category: string;
   image: string;
   description: string;
-  date: string;
+  createdAt: string;
 }
 
 const products: Product[] = [
@@ -16,7 +16,7 @@ const products: Product[] = [
     category: 'bag',
     image: '/img/featured-item1.png',
     description: 'Coach Mollie Tote Bag In Signature Canvas',
-    date: '2025-06-03T08:30:00Z',
+    createdAt: '2025-06-01T08:30:00Z',
   },
   {
     _id: 2,
@@ -25,7 +25,7 @@ const products: Product[] = [
     category: 'bag',
     image: '/img/featured-item2.png',
     description: 'ini',
-    date: '2025-06-03T08:30:00Z',
+    createdAt: '2025-06-02T08:30:00Z',
   },
   {
     _id: 3,
@@ -34,7 +34,7 @@ const products: Product[] = [
     category: 'wrist-watch',
     image: '/img/featured-item3.png',
     description: 'ini',
-    date: '2025-06-03T08:30:00Z'
+    createdAt: '2025-06-03T08:30:00Z'
   },
   {
     _id: 4,
@@ -43,7 +43,7 @@ const products: Product[] = [
     category: 'sunglasses',
     image: '/img/featured-item4.png',
     description: 'ini',
-    date: '2025-06-03T08:30:00Z'
+    createdAt: '2025-06-04T08:30:00Z'
   },
 ];
 
