@@ -139,7 +139,7 @@ exports.login = async (req, res) => {
       where: { username },
     });
     if (!user || !(await bcrypt.compare(password, user.password))) {
-      return res.status(400).json({ message: "Invalid username or password" });
+      return res.status(400).json({ message: "Check your username or password." });
     }
 
     const token = jwt.sign(

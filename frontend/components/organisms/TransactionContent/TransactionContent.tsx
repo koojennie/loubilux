@@ -30,7 +30,7 @@ export default function TransactionContent() {
         <div className="row mt-30 mb-20">
           <div className="col-lg-12 col-12 main-content">
             <div id="list_status_title">
-              <ButtonTab title="All Trx" active />
+              <ButtonTab title="All" active />
               <ButtonTab title="Success" active={false}/>
               <ButtonTab title="Pending" active={false}/>
               <ButtonTab title="Failed" active={false}/>
@@ -46,19 +46,19 @@ export default function TransactionContent() {
               <thead>
                 <tr className="color-palette-1">
                   <th className="" scope="col">
-                    Game
+                    Product
                   </th>
-                  <th scope="col">Item</th>
+                  <th scope="col">Quantity</th>
                   <th scope="col">Price</th>
                   <th scope="col">Status</th>
                   <th scope="col">Action</th>
                 </tr>
               </thead>
               <tbody id="list_status_item">
-                <TableRow image="overview-1" title="Mobile Legends: The New Battle 2021" category="Desktop" item={200} price={290000} status="Pending" />
-                <TableRow image="overview-2" title="Call of Duty:Modern" category="Desktop" item={550} price={740000} status="Success" />
-                <TableRow image="overview-3" title="Clash of Clans" category="Mobile" item={100} price={120000} status="Failed" />
-                <TableRow image="overview-4" title="The Royal Game" category="Mobile" item={225} price={200000} status="Pending" />
+                <TableRow image="featured-item1" title="Coach Mollie Tote Bag" category="Bag" quantity={1} price={290000} status="Pending" />
+                <TableRow image="featured-item2" title="Michael Kors Crossbody" category="Bag" quantity={1} price={740000} status="Success" />
+                <TableRow image="featured-item3" title="Lacoste Geneva 2001138" category="Wrist Watch" quantity={1} price={120000} status="Failed" />
+                <TableRow image="featured-item4" title="Longchamp Sunglasses" category="Sunglasses" quantity={1} price={200000} status="Pending" />
               </tbody>
             </table>
           </div>

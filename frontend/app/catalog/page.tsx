@@ -14,13 +14,14 @@ import {
   MenuItems,
 } from '@headlessui/react'
 import { HiSearch } from "react-icons/hi";
-import { HiChevronDown, HiFunnel, HiMinus, HiPlus, HiSquares2X2, HiOutlineXMark } from "react-icons/hi2";
+import { HiChevronDown, HiFunnel, HiMinus, HiPlus, HiOutlineXMark } from "react-icons/hi2";
 import Navbar from "@/components/organisms/Navbar/Navbar";
 import ProductItem from "@/components/organisms/Products/ProductItem";
 import products from "@/utils/data";
 
 const sortOptions = [
-  { name: 'Best Rating', href: '#', current: true },
+  { name: 'All Products', href: '#', curent: true },
+  { name: 'Best Rating', href: '#', current: false },
   { name: 'Newest', href: '#', current: false },
   { name: 'Price: Low to High', href: '#', current: false },
   { name: 'Price: High to Low', href: '#', current: false },
@@ -64,7 +65,7 @@ export default function page() {
   });
 
   const [searchQuery, setSearchQuery] = useState("");
-  const [sortOption, setSortOption] = useState("Best Rating");
+  const [sortOption, setSortOption] = useState("All Products");
 
   const filteredProducts = products.filter((product) => {
     const selectedCategories = selectedFilters.category;
@@ -105,13 +106,12 @@ export default function page() {
         return a.price - b.price;
       case "Price: High to Low":
         return b.price - a.price;
-      default:
+      case "Newest":
         return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
-      // nanti pake ini al kalau udah ada rating
-      // case "Best Rating":
-      //   return b.rating - a.rating;
-      // default: // Most Popular
-      //   return b.popularity - a.popularity;
+      case "Best Rating":
+        return b.price - a.price; // ini masih salah ya harus disesuain sm angka rating aslinya
+      default:
+        return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
     }
   });
 
@@ -253,11 +253,6 @@ export default function page() {
                   </div>
                 </MenuItems>
               </Menu>
-
-              <button type="button" className="-m-2 ml-5 p-2 text-gray-400 hover:text-gray-500 sm:ml-7">
-                <span className="sr-only">View grid</span>
-                <HiSquares2X2 aria-hidden="true" className="size-5" />
-              </button>
               <button
                 type="button"
                 onClick={() => setMobileFiltersOpen(true)}

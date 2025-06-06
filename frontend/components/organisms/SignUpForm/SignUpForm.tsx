@@ -1,7 +1,9 @@
 "use client"
 
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
+import { HiEyeOff } from "react-icons/hi";
+import { HiEye } from "react-icons/hi2";
 
 interface SignUpFormProps {
   onSubmit: (formdata: any) => void;
@@ -30,6 +32,26 @@ export default function SignUpForm({ onSubmit }: SignUpFormProps) {
 
     onSubmit(formData);
   }
+
+  const passwordRef = useRef<HTMLInputElement>(null);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfPassword] = useState(false);
+  
+  const togglePasswordVisibility = () => {
+      setShowPassword((prev) => !prev);
+  
+      if (passwordRef.current) {
+        passwordRef.current.type = showPassword ? "password" : "text";
+      }
+  };
+
+  const toggleConfPasswordVisibility = () => {
+      setShowConfPassword((prev) => !prev);
+  
+      if (passwordRef.current) {
+        passwordRef.current.type = showConfirmPassword ? "password" : "text";
+      }
+  };
 
   return (
     <form onSubmit={handleSubmit}>
@@ -89,13 +111,19 @@ export default function SignUpForm({ onSubmit }: SignUpFormProps) {
         >
           Password
         </label>
-        <input
-          type="password"
-          className="form-control !rounded-lg text-lg"
-          placeholder="Enter your password"
-          value={password}
-          onChange={(e) => { setPassword(e.target.value) }}
-        />
+        <div className="relative">
+          <input
+            type={showPassword ? "text" : "password"}
+            ref={passwordRef}
+            className="form-control !rounded-lg text-lg"
+            placeholder="Enter your password"
+            value={password}
+            onChange={(e) => { setPassword(e.target.value) }}
+          />
+          <span onClick={togglePasswordVisibility} className="absolute text-2xl top-1/2 right-4 -translate-y-1/2 text-gray-500 cursor-pointer">
+            {showPassword ? <HiEyeOff /> : <HiEye />}
+          </span>
+        </div>
       </div>
       <div className="pt-30">
         <label
@@ -104,13 +132,19 @@ export default function SignUpForm({ onSubmit }: SignUpFormProps) {
         >
           Confirm Password
         </label>
-        <input
-          type="password"
-          className="form-control !rounded-lg text-lg"
-          placeholder="Confirm your password"
-          value={confirmPassword}
-          onChange={(e) => { setConfirmPassword(e.target.value) }}
-        />
+        <div className="relative">
+          <input
+            type={showConfirmPassword ? "text" : "password"}
+            ref={passwordRef}
+            className="form-control !rounded-lg text-lg"
+            placeholder="Confirm your password"
+            value={confirmPassword}
+            onChange={(e) => { setConfirmPassword(e.target.value) }}
+          />
+          <span onClick={toggleConfPasswordVisibility} className="absolute text-2xl top-1/2 right-4 -translate-y-1/2 text-gray-500 cursor-pointer">
+            {showConfirmPassword ? <HiEyeOff /> : <HiEye />}
+          </span>
+        </div>
       </div>
       <div className="button-group d-flex flex-column mx-auto pt-50">
         <button

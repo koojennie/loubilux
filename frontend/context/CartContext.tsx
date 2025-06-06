@@ -5,6 +5,7 @@ import axios from "axios";
 const CartContext = createContext({
   totalItems: 0,
   refreshCart: () => {},
+  addToCart: async (productId: string, quantity: number) => {},
 });
 
 export const CartProvider = ({ children }: { children: React.ReactNode }) => {
@@ -23,12 +24,27 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
     }
   }
 
+  const addToCart = async (productId: string, quantity: number) => {
+    try {
+      await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/cart/add`, {
+        productId,
+        quantity,
+      }, {
+        withCredentials: true,
+      });
+
+      await refreshCart();
+    } catch (error: any) {
+      console.error(`Add to cart error: ${error.message}`);
+    }
+  };
+
   useEffect(() => {
     refreshCart(); // initial load
   }, []);
 
   return (
-    <CartContext.Provider value={{ totalItems, refreshCart }}>
+    <CartContext.Provider value={{ totalItems, refreshCart, addToCart }}>
       {children}
     </CartContext.Provider>
   );
