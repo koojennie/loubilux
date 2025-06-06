@@ -146,14 +146,24 @@ export default function page() {
                     onClick={() => updateCartItem(item.product.productId, item.quantity - 1)}
                   >
                     {/* MINUS */}
-                    <svg className="stroke-gray-900" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none">
+                    {/* <svg className="stroke-gray-900" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none">
                       <path d="M16.5 11H5.5" strokeWidth="1.6" strokeLinecap="round" />
+                    </svg> */}
+
+                    <svg className="stroke-gray-900 transition-all duration-500 group-hover:stroke-black"
+                      xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22"
+                      fill="none">
+                      <path d="M16.5 11H5.5" stroke="" strokeWidth="1.6" strokeLinecap="round" />
+                      <path d="M16.5 11H5.5" stroke="" strokeOpacity="0.2" strokeWidth="1.6"
+                        strokeLinecap="round" />
+                      <path d="M16.5 11H5.5" stroke="" strokeOpacity="0.2" strokeWidth="1.6"
+                        strokeLinecap="round" />
                     </svg>
                   </button>
 
                   <input
                     type="text"
-                    className="border-y border-gray-200 outline-none text-gray-900 font-semibold text-lg w-full max-w-[118px] min-w-[80px] text-center bg-transparent"
+                    className="border-y border-gray-200 outline-none text-gray-900 font-semibold text-lg w-full max-w-[118px] min-w-[80px] placeholder:text-gray-900 py-[15px] text-center bg-transparent"
                     value={item.quantity}
                     readOnly
                   />
@@ -162,8 +172,18 @@ export default function page() {
                     onClick={() => updateCartItem(item.product.productId, item.quantity + 1)}
                   >
                     {/* PLUS */}
-                    <svg className="stroke-gray-900" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none">
+                    {/* <svg className="stroke-gray-900" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none">
                       <path d="M11 5.5V16.5M16.5 11H5.5" strokeWidth="1.6" strokeLinecap="round" />
+                    </svg> */}
+                    <svg className="stroke-gray-900 transition-all duration-500 group-hover:stroke-black"
+                      xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22"
+                      fill="none">
+                      <path d="M11 5.5V16.5M16.5 11H5.5" stroke="" strokeWidth="1.6"
+                        strokeLinecap="round" />
+                      <path d="M11 5.5V16.5M16.5 11H5.5" stroke="" strokeOpacity="0.2" strokeWidth="1.6"
+                        strokeLinecap="round" />
+                      <path d="M11 5.5V16.5M16.5 11H5.5" stroke="" strokeOpacity="0.2" strokeWidth="1.6"
+                        strokeLinecap="round" />
                     </svg>
                   </button>
                 </div>
@@ -191,17 +211,17 @@ export default function page() {
             </div>
           </div>
           <div className="flex items-center flex-col sm:flex-row justify-center gap-4 mt-8">
-              <button
-                className="!rounded-full w-full max-w-[280px] py-4 px-4 text-center justify-center items-center bg-[#493628] font-semibold text-lg text-white flex transition-all duration-500 hover:bg-[#705C53]"
-                onClick={handleButtonCheckout}
-                >Continue
-                to Checkout
-                <svg className="ml-2" xmlns="http://www.w3.org/2000/svg" width="23" height="22" viewBox="0 0 23 22"
-                  fill="none">
-                  <path d="M8.75324 5.49609L14.2535 10.9963L8.75 16.4998" stroke="white" strokeWidth="1.6"
-                    strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </button>
+            <button
+              className="!rounded-full w-full max-w-[280px] py-4 px-4 text-center justify-center items-center bg-[#493628] font-semibold text-lg text-white flex transition-all duration-500 hover:bg-[#705C53]"
+              onClick={handleButtonCheckout}
+            >Continue
+              to Checkout
+              <svg className="ml-2" xmlns="http://www.w3.org/2000/svg" width="23" height="22" viewBox="0 0 23 22"
+                fill="none">
+                <path d="M8.75324 5.49609L14.2535 10.9963L8.75 16.4998" stroke="white" strokeWidth="1.6"
+                  strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </button>
           </div>
         </div>
       </section>

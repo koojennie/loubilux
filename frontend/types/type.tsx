@@ -48,10 +48,10 @@ export interface OrderLineItem {
 // export interface Order
 export interface Order {
     id: string;
-    user: User;
+    user: User| string;
     orderlineitems: OrderLineItem;
     orderId: string;
-    orderDate: Date;
+    orderDate: string;
     statusOrder: string;
     paymentMethod: string;
     paymentStatus: string;

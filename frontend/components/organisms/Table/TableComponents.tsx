@@ -48,20 +48,20 @@ const TableComponents = <T extends Record<string, any>>({
   return (
     <div className="relative flex flex-col w-full h-full overflow-y-auto text-gray-700 bg-white shadow-md rounded-lg my-3">
       <table className="w-full text-center table-auto min-w-max">
-        <thead className="sticky top-0 bg-slate-50 shadow">
+        <thead className="sticky top-0 bg-[#D6C0B3] shadow">
           <tr className="bg-slate-50">
             {columns.map((col) => (
               <th
                 key={col.key as string}
-                className="transition-colors cursor-pointer border-b border-slate-300 bg-slate-100 hover:bg-slate-200 px-2"
+                className="transition-colors cursor-pointer border-b border-slate-300 bg-[#E4E0E1] hover:bg-[#D6C0B3] px-2"
               >
-                <div className="flex justify-center text-sm font-semibold leading-none text-slate-800">
+                <div className="flex justify-center text-sm font-semibold leading-none text-[#493628]">
                   {col.label}
                 </div>
               </th>
             ))}
-            <th className="pt-3 transition-colors cursor-pointer border-b border-slate-300 bg-slate-100 hover:bg-slate-200">
-              <p className="flex justify-center text-sm font-semibold leading-none text-slate-800">Action</p>
+            <th className="pt-3 transition-colors cursor-pointer border-b border-slate-300 bg-[#E4E0E1] hover:bg-[#D6C0B3]">
+              <p className="flex justify-center text-sm font-semibold leading-none text-[#493628]">Action</p>
             </th>
           </tr>
         </thead>
@@ -70,7 +70,7 @@ const TableComponents = <T extends Record<string, any>>({
           {data?.map((row) => (
             <tr
               key={`${row.id}`} // Pastikan id unik
-              className="hover:bg-slate-50 border border-transparent hover:border-slate-200"
+              className="hover:bg-[#e9e6e7] border border-transparent"
             >
               {columns.map((col) => (
                 <td key={`${row.id}-${String(col.key)}`} className="py-2 px-2 border-b border-slate-200">
@@ -91,12 +91,12 @@ const TableComponents = <T extends Record<string, any>>({
       </table>
 
       <div className="flex justify-between items-center px-4 py-3">
-        <div className="text-sm text-slate-500">
+        <div className="text-sm text-[#493628]">
           Showing <b>{(page - 1) * limit + 1}-{Math.min(page * limit, totalItems)}</b> of {totalItems}
         </div>
         <div className="flex space-x-1">
           <button
-            className="px-3 py-1 min-w-9 min-h-9 text-sm font-normal text-slate-500 bg-white border border-slate-200 rounded hover:bg-slate-50 hover:border-slate-400 transition duration-200 ease"
+            className="px-3 py-1 min-w-9 min-h-9 text-sm font-normal text-[#493628] bg-white border border-slate-200 rounded hover:bg-slate-50 hover:border-slate-400 transition duration-200 ease"
             onClick={() => onPageChange(page - 1)}
             disabled={page === 1}
           >
@@ -110,8 +110,8 @@ const TableComponents = <T extends Record<string, any>>({
               disabled={p === "..."}
               className={`px-3 py-1 min-w-9 min-h-9 text-sm font-normal rounded ${
                 page === p
-                  ? "text-white bg-slate-400 border border-slate-200 hover:bg-slate-500 transition duration-200"
-                  : "text-slate-600 bg-white border border-slate-200 hover:bg-slate-50"
+                  ? "text-[#493628] bg-[#D6C0B3] border border-slate-200 hover:bg-[#493628] hover:text-[#D6C0B3] transition duration-200"
+                  : "text-[#493628] bg-white border border-slate-200 hover:bg-[#E4E0E1]"
               }`}
             >
               {p}
@@ -119,7 +119,7 @@ const TableComponents = <T extends Record<string, any>>({
           ))}
 
           <button
-            className="px-3 py-1 min-w-9 min-h-9 text-sm font-normal text-slate-500 bg-white border border-slate-200 rounded hover:bg-slate-50 hover:border-slate-400 transition duration-200 ease"
+            className="px-3 py-1 min-w-9 min-h-9 text-sm font-normal text-[#493628] bg-white border border-slate-200 rounded hover:bg-slate-50 hover:border-slate-400 transition duration-200 ease"
             onClick={() => onPageChange(page + 1)}
             disabled={page === totalPages}
           >
