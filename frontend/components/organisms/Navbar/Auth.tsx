@@ -133,7 +133,7 @@ export default function Auth() {
   return (
     <li className="nav-item my-auto">
       <Link
-        className=" d-flex flex-column mx-auto !rounded-full py-3 px-7 text-center bg-[#493628] font-semibold text-lg text-white flex transition-all duration-500 hover:bg-[#705C53]"
+        className=" d-flex flex-column mx-auto !rounded-full py-3 px-7 text-center bg-[#493628] !font-semibold text-lg text-white flex transition-all duration-500 hover:bg-[#705C53]"
         role="button" href="/sign-in"
       >
         Sign In
