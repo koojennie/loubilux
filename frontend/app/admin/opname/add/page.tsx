@@ -10,7 +10,7 @@ const AddOpnamePage = () => {
 
   const router = useRouter();
 
-  const handleProductSubmit = async (formData: any) => {
+  const handleSubmitOpname = async (formData: any) => {
 
     try {
       const response = await axios.post(
@@ -22,10 +22,11 @@ const AddOpnamePage = () => {
       );
 
 
+
       if(response.status === 201){
         toast.success("Data Opname successfully added!");
         
-        setTimeout(() => router.push("/admin/products"), 2000); 
+        setTimeout(() => router.push("/admin/opname"), 2000); 
       } else {
         toast.error(response.data.message || "Failed to ad Opname Data!");
       }
@@ -38,7 +39,7 @@ const AddOpnamePage = () => {
   return (
     <div className="p-8 md:p-8 ">
       <div className="relative m-auto flex flex-col rounded-2xl bg-white bg-clip-border text-slate-700 shadow-lg">
-        <OpnameForm onSubmit={handleProductSubmit}/>
+        <OpnameForm onSubmit={handleSubmitOpname}/>
         <Toaster />
       </div>
     </div>

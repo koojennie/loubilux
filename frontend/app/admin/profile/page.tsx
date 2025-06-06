@@ -30,7 +30,7 @@ const profileAdmin = () => {
       
     try {
       const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/users/${userId}`,
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/users/userbyid/${userId}`,
         {
           withCredentials: true
         }

@@ -19,29 +19,31 @@ const OpnameForm: React.FC<OpnameFormProps> = ({ onSubmit, onEditSubmit, isEdit 
 
   // state form
   const [generatedOpnameId, setGenerateOpnameId] = useState(initialData?.opnameId || "");
-  const [productId, setProductId] = useState(initialData?.name || "");
-  const [price, setPrice] = useState(initialData?.price?.toString() || "");
-  
+  const [selectedProductId, setSelectedProductId] = useState(initialData?.productId || "");
+
   // new
-  const [queryProduct, setQueryProdudct] = useState<string>('');
+  const [queryProduct, setQueryProduct] = useState<string>('');
   const [suggestionsProduct, setSuggestionProduct] = useState([]);
-  const [selectedProduct, setSelectedProdudct] = useState('');
-  const [stockFisik, setStockFisik] = useState('');
-  const [quantity, setQuantity] = useState(initialData?.quantity?.toString() || "");
+  // const [selectedProduct, setSelectedProdudct] = useState('');
+  const [physicalStock, setPhysicalStock] = useState('');
+  const [recordedStock, setRecordedStock] = useState('');
+  const [notes, setNotes] = useState<string>("");
 
   // state open modal 
   const [isOpenCloseModalConfirmation, setIsOpenCloseModalConfirmation] = useState<boolean>(false);
-  const [isOpenCloseModalDeleteConfirmation, setIsOpenCloseModalDeleteConfirmation] = useState<boolean>(false);
   const [submitEvent, setSubmitEvent] = useState<FormEvent | null>(null); // Simpan event
 
   useEffect(() => {
-    functionGenerateOpnameId();
     if (isEdit && initialData) {
 
       setGenerateOpnameId(initialData.opnameId || "");
-      setProductId(initialData.productId || "");
-      setQuantity(initialData.quantity?.toString() || "");
-      setPrice(initialData.price?.toString() || "");
+      setSelectedProductId(initialData.productId || "");
+      setQueryProduct(initialData.productName || "");
+      setRecordedStock(initialData.recordedStock?.toString() || "");
+      setPhysicalStock(initialData.physicalStock?.toString() || "");
+      setNotes(initialData.note || "");
+    } else {
+      functionGenerateOpnameId();
     }
   }, [initialData, isEdit]);
 
@@ -62,8 +64,6 @@ const OpnameForm: React.FC<OpnameFormProps> = ({ onSubmit, onEditSubmit, isEdit 
 
     return () => clearTimeout(debounce);
   }, [queryProduct]);
-
-  console.log(suggestionsProduct);
 
   const functionGenerateOpnameId = async () => {
     try {
@@ -89,18 +89,19 @@ const OpnameForm: React.FC<OpnameFormProps> = ({ onSubmit, onEditSubmit, isEdit 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    // const formData = {
-    //   productCode: generatedOpnameId,
-    //   name: productName,
-    //   quantity: Number(quantity),
-    //   price: Number(price)
-    // };
+    const formData = {
+      opnameId: generatedOpnameId,
+      productId: selectedProductId,
+      recordedStock: Number(recordedStock),
+      physicalStock: Number(physicalStock),
+      note: notes,
+    };
 
-    // if (isEdit && onEditSubmit) {
-    //   onEditSubmit(formData);
-    // } else if (!isEdit && onSubmit) {
-    //   onSubmit(formData);
-    // }
+    if (isEdit && onEditSubmit) {
+      onEditSubmit(formData);
+    } else if (!isEdit && onSubmit) {
+      onSubmit(formData);
+    }
 
     // onSubmit(formData);
     setIsOpenCloseModalConfirmation(false);
@@ -134,11 +135,11 @@ const OpnameForm: React.FC<OpnameFormProps> = ({ onSubmit, onEditSubmit, isEdit 
                   className="w-full h-10 bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded px-3 shadow-sm focus:border-slate-400"
                   placeholder="0"
                   min="0"
-                  value={stockFisik}
+                  value={physicalStock}
                   onChange={(e) => {
                     const value = e.target.value;
                     if (/^\d*$/.test(value)) {
-                      setQuantity(value);
+                      setPhysicalStock(value);
                     }
                   }}
                 />
@@ -153,8 +154,8 @@ const OpnameForm: React.FC<OpnameFormProps> = ({ onSubmit, onEditSubmit, isEdit 
                   placeholder="Search Product"
                   value={queryProduct}
                   onChange={(e) => {
-                    setQueryProdudct(e.target.value);
-                    setSelectedProdudct('');
+                    setQueryProduct(e.target.value);
+                    setSelectedProductId('');
                   }}
                 />
                 {suggestionsProduct.length > 0 && (
@@ -163,10 +164,9 @@ const OpnameForm: React.FC<OpnameFormProps> = ({ onSubmit, onEditSubmit, isEdit 
                       <li
                         key={product.productId}
                         onClick={() => {
-                          setSelectedProdudct(product.name);
-                          setQueryProdudct(product.name);
-                          setProductId(product.productId); // untuk simpan ke form
-                          setQuantity(product.quantity?.toString() || '0'); // asumsi product punya stock
+                          setQueryProduct(product.name);
+                          setSelectedProductId(product.productId); // untuk simpan ke form
+                          setRecordedStock(product.quantity?.toString() || "0"); // asumsi product punya stock
                           setSuggestionProduct([]);
                         }}
                         className="px-4 py-2 hover:bg-gray-100 cursor-pointer text-sm"
@@ -187,14 +187,33 @@ const OpnameForm: React.FC<OpnameFormProps> = ({ onSubmit, onEditSubmit, isEdit 
                   className="w-full h-10 bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded px-3 shadow-sm focus:border-slate-400"
                   placeholder="0"
                   min="0"
-                  value={quantity}
+                  value={recordedStock}
                   onChange={(e) => {
                     const value = e.target.value;
                     if (/^\d*$/.test(value)) {
-                      setQuantity(value);
+                      setRecordedStock(value);
                     }
                   }}
+                  readOnly
                 />
+              </div>
+              <div className="w-full">
+                <label className="block mb-1 text-sm text-slate-700">Notes</label>
+                <input
+                  // rows={4}
+                  className="bg-transparent border border-gray-300 text-slate-700 text-sm rounded-lg focus:ring-2 focus:ring-fuchsia-50 focus:border-fuchsia-300 block w-full p-2.5"
+                  placeholder="Notes..."
+                  value={notes}
+                  onChange={(e) => { setNotes(e.target.value) }}
+                />
+                {/* </textarea> */}
+              </div>
+              <div className="w-full">
+                <p className="block mb-2 font-semibold text-base text-slate-600">Opname Date</p>
+                <p className="text-slate-500 text-sm truncate">
+                  {new Date().toLocaleDateString("id-ID", { day: "2-digit", month: "long", year: "numeric" })}
+                </p>
+                {/* <input type="hidden" name="opnameDate" value={new Date().toISOString()} /> */}
               </div>
 
             </div>
@@ -209,7 +228,7 @@ const OpnameForm: React.FC<OpnameFormProps> = ({ onSubmit, onEditSubmit, isEdit 
             <button
               className="mx-auto select-none rounded border border-red-600 py-2 px-4 text-center text-sm font-semibold text-red-600 transition-all hover:bg-red-600 hover:text-white hover:shadow-md hover:shadow-red-600/20 active:bg-red-700 active:text-white active:opacity-[0.85] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
               type="button"
-              onClick={() => router.push('/admin/products')}
+              onClick={() => router.push('/admin/opname')}
             >
               Cancel
             </button>
@@ -229,7 +248,7 @@ const OpnameForm: React.FC<OpnameFormProps> = ({ onSubmit, onEditSubmit, isEdit 
         isOpen={isOpenCloseModalConfirmation}
         onClose={() => setIsOpenCloseModalConfirmation(false)}
         onConfirm={() => handleSubmit(submitEvent!)}
-        textModal="Are you sure add this product?"
+        textModal="Are you sure edit this Opname?"
       />
 
       {/* <ModalConfirmationDelete 

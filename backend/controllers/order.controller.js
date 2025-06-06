@@ -1,5 +1,5 @@
 const { Op } = require("sequelize");
-const { Order, User, OrderLineItem, Product, Cart, CartItem, sequelize, Sequelize } = require("../models");
+const { Order, User, OrderLineItem, Product, Cart, CartItem, Category, sequelize, Sequelize } = require("../models");
 
 
 const generateOrdersId = async () => {
@@ -410,6 +410,38 @@ const getMontlyRevenue = async (req, res) => {
   }
 }
 
+const getRevenueByCategory = async (req, res) => {
+  try {
+    const results = await Order.findAll({
+      attributes:[
+        [Sequelize.col("Product.Category.name"), "categoryName"],
+        [Sequelize.fn("SUM", Sequelize.literal("price * quantity")), "totalRevenue"]
+      ],
+      include: [
+        {
+          model: Product,
+          attributes: [],
+          include: {
+            model: Category,
+            attributes: [],
+          }
+        }
+      ],
+      group:["Product.Category.id"],
+      raw: true,
+      
+    });
+
+  } catch (error) {
+    console.error("Error getRevenueMonthlyRevenue", error);
+    res.status(500).json({
+      status: 'error',
+      message: "Internal Server Error",
+      error: error.message,
+    })
+  }
+}
+
 module.exports = {
   createOrderFromCart,
   getUserOrders,
@@ -418,4 +450,5 @@ module.exports = {
   updateOrderStatus,
   getFilteredOrdersReport,
   getMontlyRevenue,
+  getRevenueByCategory,
 };
