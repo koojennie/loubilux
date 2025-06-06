@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import { useRouter } from "next/navigation";
 import toast, { Toaster } from "react-hot-toast";
@@ -8,6 +8,7 @@ import { Opname } from '@/types/type';
 
 import HeaderContentAdmin from "@/components/organisms/HeaderContetntAdmin/HeaderContentAdmin";
 import TableComponents from '@/components/organisms/Table/TableComponents';
+import ModalConfirmationDelete from '@/components/organisms/Modal/ModalConfirmationDelete';
 
 type OpnameProps = {
     initialOpnames: Opname[];
@@ -16,20 +17,55 @@ type OpnameProps = {
 const OpnamePage = ({ initialOpnames }: OpnameProps) => {
     const router = useRouter();
 
-    const [opname, setOpname] = useState<Opname[]>(initialOpnames);
     // data page
+    const [opname, setOpname] = useState<Opname[]>(initialOpnames);
+
+    // get state page
     const [page, setPage] = useState<number>(1);
     const [totalItems, setTotalItems] = useState<number>(1);
     const [limit, setLimit] = useState<number>(5);
-    const [sortBy, setSortBy] = useState<string>("opnameDate");
-    const [orderBy, setOrderBy] = useState<string>('DESC');
+    const [sortBy, setSortBy] = useState<string>("createdAt");
+    const [orderBy, setOrderBy] = useState<string>('ASC');
     const [searchQuery, setSearchQuery] = useState<string>("");
 
+    // 
     const [isLoading, setIsLoading] = useState<boolean>(true);
+
+    // state Modal
+    const [selectedDeleteOpname, setSelectedDeleteOpname] = useState<Opname | null>(null);
+    const [isModalConfirmationDeleteOpenClosed, setIsModalConfirmationDeleteOpenClosed] = useState<boolean>(false);
+    const modalConfirmationDeleteRef = useRef<HTMLDivElement>(null);
+
 
     useEffect(() => {
         fetchAllOpname();
-    }, [page, limit]);
+    }, [page, limit, orderBy, sortBy]);
+
+
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (modalConfirmationDeleteRef.current && !modalConfirmationDeleteRef.current.contains(event.target as Node)) {
+                setIsModalConfirmationDeleteOpenClosed(false);
+            }
+        };
+
+        const handleKeyDown = (event: KeyboardEvent) => {
+            if (event.key === "Escape") {
+                if (isModalConfirmationDeleteOpenClosed) {
+                    setIsModalConfirmationDeleteOpenClosed(!isModalConfirmationDeleteOpenClosed);
+                }
+            }
+        };
+
+        document.addEventListener('mousedown', handleClickOutside);
+        document.addEventListener('keydown', handleKeyDown);
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+            document.removeEventListener('keydown', handleKeyDown);
+        };
+    }, [isModalConfirmationDeleteOpenClosed]);
+
 
     const fetchAllOpname = async () => {
         try {
@@ -40,7 +76,12 @@ const OpnamePage = ({ initialOpnames }: OpnameProps) => {
                 }
             );
 
-            setOpname(response.data.data);
+            const result = response.data.data.map((opname: any) => ({
+                id: opname.opnameId,
+                ...opname,
+            }));
+
+            setOpname(result);
             setTotalItems(response.data.totalItems);
         } catch (error) {
             console.error("Error when fetching opname", error);
@@ -49,6 +90,46 @@ const OpnamePage = ({ initialOpnames }: OpnameProps) => {
             setIsLoading(false);
         }
     }
+
+    const handleDeleteOpname = async (opname: Opname | null) => {
+        if (!opname) {
+            toast.error('No Opname Selected for deletion');
+            console.error('No Opname Selected for deletion');
+            return;
+        }
+
+        setIsLoading(true)
+
+        try {
+            await axios.delete(
+                `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/opname/${opname.opnameId}`,
+                { withCredentials: true }
+            );
+
+            toast.success('Deleted Opname Sucessfully');
+
+            fetchAllOpname();
+
+            setIsModalConfirmationDeleteOpenClosed(!isModalConfirmationDeleteOpenClosed);
+        } catch (error) {
+            toast.error('Error When Deleting Opname:  ${error}');
+            console.error('Error when deleting Opname ', error);
+
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const handleOpenCloseModalConfirmationDelete = (opname?: Opname) => {
+        setSelectedDeleteOpname(opname || null);
+        setIsModalConfirmationDeleteOpenClosed(!isModalConfirmationDeleteOpenClosed);
+    };
+
+    const handleOpenCloseModalViewDetail = (opname?: Opname) => {
+        // setSelectedViewDetailUser(user || null);
+        // setIsModalViewDetailOpen(!isModalViewDetailOpen);
+        // console.log(opname);
+    };
 
     return (
         <>
@@ -67,11 +148,11 @@ const OpnamePage = ({ initialOpnames }: OpnameProps) => {
                         // { key: 'statusPublish', label: 'Status' },
                         // { key: 'category', label: 'Category' },
                     ]}
-                      totalItems={totalItems}
-                      onChangeDropDownLimitData={setLimit}
-                      onChangeDropDownOrderBy={setOrderBy}
-                      onChangeDropDownSortBy={setSortBy}
-                      onChangeSearchQuery={setSearchQuery}
+                    totalItems={totalItems}
+                    onChangeDropDownLimitData={setLimit}
+                    onChangeDropDownOrderBy={setOrderBy}
+                    onChangeDropDownSortBy={setSortBy}
+                    onChangeSearchQuery={setSearchQuery}
                     // backPage={() => { console.log("Back") }}
                     toAddPage={() => router.push('/admin/opname/add')}
                 />
@@ -90,8 +171,9 @@ const OpnamePage = ({ initialOpnames }: OpnameProps) => {
                             { key: 'note', label: 'Note' },
                         ]}
                         // onInfo={(id) => handleOpenCloseModalViewDetail(opname.find(opname => opname.opnameId === id))}
-                        // onEdit={handleToPageEdit}
+                        onEdit={() => { }}
                         // onDelete={(id) => handleOpenCloseModalConfirmationDelete(opname.find(opname => opname.opnameId === id))}
+                        onDelete={(id) => handleOpenCloseModalConfirmationDelete(opname.find(opname => opname.opnameId === id))}
                         tableType="opname"
                         page={page}
                         limit={limit}
@@ -116,16 +198,16 @@ const OpnamePage = ({ initialOpnames }: OpnameProps) => {
           { key: 'category', label: 'Category' },
         ]}
         ref={modalViewDetailRef}
-      />
+      /> */}
 
-      <ModalConfirmationDelete
-        isOpen={isModalConfirmationDeleteOpen}
-        onClose={handleOpenCloseModalConfirmationDelete}
-        // onConfirm={() => handleDeleteProduct} 
-        onConfirm={() => handleDeleteProduct(selectedDeleteProduct)}
-        ref={modalConfirmationDeleteRef}
-      />
-                 */}
+            <ModalConfirmationDelete
+                isOpen={isModalConfirmationDeleteOpenClosed}
+                onClose={handleOpenCloseModalConfirmationDelete}
+                // onConfirm={() => handleDeleteProduct} 
+                onConfirm={() => handleDeleteOpname(selectedDeleteOpname)}
+                ref={modalConfirmationDeleteRef}
+            />
+
             <Toaster />
         </>
     );

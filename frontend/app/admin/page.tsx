@@ -8,18 +8,19 @@ import StatisticsChart from "@/components/organisms/Charts/StatisticChart";
 
 export default function dashboard() {
   return (
-    <div className="top-16 px-5">
-      <div className="grid grid-cols-12 gap-4 md:gap-6">
+    <div className="top-16 pl-10">
+      {/* <div className="grid grid-cols-12 gap-4 md:gap-6"> */}
+      <div className="grid grid-cols-1 gap-4 md:gap-3">
         <div className="col-span-12 space-y-6 xl:col-span-7">
           <CardDashboard />
           <div className="pb-2"></div>
           <MonthSales />
         </div>
-        <div className="col-span-12 xl:col-span-5">
-          <RecentOrders />
-        </div>
+        {/* <div className="col-span-12 xl:col-span-5">
+        </div> */}
         <div className="col-span-12">
-          <StatisticsChart />
+          <RecentOrders />
+          {/* <StatisticsChart /> */}
         </div>
       </div>
     </div>

@@ -15,7 +15,7 @@ import { Product, Order } from "@/types/type";
 export default function RecentOrders() {
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [orders, setOrders] = useState<Order | null>(null);
+  const [orders, setOrders] = useState<Order[]>([]);
 
 
   const fetchAllOrders = async () => {
@@ -27,7 +27,7 @@ export default function RecentOrders() {
         }
       );
 
-      setOrders(response.data.data);
+      setOrders(Array.isArray(response.data.data) ? response.data.data : []);
       // setPage(response.data.page);
       // setTotalItems(response.data.totalOrders);
       // setLimit(response.data.limit);
@@ -145,16 +145,16 @@ export default function RecentOrders() {
 
           <TableBody className="divide-y divide-gray-100 dark:divide-gray-800">
             {orders?.map((order: Order) => (
-              <TableRow>
-              <TableCell className="py-3">
-                <div>{order.orderId}</div>
-              </TableCell>
-              <TableCell className="py-3">
-                <div>{order.user}</div>
-              </TableCell>
-              <TableCell className="py-3">
-                <div>{order.orderDate instanceof Date ? order.orderDate.toLocaleString() : String(order.orderDate)}</div>
-              </TableCell>
+              <TableRow key={order.orderId}>
+                <TableCell className="py-3">
+                  <div>{order.orderId}</div>
+                </TableCell>
+                <TableCell className="py-3">
+                  <div>{order.user}</div>
+                </TableCell>
+                <TableCell className="py-3">
+                  <div>{order.orderDate instanceof Date ? order.orderDate.toLocaleString() : String(order.orderDate)}</div>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
