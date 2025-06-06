@@ -18,7 +18,7 @@ module.exports = {
 
     await queryInterface.bulkInsert('Users', [
       {
-        userId: 'USR-0003', // ganti userId nya ke sesuai yang ada di database
+        userId: 'USR-0001', // ganti userId nya ke sesuai yang ada di database
         name: 'adminloubi',
         username: 'adminloubi',
         email: 'adminloubi@gmail.com',
@@ -30,7 +30,7 @@ module.exports = {
         updatedAt: new Date()
       },
       {
-        userId: 'USR-0004',
+        userId: 'USR-0002 ',
         name: 'jennie', 
         username: 'jennie',
         email: 'jennie@gmail.com',

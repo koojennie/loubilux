@@ -13,22 +13,22 @@ module.exports = {
      * }], {});
     */
     await queryInterface.bulkInsert('Categories', [
-      // {
-      //   categoryId: "BG",
-      //   name: "Bag",
-      //   description: "ini adalah category sepatu",
-      //   prefix: "BG",
-      //   createdAt: new Date(),
-      //   updatedAt: new Date()
-      // },
-      // {
-      //   categoryId: "SH",
-      //   name: "Shoes",
-      //   description: "ini adalah category sepatu",
-      //   prefix: "SH",
-      //   createdAt: new Date(),
-      //   updatedAt: new Date()
-      // },
+      {
+        categoryId: "BG",
+        name: "Bag",
+        description: "ini adalah category sepatu",
+        prefix: "BG",
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        categoryId: "SH",
+        name: "Shoes",
+        description: "ini adalah category sepatu",
+        prefix: "SH",
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
       {
         categoryId: "WL",
         name: "Wallet",

@@ -14,13 +14,13 @@ import {
   MenuItems,
 } from '@headlessui/react'
 import { HiSearch } from "react-icons/hi";
-import { HiChevronDown, HiFunnel, HiMinus, HiPlus, HiSquares2X2, HiOutlineXMark } from "react-icons/hi2";
+import { HiChevronDown, HiFunnel, HiMinus, HiPlus, HiOutlineXMark } from "react-icons/hi2";
 import Navbar from "@/components/organisms/Navbar/Navbar";
 import ProductItem from "@/components/organisms/Products/ProductItem";
 import products from "@/utils/data";
 
 const sortOptions = [
-  { name: 'Most Popular', href: '#', current: true },
+  { name: 'All Products', href: '#', curent: true },
   { name: 'Best Rating', href: '#', current: false },
   { name: 'Newest', href: '#', current: false },
   { name: 'Price: Low to High', href: '#', current: false },
@@ -33,7 +33,7 @@ const filters = [
     options: [
       { value: 'bag', label: 'Bag', checked: false },
       { value: 'shoes', label: 'Shoes', checked: false },
-      { value: 'wallet', label: 'Wallet', checked: true },
+      { value: 'wallet', label: 'Wallet', checked: false },
       { value: 'wrist-watch', label: 'Wrist Watch', checked: false },
       { value: 'bracelet', label: 'Bracelet', checked: false },
       { value: 'sunglasses', label: 'Sunglasses', checked: false },
@@ -46,7 +46,7 @@ const filters = [
     options: [
       { value: 'under-250k', label: 'Under IDR 250K', checked: false },
       { value: '250k-500k', label: 'IDR 250K – 500K', checked: false },
-      { value: '500k-1m', label: 'IDR 500K – 1M', checked: true },
+      { value: '500k-1m', label: 'IDR 500K – 1M', checked: false },
       { value: '1m-2m', label: 'IDR 1M – 2.5M', checked: false },
       { value: 'over-2m', label: 'Over IDR 2.5M', checked: false },
     ],
@@ -64,36 +64,56 @@ export default function page() {
     price: new Set<string>(),
   });
 
+  const [searchQuery, setSearchQuery] = useState("");
+  const [sortOption, setSortOption] = useState("All Products");
+
   const filteredProducts = products.filter((product) => {
-  const selectedCategories = selectedFilters.category;
-  const selectedPrices = selectedFilters.price;
+    const selectedCategories = selectedFilters.category;
+    const selectedPrices = selectedFilters.price;
 
-  const matchCategory =
-    selectedCategories.size === 0 || selectedCategories.has(product.category);
+    const matchCategory =
+      selectedCategories.size === 0 || selectedCategories.has(product.category);
 
-  const matchPrice =
-    selectedPrices.size === 0 ||
-    Array.from(selectedPrices).some((priceRange) => {
-      const price = product.price;
-      switch (priceRange) {
-        case "under-250k":
-          return price < 250000;
-        case "250k-500k":
-          return price >= 250000 && price <= 500000;
-        case "500k-1m":
-          return price > 500000 && price <= 1000000;
-        case "1m-2m":
-          return price > 1000000 && price <= 2500000;
-        case "over-2m":
-          return price > 2500000;
-        default:
-          return true;
+    const matchPrice =
+      selectedPrices.size === 0 ||
+      Array.from(selectedPrices).some((priceRange) => {
+        const price = product.price;
+        switch (priceRange) {
+          case "under-250k":
+            return price < 250000;
+          case "250k-500k":
+            return price >= 250000 && price <= 500000;
+          case "500k-1m":
+            return price > 500000 && price <= 1000000;
+          case "1m-2m":
+            return price > 1000000 && price <= 2500000;
+          case "over-2m":
+            return price > 2500000;
+          default:
+            return true;
       }
     });
 
-    return matchCategory && matchPrice;
-  });
+    const matchSearch =
+      product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (product.description?.toLowerCase().includes(searchQuery.toLowerCase()) ?? false);
 
+    return matchCategory && matchPrice && matchSearch;
+  });
+  products.sort((a, b) => {
+    switch (sortOption) {
+      case "Price: Low to High":
+        return a.price - b.price;
+      case "Price: High to Low":
+        return b.price - a.price;
+      case "Newest":
+        return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+      case "Best Rating":
+        return b.price - a.price; // ini masih salah ya harus disesuain sm angka rating aslinya
+      default:
+        return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+    }
+  });
 
   return (
     <>
@@ -145,10 +165,26 @@ export default function page() {
                             <div className="flex h-5 shrink-0 items-center">
                               <div className="group grid size-4 grid-cols-1">
                                 <input
-                                  defaultValue={option.value}
+                                  value={option.value}
                                   id={`filter-mobile-${section.id}-${optionIdx}`}
                                   name={`${section.id}[]`}
                                   type="checkbox"
+                                  checked={selectedFilters[section.id as keyof typeof selectedFilters]?.has(option.value)}
+                                  onChange={(e) => {
+                                    const filterType = section.id as keyof typeof selectedFilters;
+                                    const newSet = new Set(selectedFilters[filterType]);
+
+                                    if (e.target.checked) {
+                                      newSet.add(option.value);
+                                    } else {
+                                      newSet.delete(option.value);
+                                    }
+
+                                    setSelectedFilters({
+                                      ...selectedFilters,
+                                      [filterType]: newSet,
+                                    });
+                                  }}
                                   className="col-start-1 row-start-1 rounded-sm border border-gray-300 accent-[#493628]"
                                 />
                               </div>
@@ -173,12 +209,16 @@ export default function page() {
         {/* 🍭 large screen */}
         <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex items-baseline justify-between border-b border-gray-200 pt-6 pb-6">
-            <h1 className="text-4xl !font-semibold tracking-tight text-gray-900">Products Catalog</h1>
+            <h1 className="text-4xl !font-semibold tracking-tight text-gray-900">Products</h1>
               <div className="flex items-center">
                 <div className="relative w-full pr-5">
-                  <input type="text" id="search"
-                      className="bg-white text-lg font-medium rounded-full border px-10 py-2 transition-all ease-in duration-300 w-full focus:outline-primary"
-                      placeholder="Search here..." />
+                  <input 
+                    type="text" 
+                    id="search"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="bg-white text-lg font-medium rounded-full border px-10 py-2 transition-all ease-in duration-300 w-full focus:outline-primary"
+                    placeholder="Search here..." />
                   <HiSearch className="absolute left-3 top-1/2 -translate-y-1/2 size-6" />
                 </div>
               <Menu as="div" className="relative inline-block text-left">
@@ -199,25 +239,20 @@ export default function page() {
                   <div className="py-1">
                     {sortOptions.map((option) => (
                       <MenuItem key={option.name}>
-                        <a
-                          href={option.href}
+                        <button
+                          onClick={() => setSortOption(option.name)}
                           className={classNames(
-                            option.current ? '!font-medium !text-[#493628]' : '!text-[#BFB29E] !font-medium',
-                            'block px-4 py-2 text-base data-focus:bg-gray-100 data-focus:outline-hidden !font-medium',
+                            sortOption === option.name ? '!font-medium !text-[#493628] !text-left !w-full' : '!text-[#BFB29E] !font-medium !text-left !w-full',
+                            'block px-4 py-2 text-base data-focus:bg-gray-100 data-focus:outline-hidden',
                           )}
                         >
                           {option.name}
-                        </a>
+                        </button>
                       </MenuItem>
                     ))}
                   </div>
                 </MenuItems>
               </Menu>
-
-              <button type="button" className="-m-2 ml-5 p-2 text-gray-400 hover:text-gray-500 sm:ml-7">
-                <span className="sr-only">View grid</span>
-                <HiSquares2X2 aria-hidden="true" className="size-5" />
-              </button>
               <button
                 type="button"
                 onClick={() => setMobileFiltersOpen(true)}

@@ -1,7 +1,9 @@
 "use client"
 
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
+import { HiEyeOff } from "react-icons/hi";
+import { HiEye } from "react-icons/hi2";
 
 interface SignInFormProps{
   onSubmit: (formData: any) => void;
@@ -22,6 +24,17 @@ export default function SignInForm({onSubmit}: SignInFormProps) {
 
     onSubmit(formData);
   }
+
+  const passwordRef = useRef<HTMLInputElement>(null);
+  const [showPassword, setShowPassword] = useState(false);
+
+  const togglePasswordVisibility = () => {
+    setShowPassword((prev) => !prev);
+
+    if (passwordRef.current) {
+      passwordRef.current.type = showPassword ? "password" : "text";
+    }
+  };
 
   return (
     <form onSubmit={handleSubmit}>
@@ -55,17 +68,23 @@ export default function SignInForm({onSubmit}: SignInFormProps) {
         >
           Password
         </label>
-        <input
-          type="password"
-          className="form-control !rounded-lg text-lg"
-          id="password"
-          name="password"
-          aria-describedby="password"
-          placeholder="Enter your password"
-          value={password}
-          onChange={(e) => {setPassword(e.target.value)}}
-          required
-        />
+        <div className="relative">
+          <input
+            type={showPassword ? "text" : "password"}
+            ref={passwordRef}
+            className="form-control !rounded-lg text-lg"
+            id="password"
+            name="password"
+            aria-describedby="password"
+            placeholder="Enter your password"
+            value={password}
+            onChange={(e) => {setPassword(e.target.value)}}
+            required
+          />
+          <span onClick={togglePasswordVisibility} className="absolute text-2xl top-1/2 right-4 -translate-y-1/2 text-gray-500 cursor-pointer">
+            {showPassword ? <HiEyeOff /> : <HiEye />}
+          </span>
+        </div>
       </div>
       <div className="button-group d-flex flex-column mx-auto pt-50">
         <button
