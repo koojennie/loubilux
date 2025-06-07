@@ -1,18 +1,23 @@
+'use client';
+
+import { useSidebar } from "@/context/SidebarContext";
 import Row from "./Row";
+import { FaWhatsapp } from "react-icons/fa6";
 
 export default function TransactionDetailContent() {
+  const { expanded } = useSidebar();
   return (
-    <main className="main-wrapper">
+    <main className={`main-wrapper ${expanded ? 'expanded' : 'collapsed'}`}>
             <div className="ps-lg-0">
-                <h2 className="text-4xl fw-bold color-palette-1 mb-30">Details #GG001</h2>
+                <h2 className="text-4xl fw-bold color-palette-1 mb-30">Order Detail #ORD-20250508-001</h2>
                 <div className="details">
                     <div className="main-content main-content-card overflow-auto">
                         <section className="checkout mx-auto">
                             <div className="d-flex flex-row  align-items-center justify-content-between mb-30">
                                 <div className="game-checkout d-flex flex-row align-items-center">
                                     <div className="pe-4">
-                                        <div className="cropped">
-                                            <img src="/img/Thumbnail-3.png" width="200" height="130"
+                                        <div className="">
+                                            <img src="/icon/loubilux-logo.png" width="100" height="100"
                                                 className="img-fluid" alt=""/>
                                         </div>
                                     </div>
@@ -44,9 +49,11 @@ export default function TransactionDetailContent() {
                                 <Row label="Bank Account Name" value="PT Store GG Indonesia"/>
                                 <Row label="Bank Number" value="1800 - 9090 - 2021"/>
                             </div>
-                            <div className="d-md-block d-flex flex-column w-100">
-                                <a className="btn btn-whatsapp rounded-pill fw-medium text-white border-0 text-lg" href="#"
-                                    role="button">WhatsApp ke Admin</a>
+                            <div className="w-60 mt-8">
+                                <a className="flex items-center justify-center gap-2 !mx-auto !rounded-full py-3 px-7 text-center bg-[#493628] !font-semibold text-lg text-white transition-all duration-500 hover:bg-[#705C53]" href="https://api.whatsapp.com/send/?phone=6281212768921&text&type=phone_number&app_absent=0" target="_blank" role="button">
+                                    <FaWhatsapp />
+                                    Contact Admin
+                                </a>
                             </div>
                         </section>
                     </div>

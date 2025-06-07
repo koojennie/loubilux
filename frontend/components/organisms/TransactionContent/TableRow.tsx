@@ -14,12 +14,6 @@ interface TableRowProps {
 
 export default function TableRow(props: TableRowProps) {
     const { image, title, category, quantity, price, status } = props;
-    const statusClass = cx({
-        'float-start icon-status' : true,
-        pending: status === 'Pending',
-        success: status === 'Success',
-        failed: status === 'Failed',
-    });
 
     const statusConfig = {
       Pending: {
