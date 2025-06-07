@@ -1,13 +1,14 @@
 import Link from "next/link";
 import cx from "classnames";
 import Image from "next/image";
+import { HiClock, HiCheckCircle, HiXCircle } from "react-icons/hi";
 
 interface TableRowProps {
     image: string;
     title: string;
     category: string;
     quantity: number;
-    price: number;
+    price: string;
     status: 'Pending' | 'Success' | 'Failed';
 }
 
@@ -19,6 +20,27 @@ export default function TableRow(props: TableRowProps) {
         success: status === 'Success',
         failed: status === 'Failed',
     });
+
+    const statusConfig = {
+      Pending: {
+        icon: <HiClock className="me-1 text-yellow-600" />,
+        className: "bg-yellow-100 text-yellow-800",
+      },
+      Success: {
+        icon: <HiCheckCircle className="me-1 text-green-600" />,
+        className: "bg-green-100 text-green-800",
+      },
+      Failed: {
+        icon: <HiXCircle className="me-1 text-red-600" />,
+        className: "bg-red-100 text-red-800",
+      },
+    };
+
+    const { icon, className } = statusConfig[status] || {
+      icon: null,
+      className: "bg-gray-100 text-gray-800",
+    };
+
   return (
     <tr data-category="pending" className="align-middle">
       <th scope="row">
@@ -42,14 +64,12 @@ export default function TableRow(props: TableRowProps) {
         <p className="fw-medium color-palette-1 m-0">{quantity} pcs</p>
       </td>
       <td>
-        <p className="fw-medium color-palette-1 m-0">Rp {price}</p>
+        <p className="fw-medium color-palette-1 m-0">{price}</p>
       </td>
       <td>
-        <div>
-          <span className={statusClass}></span>
-          <p className="fw-medium text-start color-palette-1 m-0 position-relative">
-            {status}
-          </p>
+        <div className={`inline-flex items-center px-2.5 py-0.5 rounded text-sm font-medium ${className}`}>
+          {icon}
+          {status}
         </div>
       </td>
       <td>

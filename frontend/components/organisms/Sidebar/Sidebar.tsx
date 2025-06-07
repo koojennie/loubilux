@@ -1,5 +1,6 @@
 "use client";
 
+import { useSidebar } from "@/context/SidebarContext";
 import { useState } from "react";
 import Footer from "./Footer";
 import MenuItem from "./MenuItem";
@@ -12,11 +13,11 @@ interface SidebarProps {
 
 export default function Sidebar(props: SidebarProps) {
   const { activeMenu } = props;
-  const [expanded, setExpanded] = useState(true);
+  const { expanded, toggleSidebar } = useSidebar();
   return (
-    <section className="sidebar">
+    <section className={`sidebar ${!expanded ? 'collapsed' : ''}`}>
       <div className="content relative pt-50 pb-30 ps-30">
-        <button onClick={() => setExpanded(curr => !curr)} className="absolute top-4 right-4 p-1.5 !rounded-lg bg-gray-50 hover:bg-gray-100">
+        <button onClick={toggleSidebar} className="absolute top-4 right-4 p-1.5 !rounded-lg bg-gray-50 hover:bg-gray-100">
           {expanded ? <LuChevronFirst className="w-[32px] h-[32px]" /> : <LuChevronLast className="w-[32px] h-[32px]" />}
         </button>
         <Profile />

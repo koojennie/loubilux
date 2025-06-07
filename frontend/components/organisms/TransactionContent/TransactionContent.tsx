@@ -4,6 +4,7 @@ import React, {useState, useEffect} from "react";
 import axios from "axios";
 import ButtonTab from "./ButtonTab";
 import TableRow from "./TableRow";
+import { useSidebar } from "@/context/SidebarContext";
 
 export default function TransactionContent() {
 
@@ -15,8 +16,10 @@ export default function TransactionContent() {
     }
   }
 
+  const { expanded } = useSidebar();
+
   return (
-    <main className="main-wrapper">
+    <main className={`main-wrapper ${expanded ? 'expanded' : 'collapsed'}`}>
       <div className="ps-lg-0">
         <h2 className="text-4xl fw-bold color-palette-1 mb-30">
           My Transactions
@@ -41,8 +44,8 @@ export default function TransactionContent() {
           <p className="text-lg fw-medium color-palette-1 mb-14">
             Latest Transactions
           </p>
-          <div className="main-content main-content-table overflow-auto">
-            <table className="table table-borderless">
+          <div className="main-content main-content-table overflow-x-auto md:overflow-x-visible">
+            <table className="min-w-[640px] table table-borderless">
               <thead>
                 <tr className="color-palette-1">
                   <th className="" scope="col">
@@ -50,15 +53,15 @@ export default function TransactionContent() {
                   </th>
                   <th scope="col">Quantity</th>
                   <th scope="col">Price</th>
-                  <th scope="col">Status</th>
-                  <th scope="col">Action</th>
+                  <th className="" scope="col">Status</th>
+                  <th className="w-10" scope="col">Action</th>
                 </tr>
               </thead>
               <tbody id="list_status_item">
-                <TableRow image="featured-item1" title="Coach Mollie Tote Bag" category="Bag" quantity={1} price={290000} status="Pending" />
-                <TableRow image="featured-item2" title="Michael Kors Crossbody" category="Bag" quantity={1} price={740000} status="Success" />
-                <TableRow image="featured-item3" title="Lacoste Geneva 2001138" category="Wrist Watch" quantity={1} price={120000} status="Failed" />
-                <TableRow image="featured-item4" title="Longchamp Sunglasses" category="Sunglasses" quantity={1} price={200000} status="Pending" />
+                <TableRow image="featured-item1" title="Coach Mollie Tote Bag" category="Bag" quantity={1} price={new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(Number(3190000))} status="Pending" />
+                <TableRow image="featured-item2" title="Michael Kors Crossbody" category="Bag" quantity={1} price={new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(Number(1290000))} status="Success" />
+                <TableRow image="featured-item3" title="Lacoste Geneva 2001138" category="Wrist Watch" quantity={1} price={new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(Number(1950000))} status="Failed" />
+                <TableRow image="featured-item4" title="Longchamp Sunglasses" category="Sunglasses" quantity={1} price={new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(Number(1350000))} status="Pending" />
               </tbody>
             </table>
           </div>

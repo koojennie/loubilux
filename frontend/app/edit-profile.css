@@ -10,6 +10,18 @@
     padding: 50px 50px 50px 0px;
 }
 
+.edit-profile main.main-wrapper {
+  transition: margin-left 0.3s ease;
+}
+
+.edit-profile main.main-wrapper.expanded {
+  margin-left: 340px;
+}
+
+.edit-profile main.main-wrapper.collapsed {
+  margin-left: 80px;
+}
+
 .edit-profile .bg-card{
     background-color: #FFF;
     border-radius: 1rem;

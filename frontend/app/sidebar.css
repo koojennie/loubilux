@@ -1,3 +1,28 @@
+.sidebar.collapsed .content {
+  width: 80px; /* Sidebar minimal hanya untuk tombol collapse */
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.sidebar.collapsed .menus,
+.sidebar.collapsed .sidebar-footer,
+.sidebar.collapsed .profile,
+.sidebar.collapsed .user {
+  display: none;
+}
+
+.sidebar.collapsed .content {
+    background-color: transparent;
+}
+
+.sidebar.collapsed .content button {
+    background-color: #493628;
+    color: white;
+}
+
+.sidebar .content {
+  transition: width 0.3s ease;
+}
 
 .sidebar .content {
     background: #FFFFFF;
