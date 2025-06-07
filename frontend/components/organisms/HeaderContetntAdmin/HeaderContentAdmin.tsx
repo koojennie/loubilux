@@ -72,11 +72,11 @@ const HeaderContentAdmin = <T,>({
     <div className="relative mx-0 mt-4 md:mx-4 text-gray-700">
       <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
         <div>
-          <h5 className="text-2xl font-semibold text-blue-gray-900">{header}</h5>
-          <p className="mt-1 text-base text-gray-700">{subHeader}</p>
+          <p className="text-2xl font-semibold text-[#493628]">{header}</p>
+          <p className="text-base text-[#493628] mt-1">{subHeader}</p>
         </div>
           <button
-            className="flex items-center gap-2 bg-gray-900 py-2 px-3 text-white text-xs font-bold uppercase rounded-lg shadow-md hover:shadow-lg"
+            className="flex items-center gap-2 bg-[#493628] py-2 px-3 text-white text-xs font-bold uppercase rounded-lg shadow-md hover:shadow-lg"
             type="button"
             onClick={toAddPage}
           >

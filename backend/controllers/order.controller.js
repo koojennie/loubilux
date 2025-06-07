@@ -383,13 +383,13 @@ const getMontlyRevenue = async (req, res) => {
   try {
 
     const montlyRevenueData = await sequelize.query(`
-      SELECT 
-      TO_CHAR("createdAt", 'YYYY-MM') AS month,
-      SUM("totalPrice") AS totalRevenue
-      FROM "Orders"
-      GROUP BY month
-      ORDER BY month ASC;
-    `, {
+        SELECT 
+        TO_CHAR("createdAt", 'YYYY-MM') AS month,
+        SUM("totalPrice") AS totalRevenue
+        FROM "Orders"
+        GROUP BY month
+        ORDER BY month ASC;
+      `, {
       type: Sequelize.QueryTypes.SELECT
     });
 
@@ -412,35 +412,45 @@ const getMontlyRevenue = async (req, res) => {
 
 const getRevenueByCategory = async (req, res) => {
   try {
-    const results = await Order.findAll({
-      attributes:[
-        [Sequelize.col("Product.Category.name"), "categoryName"],
-        [Sequelize.fn("SUM", Sequelize.literal("price * quantity")), "totalRevenue"]
+    const results = await OrderLineItem.findAll({
+      attributes: [
+        [Sequelize.col('product.Category.name'), 'categoryName'],
+        [Sequelize.fn('SUM', Sequelize.col('subPrice')), 'totalRevenue']
       ],
       include: [
         {
           model: Product,
+          as: 'product',
           attributes: [],
-          include: {
-            model: Category,
-            attributes: [],
-          }
-        }
+          include: [
+            {
+              model: Category,
+              as: 'Category',
+              attributes: [],
+            },
+          ],
+        },
       ],
-      group:["Product.Category.id"],
+      group: ['product.categoryId', 'product.Category.name'],
+      order: [[Sequelize.fn('SUM', Sequelize.col('subPrice')), 'DESC']],
       raw: true,
-      
     });
 
+    res.status(200).json({
+      status: 'success',
+      message: 'Revenue by category retrieved successfully',
+      data: results,
+    });
   } catch (error) {
-    console.error("Error getRevenueMonthlyRevenue", error);
+    console.error('Error getRevenueByCategory:', error);
     res.status(500).json({
       status: 'error',
-      message: "Internal Server Error",
+      message: 'Internal Server Error',
       error: error.message,
-    })
+    });
   }
-}
+};
+
 
 module.exports = {
   createOrderFromCart,

@@ -7,7 +7,7 @@ const router = express.Router();
 
 router.post('/create', authenticateUser, authorizeRoles('user', 'admin', 'superadmin'), createOrderFromCart);
 router.get('/all', authenticateUser, authorizeRoles('admin', 'superadmin'), getAllOrders);
-router.get('/orderbyorderId/:orderId', authenticateUser, getOrderById)
+router.get('/orderbyid/:orderId', authenticateUser, getOrderById)
 router.get('/orderbyuser', authenticateUser, getUserOrders);
 router.get('/montlyrevenue', authenticateUser, getMontlyRevenue);
 router.get('/revenuepercategory', authenticateUser, authorizeRoles('admin', 'superadmin'), getRevenueByCategory)

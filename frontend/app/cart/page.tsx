@@ -8,6 +8,7 @@ import { useRouter } from 'next/navigation';
 import { useCart } from "@/context/CartContext";
 import { useCheckout } from "@/context/CheckoutContext";
 import Navbar from "@/components/organisms/Navbar/Navbar";
+import ModalConfirmation from "@/components/organisms/Modal/ModalConfirmation";
 
 export default function page() {
   const { refreshCart } = useCart();
@@ -16,6 +17,8 @@ export default function page() {
 
   // data cart
   const [cart, setCart] = useState<any>(null);
+  const [isModal, setIsModal] = useState<boolean>(false);
+  const [selectedProduct, setSelectedProduct] = useState<string | null>(null);
 
   const fetchCartUser = async () => {
     try {
@@ -74,19 +77,17 @@ export default function page() {
     if (!cart) return;
 
     const subtotal = cart.products.reduce((acc: number, item: any) => acc + item.product.price * item.quantity, 0);
-    const delivery = 15000;
-    const total = subtotal + delivery;
+    const total = subtotal;
 
     if (setCheckoutData) {
-      setCheckoutData({ subtotal, delivery, total });
+      setCheckoutData({ subtotal, total });
     }
 
     router.push('/checkout');
   };
 
   const subtotal = cart?.products.reduce((acc: number, item: any) => acc + item.product.price * item.quantity, 0) ?? 0;
-  const delivery = 15000;
-  const total = subtotal + delivery;
+  const total = subtotal;
 
 
   return (
@@ -119,7 +120,7 @@ export default function page() {
                 <div className="img-box">
                   <Image
                     // src="/img/featured-item1.png" // Ganti ke item.product.image jika tersedia dari backend
-                    src={item.product.images?.[0] || "/img/featured-item1.png"}
+                    src={item.product.images?.[0] || "/img/placeholder-image.svg"}
                     className="xl:w-[140px] !rounded-xl object-cover"
                     width={140}
                     height={140}
@@ -142,18 +143,32 @@ export default function page() {
               <div className="flex items-center flex-col min-[550px]:flex-row w-full max-xl:max-w-xl max-xl:mx-auto xl:gap-45 max-sm:gap-5">
                 <div className="flex items-center w-full mx-auto justify-center"
                 >
+                  {/* MINUS */}
                   <button className="group !rounded-l-full px-6 py-[18px] border border-gray-200 flex items-center justify-center shadow-sm hover:bg-gray-50"
-                    onClick={() => updateCartItem(item.product.productId, item.quantity - 1)}
+                    // onClick={() => updateCartItem(item.product.productId, item.quantity - 1)}
+                    onClick={() => {
+                      if(item.quantity === 1){
+                        setSelectedProduct(item.product.productId);
+                        setIsModal(true);
+                      } else {
+                        updateCartItem(item.product.productId, item.quantity - 1);
+                      }
+                    }}
                   >
-                    {/* MINUS */}
-                    <svg className="stroke-gray-900" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none">
-                      <path d="M16.5 11H5.5" strokeWidth="1.6" strokeLinecap="round" />
+                    <svg className="stroke-gray-900 transition-all duration-500 group-hover:stroke-black"
+                      xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22"
+                      fill="none">
+                      <path d="M16.5 11H5.5" stroke="" strokeWidth="1.6" strokeLinecap="round" />
+                      <path d="M16.5 11H5.5" stroke="" strokeOpacity="0.2" strokeWidth="1.6"
+                        strokeLinecap="round" />
+                      <path d="M16.5 11H5.5" stroke="" strokeOpacity="0.2" strokeWidth="1.6"
+                        strokeLinecap="round" />
                     </svg>
                   </button>
 
                   <input
                     type="text"
-                    className="border-y border-gray-200 outline-none text-gray-900 font-semibold text-lg w-full max-w-[118px] min-w-[80px] text-center bg-transparent"
+                    className="border-y border-gray-200 outline-none text-gray-900 font-semibold text-lg w-full max-w-[118px] min-w-[80px] placeholder:text-gray-900 py-[15px] text-center bg-transparent"
                     value={item.quantity}
                     readOnly
                   />
@@ -162,8 +177,18 @@ export default function page() {
                     onClick={() => updateCartItem(item.product.productId, item.quantity + 1)}
                   >
                     {/* PLUS */}
-                    <svg className="stroke-gray-900" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none">
+                    {/* <svg className="stroke-gray-900" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none">
                       <path d="M11 5.5V16.5M16.5 11H5.5" strokeWidth="1.6" strokeLinecap="round" />
+                    </svg> */}
+                    <svg className="stroke-gray-900 transition-all duration-500 group-hover:stroke-black"
+                      xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22"
+                      fill="none">
+                      <path d="M11 5.5V16.5M16.5 11H5.5" stroke="" strokeWidth="1.6"
+                        strokeLinecap="round" />
+                      <path d="M11 5.5V16.5M16.5 11H5.5" stroke="" strokeOpacity="0.2" strokeWidth="1.6"
+                        strokeLinecap="round" />
+                      <path d="M11 5.5V16.5M16.5 11H5.5" stroke="" strokeOpacity="0.2" strokeWidth="1.6"
+                        strokeLinecap="round" />
                     </svg>
                   </button>
                 </div>
@@ -181,29 +206,40 @@ export default function page() {
               <p className="font-normal text-xl leading-8 text-[#705C53]">Sub Total</p>
               <h6 className="font-semibold text-xl leading-8 text-[#493628]">{subtotal.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })}</h6>
             </div>
-            <div className="flex items-center justify-between w-full pb-6 border-b border-gray-200">
-              <p className="font-normal text-xl leading-8 text-[#705C53]">Delivery Charge</p>
-              <h6 className="font-semibold text-xl leading-8 text-[#493628]">{delivery.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })}</h6>
-            </div>
             <div className="flex items-center justify-between w-full py-6">
               <p className="font-medium text-2xl leading-9 text-[#493628]">Total</p>
               <h6 className="font-medium text-2xl leading-9 text-[#493628]">{total.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })}</h6>
             </div>
           </div>
           <div className="flex items-center flex-col sm:flex-row justify-center gap-4 mt-8">
-              <button
-                className="!rounded-full w-full max-w-[280px] py-4 px-4 text-center justify-center items-center bg-[#493628] font-semibold text-lg text-white flex transition-all duration-500 hover:bg-[#705C53]"
-                onClick={handleButtonCheckout}
-                >Continue
-                to Checkout
-                <svg className="ml-2" xmlns="http://www.w3.org/2000/svg" width="23" height="22" viewBox="0 0 23 22"
-                  fill="none">
-                  <path d="M8.75324 5.49609L14.2535 10.9963L8.75 16.4998" stroke="white" strokeWidth="1.6"
-                    strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </button>
+            <button
+              className="!rounded-full w-full max-w-[280px] py-4 px-4 text-center justify-center items-center bg-[#493628] font-semibold text-lg text-white flex transition-all duration-500 hover:bg-[#705C53]"
+              onClick={handleButtonCheckout}
+            >Continue
+              to Checkout
+              <svg className="ml-2" xmlns="http://www.w3.org/2000/svg" width="23" height="22" viewBox="0 0 23 22"
+                fill="none">
+                <path d="M8.75324 5.49609L14.2535 10.9963L8.75 16.4998" stroke="white" strokeWidth="1.6"
+                  strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </button>
           </div>
         </div>
+        <ModalConfirmation
+          isOpen={isModal}
+          onClose={() => { 
+            setIsModal(!isModal);
+            setSelectedProduct(null);
+          }}
+          onConfirm={() => {
+            if(selectedProduct){
+              updateCartItem(selectedProduct, 0);
+              setIsModal(false);
+              setSelectedProduct(null);
+            }
+           }}
+          textModal="Apakah ada yakin ingin menghapus item ini dari keranjang kamu ?"
+        />
       </section>
     </>
   )

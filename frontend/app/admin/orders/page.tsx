@@ -34,7 +34,14 @@ const OrdersPage = () => {
         }
       );
 
-      setOrders(response.data.data);
+      const results = response.data.data.map((order: Order) => (
+        {
+          ...order,
+          id: order.orderId,
+        }
+      ));
+
+      setOrders(results);
       setPage(response.data.page);
       setTotalItems(response.data.totalOrders);
       setLimit(response.data.limit);
@@ -85,8 +92,8 @@ const OrdersPage = () => {
           { key: 'orderId', label: 'Order Id' as keyof Order },
           { key: 'user', label: 'Customer' as keyof Order },
           { key: 'orderDate', label: 'Order Date' as keyof Order },
+          { key: 'totalPrice', label: 'Total Price' as keyof Order },
           { key: 'statusOrder', label: 'Status Order' as keyof Order },
-          // { key: 'paymentMethod', label: 'Payment Status' as keyof Order },
           // { key: 'category', label: 'Category' },
         ]}
         tableType="orders"
@@ -101,7 +108,7 @@ const OrdersPage = () => {
         }}
       />
 
-      {/* <ModalViewDetails
+      <ModalViewDetails
         isOpen={isModalViewDetailOpen}
         onClose={handleOpenCloseModalViewDetail}
         data={selectedViewDetailOrder}
@@ -116,7 +123,7 @@ const OrdersPage = () => {
           { key: 'totalPrice', label: 'Total Price' as keyof Order },
           { key: 'items', label: 'Items' as keyof Order },
         ]}
-      />  */}
+      /> 
       <ModalReport isOpen={isModaReport} setIsOpen={setIsModalReport} />
     </div>
   );

@@ -150,9 +150,9 @@ const ProductForm: React.FC<ProductFormProps> = ({ onSubmit, onEditSubmit ,isEdi
     <div>
       <form onSubmit={handleSubmit} action="">
         <div className="flex flex-col py-8 pt-8 mb-12 px-8 ">
-          <h4 className="flex text-lg mb-1 font-semibold text-slate-700">
+          <p className="flex text-lg mb-1 font-semibold text-[#493628]">
             {isEdit ? `Edit Product ${generatedProductCode}`: 'Add New Product'}
-          </h4>
+          </p>
           <p className="mb-4 text-sm mt-1 text-slate-400">
             Fill in the information below to add a new product.
           </p>
@@ -161,7 +161,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ onSubmit, onEditSubmit ,isEdi
             <div className="col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
               {/* Product Code */}
               <div className="w-full">
-                <p className="block mb-2 font-semibold text-base text-slate-600">Product Code</p>
+                <p className="block mb-2 font-semibold text-base text-[#493628]">Product Code</p>
                 <p className="text-slate-500 text-sm truncate">{generatedProductCode || `Please Choose Category first`}</p>
                 <input type="hidden" name='productCode' value={generatedProductCode} />
               </div>

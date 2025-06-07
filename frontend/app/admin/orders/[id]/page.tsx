@@ -16,7 +16,7 @@ const OrderDetailPage: React.FC = () => {
     try {
       setIsLoading(true);
       const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/orders/${orderId}`,
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/orders/orderbyid/${orderId}`,
         { withCredentials: true }
       );
       setOrder(response.data.data);
@@ -43,7 +43,7 @@ const OrderDetailPage: React.FC = () => {
         ) : order ? (
           <OrderDetailComponent order={order} />
         ) : (
-          <p>No order found.</p>
+          <p>No order found...</p>
         )}
       </div>
     </div>

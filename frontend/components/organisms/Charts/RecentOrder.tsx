@@ -120,24 +120,18 @@ export default function RecentOrders() {
               >
                 OrderDate
               </TableCell>
-              {/* <TableCell
+              <TableCell
                 isHeader
                 className="py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
               >
-                Category
+                Total Price
               </TableCell>
               <TableCell
                 isHeader
                 className="py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
               >
-                Price
+                Status Order
               </TableCell>
-              <TableCell
-                isHeader
-                className="py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
-              >
-                Status
-              </TableCell> */}
             </TableRow>
           </TableHeader>
 
@@ -153,7 +147,40 @@ export default function RecentOrders() {
                   <div>{order.user}</div>
                 </TableCell>
                 <TableCell className="py-3">
-                  <div>{order.orderDate instanceof Date ? order.orderDate.toLocaleString() : String(order.orderDate)}</div>
+                  {(() => {
+                    const rawDate = order.orderDate as string;
+                    if (!rawDate) return <div>-</div>;
+                    try {
+                      const [datePart, timePart] = rawDate.split(", ");
+                      const [day, month, year] = datePart.split("/").map(Number);
+                      const [hour, minute, second] = timePart.split(".").map(Number);
+                      const dateObj = new Date(year, month - 1, day, hour, minute, second);
+                      const options: Intl.DateTimeFormatOptions = {
+                        day: "2-digit",
+                        month: "long",
+                        year: "numeric",
+                      };
+                      const formattedDate = dateObj.toLocaleDateString("id-ID", options);
+                      return <div>{formattedDate}</div>;
+                    } catch {
+                      return <div>{String(order.orderDate)}</div>;
+                    }
+                  })()}
+                </TableCell>
+                <TableCell>
+                  <div>
+                    {new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(Number(order.totalPrice))}
+
+                  </div>
+                </TableCell>
+                <TableCell className="py-3">
+                  <span
+                    className={`px-3 py-1 rounded-md text-xs font-semibold ${order.statusOrder === 'Completed' ? 'bg-green-200 text-green-800' : 'bg-yellow-200 text-yellow-800'
+                      }`}
+                  >
+                    {String(order.statusOrder)}
+                  </span>
+
                 </TableCell>
               </TableRow>
             ))}

@@ -108,9 +108,28 @@ export const renderCellContent = <T extends { [key: string]: any }>(
         </span>
       )
     } else if (col.key === 'orderDate') {
-      const humanReadableDate = value;
+      // const humanReadableDate = value;
+      // console.log(value)  ;
+
+      const rawDate = value;
+
+      const [datePart, timePart] = rawDate.split(", "); 
+
+      const [day, month, year] = datePart.split("/").map(Number); 
+      const [hour, minute, second] = timePart.split(".").map(Number); 
+
+      const dateObj = new Date(year, month - 1, day, hour, minute, second);
+
+      const options: Intl.DateTimeFormatOptions = {
+        day: "2-digit",
+        month: "long",
+        year: "numeric",
+      };
+
+      const formattedDate = dateObj.toLocaleDateString("id-ID", options); 
+
       return (
-        <p className="font-normal text-sm text-slate-800">{humanReadableDate} WIB</p>
+        <p className="font-normal text-sm text-slate-800">{formattedDate}</p>
       )
     } else if (col.key === 'paymentMethod') {
       return (
@@ -137,10 +156,10 @@ export const renderCellContent = <T extends { [key: string]: any }>(
       return (
         <span
           className={`px-3 py-1 rounded-md text-xs font-semibold ${num < 0
-              ? 'bg-red-200 text-red-800'
-              : num > 0
-                ? 'bg-yellow-200 text-yellow-800'
-                : 'bg-green-200 text-green-800'
+            ? 'bg-red-200 text-red-800'
+            : num > 0
+              ? 'bg-yellow-200 text-yellow-800'
+              : 'bg-green-200 text-green-800'
             }`}
         >
           {String(value)}
