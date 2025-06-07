@@ -8,8 +8,9 @@ export interface User {
     phoneNumber: string;
     role: string;
     profilePicture: string;
-    createdAt: string;
-    updateAt: string;
+    rating: number;
+    createdAt: string | Date;
+    updateAt: string | Date;
 }
 
 // interface Category 
@@ -32,7 +33,7 @@ export interface Product {
     statusPublish: string;
     images: string[];
     description: string;
-    category: Category;
+    category: Category | string;
     createdAt?: Date;
     updateAt?: Date;
 }
