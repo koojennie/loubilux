@@ -59,10 +59,6 @@
     padding: 10px 0px;
 }
 
-.transactions-detail .details table thead tr th{
-    font-weight: 400;
-}
-
 .transactions-detail .details .icon-status{
     width: 6px;
     height: 6px;

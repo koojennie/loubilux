@@ -22,7 +22,7 @@ export default function TransactionContent() {
     <main className={`main-wrapper ${expanded ? 'expanded' : 'collapsed'}`}>
       <div className="ps-lg-0">
         <h2 className="text-4xl fw-bold color-palette-1 mb-30">
-          My Transactions
+          My Orders
         </h2>
         <div className="mb-30">
           <p className="text-lg color-palette-2 mb-12">You’ve spent</p>
@@ -42,26 +42,24 @@ export default function TransactionContent() {
         </div>
         <div className="latest-transaction">
           <p className="text-lg fw-medium color-palette-1 mb-14">
-            Latest Transactions
+            Latest Orders
           </p>
           <div className="main-content main-content-table overflow-x-auto md:overflow-x-visible">
-            <table className="min-w-[640px] table table-borderless">
+            <table className="min-w-[640px] table table-borderless color-palette-1">
               <thead>
-                <tr className="color-palette-1">
-                  <th className="" scope="col">
-                    Product
+                <tr>
+                  <th scope="col">
+                    Order ID
                   </th>
-                  <th scope="col">Quantity</th>
-                  <th scope="col">Price</th>
+                  <th scope="col">Customer</th>
+                  <th scope="col">Order Date</th>
+                  <th scope="col">Total Price</th>
                   <th className="" scope="col">Status</th>
                   <th className="w-10" scope="col">Action</th>
                 </tr>
               </thead>
               <tbody id="list_status_item">
-                <TableRow image="featured-item1" title="Coach Mollie Tote Bag" category="Bag" quantity={1} price={new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(Number(3190000))} status="Pending" />
-                <TableRow image="featured-item2" title="Michael Kors Crossbody" category="Bag" quantity={1} price={new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(Number(1290000))} status="Success" />
-                <TableRow image="featured-item3" title="Lacoste Geneva 2001138" category="Wrist Watch" quantity={1} price={new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(Number(1950000))} status="Failed" />
-                <TableRow image="featured-item4" title="Longchamp Sunglasses" category="Sunglasses" quantity={1} price={new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(Number(1350000))} status="Pending" />
+                <TableRow orderId="ORD-20250508-001" name="Jennie Koo" orderDate="08 Mei 2025" totalPrice={new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(Number(3190000))} status="Pending" />
               </tbody>
             </table>
           </div>

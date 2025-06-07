@@ -117,7 +117,7 @@ export default function Auth() {
             </li>
             <li>
               <Link className="dropdown-item text-lg color-palette-2" href="/member/transactions">
-                My Transactions
+                My Orders
               </Link>
             </li>
             <li>
