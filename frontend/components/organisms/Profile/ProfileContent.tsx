@@ -27,19 +27,19 @@ export default function ProfileContent() {
                             </div>
                         </div>
                         <div className="pt-30">
-                            <Input label="Full Name" />
+                            <Input label="Full Name" placeholder="Enter your full name"/>
                         </div>
                         <div className="pt-30">
-                            <Input label="Username" />
+                            <Input label="Username" placeholder="Enter your username" />
                         </div>
                         <div className="pt-30">
-                            <Input label="Email Address" />
+                            <Input label="Email Address" placeholder="Enter your email adress" />
                         </div>
                         <div className="pt-30">
-                            <Input label="Password" />
+                            <Input label="Password" placeholder="Enter your password" />
                         </div>
                         <div className="pt-30">
-                            <Input label="Confirm Password" />
+                            <Input label="Confirm Password" placeholder="Confirm your password" />
                         </div>
                         <div className="button-group d-flex flex-column pt-50">
                             <button type="submit" className="btn btn-save fw-medium text-lg text-white rounded-pill"

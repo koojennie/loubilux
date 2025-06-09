@@ -1,9 +1,10 @@
 interface InputProps {
     label: string;
+    placeholder: string;
 }
 
 export default function Input(props: InputProps) {
-    const { label, ...nativeProps } = props;
+    const { label, placeholder, ...nativeProps } = props;
   return (
     <>
       <label
@@ -18,7 +19,7 @@ export default function Input(props: InputProps) {
         id="name"
         name="name"
         aria-describedby="name"
-        placeholder="Enter your name"
+        placeholder={placeholder}
         {...nativeProps}
       />
     </>
