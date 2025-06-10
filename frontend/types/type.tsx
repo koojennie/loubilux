@@ -9,6 +9,8 @@ export interface User {
     role: string;
     profilePicture: string;
     rating: number;
+    password: string;
+    confirmPassword: string;
     createdAt: string | Date;
     updateAt: string | Date;
 }

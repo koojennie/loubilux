@@ -98,6 +98,21 @@ exports.updateUser = async (req, res) => {
         message: "User not found",
       });
     }
+    
+    if (req.body.password) {
+      if (!req.body.confirmPassword) {
+        return res.status(400).json({
+          status: "error",
+          message: "Please provide confirmPassword",
+        });
+      }
+      if (req.body.password !== req.body.confirmPassword) {
+        return res.status(400).json({
+          status: "error",
+          message: "Password and confirmPassword do not match",
+        });
+      }
+    }
 
     const updates = {};
     if (req.body.name) updates.name = req.body.name;

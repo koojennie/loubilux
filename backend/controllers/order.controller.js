@@ -141,6 +141,7 @@ const getUserOrders = async (req, res) => {
         product: item.product?.name || "Deleted Product",
         quantity: item.quantity,
         subPrice: item.subPrice,
+        category: item.product?.category || "Category Not"
       })),
     }));
 
@@ -239,6 +240,11 @@ const getOrderById = async (req, res) => {
             model: Product,
             as: "product",
             attributes: ["productId", "name", "price", "images"],
+            include: {
+              model: Category,
+              as: "Category",
+              attributes: ["name"], 
+            },
           },
         },
       ],
@@ -267,6 +273,7 @@ const getOrderById = async (req, res) => {
         quantity: item.quantity,
         subPrice: item.subPrice,
         images: item.product?.images || [],
+        category: item.product.Category.name
       })),
     };
 

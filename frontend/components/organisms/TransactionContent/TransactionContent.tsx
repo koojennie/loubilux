@@ -1,20 +1,40 @@
 "use client"
 
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import ButtonTab from "./ButtonTab";
 import TableRow from "./TableRow";
 import { useSidebar } from "@/context/SidebarContext";
+import { Order } from "@/types/type";
 
 export default function TransactionContent() {
 
-  const fetchAllOrderUser = () => {
+  const [ordersUser, setOrdersUser] = useState<Order[]>([]);
+
+  const fetchAllOrderUser = async () => {
     try {
-      
+      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/orders/all`,
+        {
+          withCredentials: true
+        }
+      );
+
+      const results = response.data.data.map((order: Order) => (
+        {
+          ...order,
+          id: order.orderId,
+        }
+      ));
+
+      setOrdersUser(results);
     } catch (error) {
       console.error("error message when get all order user");
     }
-  }
+  };
+
+  useEffect(() => {
+    fetchAllOrderUser();
+  }, []);
 
   const { expanded } = useSidebar();
 
@@ -34,9 +54,9 @@ export default function TransactionContent() {
           <div className="col-lg-12 col-12 main-content">
             <div id="list_status_title">
               <ButtonTab title="All" active />
-              <ButtonTab title="Success" active={false}/>
-              <ButtonTab title="Pending" active={false}/>
-              <ButtonTab title="Failed" active={false}/>
+              <ButtonTab title="Success" active={false} />
+              <ButtonTab title="Pending" active={false} />
+              <ButtonTab title="Failed" active={false} />
             </div>
           </div>
         </div>
@@ -59,7 +79,17 @@ export default function TransactionContent() {
                 </tr>
               </thead>
               <tbody id="list_status_item">
-                <TableRow orderId="ORD-20250508-001" name="Jennie Koo" orderDate="08 Mei 2025" totalPrice={new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(Number(3190000))} status="Pending" />
+                {ordersUser.map((orderUser) => (
+                  <TableRow
+                    key={orderUser.orderId}
+                    orderId={orderUser.orderId}
+                    name={typeof orderUser.user === "string" ? orderUser.user : orderUser.user?.name ?? ""}
+                    orderDate={orderUser.orderDate}
+                    totalPrice={new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(Number(orderUser.totalPrice))}
+                    status={orderUser.statusOrder as 'Pending' | 'Success' | 'Failed'}
+                  />
+                ))}
+                {/* <TableRow orderId="ORD-20250508-001" name="Jennie Koo" orderDate="08 Mei 2025" totalPrice={new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(Number(3190000))} status="Pending" /> */}
               </tbody>
             </table>
           </div>

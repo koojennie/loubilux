@@ -1,10 +1,14 @@
 interface InputProps {
     label: string;
     placeholder: string;
+    nameInput: string;
+    value?: string | number;
+    onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    type: "text" | "password" | "hidden" | "email";
 }
 
 export default function Input(props: InputProps) {
-    const { label, placeholder, ...nativeProps } = props;
+    const { label, nameInput , placeholder, value, type, onChange, ...nativeProps } = props;
   return (
     <>
       <label
@@ -14,12 +18,14 @@ export default function Input(props: InputProps) {
         {label}
       </label>
       <input
-        type="text"
+        type={type}
         className="form-control !rounded-lg text-lg"
-        id="name"
-        name="name"
+        id={nameInput}
+        name={nameInput}
         aria-describedby="name"
         placeholder={placeholder}
+        value={value}
+        onChange={onChange}
         {...nativeProps}
       />
     </>
