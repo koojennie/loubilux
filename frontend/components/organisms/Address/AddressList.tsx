@@ -4,6 +4,8 @@ import axios from "axios";
 import { User } from "@/types/type";
 import Input from "../Input/Input";
 import toast, { Toaster } from "react-hot-toast";
+import { MdAddHomeWork } from "react-icons/md";
+import { HiX } from "react-icons/hi";
 
 export default function AddressList() {
   const { expanded } = useSidebar();
@@ -85,6 +87,13 @@ export default function AddressList() {
     }
   }, [selectedAddressId]);
 
+  useEffect(() => {
+    setForm((prev) => ({
+      ...prev,
+      userId: userId
+    }));
+  }, [userId]);
+
   const handleChange = (field: string, value: string) => {
     setForm(prev => ({ ...prev, [field]: value }));
   };
@@ -107,12 +116,12 @@ export default function AddressList() {
           withCredentials: true,
         });
 
-        toast.success('Updated Successfuly');
+        toast.success('Updated successfully');
       } else {
         await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/address/create`, form, {
           withCredentials: true,
         });
-        toast.success('Create New Address Successfully')
+        toast.success('New address created successfully')
       }
 
       await fetchAddresses();
@@ -149,20 +158,83 @@ export default function AddressList() {
     }
   };
 
-
-
   return (
     <main className={`main-wrapper ${expanded ? 'expanded' : 'collapsed'}`}>
       <Toaster/>
       <div className="ps-lg-0">
         <h2 className="text-4xl fw-bold color-palette-1 mb-30">Address</h2>
-        {/* <div className="bg-card p-[1.875rem] w-full max-w-xl"> */}
         <div className="">
           <div className="flex flex-col lg:flex-row gap-6">
 
+            {/* Address Form - Kiri */}
+            <div className="bg-card p-10 rounded-xl w-full lg:w-1/2 max-w-xl color-palette-1">
+              <p className="text-2xl font-semibold mb-4">
+                {selectedAddressId ? 'Update Address' : 'Add Address'}
+              </p>
+              <form onSubmit={handleSubmit}>
+                <div className="mb-4">
+                  <label className="block mb-1 text-lg font-medium">Receiver Name</label>
+                  <input
+                    type="text"
+                    className="input input-bordered rounded-md w-full"
+                    value={form?.receiverName}
+                    onChange={(e) => handleChange('receiverName', e.target.value)}
+                  />
+                </div>
+                <div className="mb-4">
+                  <label className="block mb-1 text-lg font-medium">Phone Number</label>
+                  <input
+                    type="text"
+                    className="input input-bordered rounded-md w-full"
+                    value={form?.phoneNumber}
+                    onChange={(e) => handleChange('phoneNumber', e.target.value)}
+                  />
+                </div>
+                <div className="mb-4">
+                  <label className="block mb-1 text-lg font-medium">Detail</label>
+                  <input
+                    type="text"
+                    className="input input-bordered rounded-md w-full"
+                    value={form?.detail}
+                    onChange={(e) => handleChange('detail', e.target.value)}
+                  />
+                </div>
+                <div className="mb-4">
+                  <label className="block mb-1 text-lg font-medium">City</label>
+                  <input
+                    type="text"
+                    className="input input-bordered rounded-md w-full"
+                    value={form?.city}
+                    onChange={(e) => handleChange('city', e.target.value)}
+                  />
+                </div>
+                <div className="mb-4">
+                  <label className="block mb-1 text-lg font-medium">Province</label>
+                  <input
+                    type="text"
+                    className="input input-bordered rounded-md w-full"
+                    value={form?.province}
+                    onChange={(e) => handleChange('province', e.target.value)}
+                  />
+                </div>
+                <div className="mb-4">
+                  <label className="block mb-1 text-lg font-medium">Postal Code</label>
+                  <input
+                    type="text"
+                    className="input input-bordered rounded-md w-full"
+                    value={form?.postalCode}
+                    onChange={(e) => handleChange('postalCode', e.target.value)}
+                  />
+                </div>
+
+                <button type="submit" className="btn btn-save w-full fw-medium text-lg text-white rounded-pill">
+                  {selectedAddressId ? 'Update Address' : 'Save Address'}
+                </button>
+              </form>
+            </div>
 
             {/* Address list */}
-            <div className="mt-10 ">
+            <div className="mt-10 color-palette-1">
               <p className="text-2xl font-semibold mb-4">Select Address</p>
               <div className="grid gap-4 overflow-y-auto max-h-[600px] pr-2">
                 {addresses.map((address) => (
@@ -179,98 +251,29 @@ export default function AddressList() {
                         e.stopPropagation();
                         handleDeleteAddress(address.addressId);
                       }}
-                      className="absolute top-2 right-2 text-red-500 hover:text-red-700 text-sm"
+                      className="absolute top-2 right-2 text-[#493628] hover:text-[#D6C0B3] text-2xl"
                       title="Delete Address"
                     >
-                      ✕
+                      <HiX />
                     </button>
 
-                    <p className="font-medium">{address.receiverName}</p>
-                    <p className="text-sm">{address.detail}, {address.city}, {address.province}</p>
-                    <p className="text-sm">{address.postalCode}</p>
-                    <p className="text-sm">Phone: {address.phoneNumber}</p>
+                    <p className="font-semibold text-lg">{address.receiverName}</p>
+                    <p className="text-base">{address.detail}, {address.city}, {address.province}</p>
+                    <p className="text-base">{address.postalCode}</p>
+                    <p className="text-base">Phone: {address.phoneNumber}</p>
                   </div>
                 ))}
                 {/* Button to indicate empty form */}
                 <button
                   type="button"
                   onClick={() => setSelectedAddressId(null)}
-                  className={`flex items-center gap-2 border border-dashed border-gray-400 rounded-lg p-3 justify-center hover:bg-gray-100 transition ${selectedAddressId === null ? 'border-[#493628] bg-[#f8f5f2]' : 'border-gray-300'}`}
+                  className={`flex items-center gap-3 bg-[#493628] text-white font-medium !rounded-full py-3 px-4 justify-center hover:bg-[#705C53] transition ${selectedAddressId === null ? 'hover:bg-[#705C53] bg-[#493628] text-white' : 'hover:bg-[#705C53] bg-[#493628] text-white'}`}
                 >
-                  <span className="text-xl font-bold">+</span>
+                  <MdAddHomeWork className="text-xl font-bold" />
                   <span>Add New Address</span>
                 </button>
               </div>
             </div>
-
-
-            {/* Address Form - Kanan */}
-            <div className="bg-card  w-full lg:w-1/2 max-w-xl">
-              <p className="text-2xl font-semibold mb-4">
-                {selectedAddressId ? 'Update Address' : 'Add Address'}
-              </p>
-              <form onSubmit={handleSubmit}>
-                <div className="mb-4">
-                  <label className="block mb-1">Receiver Name</label>
-                  <input
-                    type="text"
-                    className="input input-bordered w-full"
-                    value={form?.receiverName}
-                    onChange={(e) => handleChange('receiverName', e.target.value)}
-                  />
-                </div>
-                <div className="mb-4">
-                  <label className="block mb-1">Phone Number</label>
-                  <input
-                    type="text"
-                    className="input input-bordered w-full"
-                    value={form?.phoneNumber}
-                    onChange={(e) => handleChange('phoneNumber', e.target.value)}
-                  />
-                </div>
-                <div className="mb-4">
-                  <label className="block mb-1">Detail</label>
-                  <input
-                    type="text"
-                    className="input input-bordered w-full"
-                    value={form?.detail}
-                    onChange={(e) => handleChange('detail', e.target.value)}
-                  />
-                </div>
-                <div className="mb-4">
-                  <label className="block mb-1">City</label>
-                  <input
-                    type="text"
-                    className="input input-bordered w-full"
-                    value={form?.city}
-                    onChange={(e) => handleChange('city', e.target.value)}
-                  />
-                </div>
-                <div className="mb-4">
-                  <label className="block mb-1">Province</label>
-                  <input
-                    type="text"
-                    className="input input-bordered w-full"
-                    value={form?.province}
-                    onChange={(e) => handleChange('province', e.target.value)}
-                  />
-                </div>
-                <div className="mb-4">
-                  <label className="block mb-1">Postal Code</label>
-                  <input
-                    type="text"
-                    className="input input-bordered w-full"
-                    value={form?.postalCode}
-                    onChange={(e) => handleChange('postalCode', e.target.value)}
-                  />
-                </div>
-
-                <button type="submit" className="btn btn-primary bg-[#493628] w-full">
-                  {selectedAddressId ? 'Update Address' : 'Save Address'}
-                </button>
-              </form>
-            </div>
-
           </div>
         </div>
       </div>

@@ -17,9 +17,6 @@ export default function page() {
   const [selectedAddressId, setSelectedAddressId] = useState<string | null>(null);
   const { checkoutData } = useCheckout() ?? {};
 
-
-  // if(!checkoutData) return <h1>Loading...</h1>
-
   // console.log(checkoutData);
 
   const [cart, setCart] = useState<any>(null);

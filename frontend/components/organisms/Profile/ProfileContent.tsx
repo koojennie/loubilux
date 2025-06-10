@@ -101,7 +101,44 @@ export default function ProfileContent() {
     reader.readAsDataURL(file);
   };
 
-  if (loading) return <div className="h-screen flex items-center justify-center text-5xl">Loading...</div>
+  if (loading) {
+    return (
+      <main className={`main-wrapper ${expanded ? 'expanded' : 'collapsed'}`}>
+        <div className="ps-lg-0 w-full max-w-xl">
+          <h2 className="text-4xl fw-bold color-palette-1 mb-30 animate-pulse">Loading Settings...</h2>
+          <div className="bg-card p-[1.875rem] w-full max-w-xl rounded-lg shadow-md animate-pulse">
+            <div className="flex gap-5 items-center">
+              <div className="w-[90px] h-[90px] rounded-full bg-gray-300" />
+              <div className="flex flex-col gap-2">
+                <div className="w-[90px] h-[30px] bg-gray-300 rounded" />
+                <div className="w-[90px] h-[30px] bg-gray-300 rounded" />
+              </div>
+            </div>
+
+            <div className="mt-8 space-y-5">
+              {[...Array(4)].map((_, i) => (
+                <div key={i} className="w-full mt-2 h-12 bg-gray-300 rounded" />
+              ))}
+            </div>
+
+            <div className="mt-6 flex items-center gap-3">
+              <div className="w-5 mt-2 h-5 bg-gray-300 rounded" />
+              <div className="w-32 mt-2 h-5 bg-gray-300 rounded" />
+            </div>
+
+            <div className="mt-6 space-y-5">
+              <div className="w-full mt-2 h-12 bg-gray-300 rounded" />
+              <div className="w-full mt-2 h-12 bg-gray-300 rounded" />
+            </div>
+
+            <div className="mt-8">
+              <div className="w-full mt-2 h-12 bg-gray-400 rounded" />
+            </div>
+          </div>
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main className={`main-wrapper ${expanded ? 'expanded' : 'collapsed'}`}>
