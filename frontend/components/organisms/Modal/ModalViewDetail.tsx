@@ -119,7 +119,7 @@ const ModalViewDetails = forwardRef<HTMLDivElement, ModalViewDetailsProps>(({ is
         <div className="flex flex-col p-4 sm:p-6">
           {/* Close Button and Title */}
           <div className="flex justify-between items-center mb-4">
-            <p className="font-bold text-xl sm:text-2xl text-slate-700">
+            <p className="font-bold text-xl sm:text-2xl text-[#493628]">
               {data.name || data.orderId || "Detail"}
             </p>
             <button
@@ -151,7 +151,7 @@ const ModalViewDetails = forwardRef<HTMLDivElement, ModalViewDetailsProps>(({ is
             {/* Image Preview Section */}
             {tableType !== "orders" && tableType !== "categories" && (
               <div className="flex flex-col items-center">
-                <p className="font-semibold text-sm sm:text-base text-slate-700">
+                <p className="font-semibold text-sm sm:text-base text-[#493628]">
                   {tableType === "users"
                     ? "Profile Picture"
                     : "Preview Image"}

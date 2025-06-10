@@ -75,10 +75,10 @@ const CategoryForm: React.FC<CategoryFormProps> = ({ onSubmit, onEditSubmit, isE
     <div>
       <form onSubmit={handleSubmit} action="">
         <div className="flex flex-col py-8 pt-8 mb-12 px-8 ">
-          <h4 className="flex text-lg mb-1 font-semibold text-slate-700">
+          <h4 className="flex text-lg mb-1 font-semibold text-[#493628]">
             {isEdit ? "Edit Category" : "Add New Category"}
           </h4>
-          <p className="mb-4 text-sm mt-1 text-slate-400">
+          <p className="mb-4 text-sm mt-1 text-[#493628]">
             Fill in the information below to add a new category.
           </p>
 
@@ -87,11 +87,11 @@ const CategoryForm: React.FC<CategoryFormProps> = ({ onSubmit, onEditSubmit, isE
 
             {/* prefix */}
             <div className="w-full max-w-28">
-              <label className="block mb-1 text-sm text-slate-700">Prefix Name</label>
+              <label className="block mb-1 text-sm text-[#493628]">Prefix Name</label>
               <div className="relative">
                 <input
                   type="text"
-                  className="w-full h-10 bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded px-3 shadow-sm focus:border-slate-400"
+                  className="w-full h-10 bg-transparent placeholder:text-[#493628] text-[#493628] text-sm border border-slate-200 rounded px-3 shadow-sm focus:border-slate-400"
                   placeholder="BG"
                   value={prefixName}
                   onChange={(e) => { setPrefixName(e.target.value) }
@@ -102,10 +102,10 @@ const CategoryForm: React.FC<CategoryFormProps> = ({ onSubmit, onEditSubmit, isE
 
             {/* Product Name */}
             <div className="w-full max-w-xl">
-              <label className="block mb-1 text-sm text-slate-700">Category Name</label>
+              <label className="block mb-1 text-sm text-[#493628]">Category Name</label>
               <input
                 type="text"
-                className="w-full h-10 bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded px-3 shadow-sm focus:border-slate-400"
+                className="w-full h-10 bg-transparent placeholder:text-[#493628] text-[#493628] text-sm border border-slate-200 rounded px-3 shadow-sm focus:border-slate-400"
                 placeholder="Bag..."
                 value={categoryName}
                 onChange={(e) => { setCategoryName(e.target.value) }
@@ -117,10 +117,10 @@ const CategoryForm: React.FC<CategoryFormProps> = ({ onSubmit, onEditSubmit, isE
 
             {/* description */}
             <div className="w-full">
-              <label className="block mb-1 text-sm text-slate-700">Description</label>
+              <label className="block mb-1 text-sm text-[#493628]">Description</label>
               <textarea
                 rows={4}
-                className="bg-transparent border border-gray-300 text-slate-700 text-sm rounded-lg focus:ring-2 focus:ring-fuchsia-50 focus:border-fuchsia-300 block w-full p-2.5"
+                className="bg-transparent border border-gray-300 text-[#493628] text-sm rounded-lg focus:ring-2 focus:ring-fuchsia-50 focus:border-fuchsia-300 block w-full p-2.5"
                 placeholder="Leave a description category..."
                 value={descriptionCategory}
                 onChange={(e) => { setDescriptionCategory(e.target.value) }

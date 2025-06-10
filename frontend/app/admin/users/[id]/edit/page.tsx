@@ -60,7 +60,7 @@ const EditUser = () => {
 
   return (
     <div className="p-8 md:p-8 ">
-      <div className="relative m-auto flex flex-col rounded-2xl bg-white bg-clip-border text-slate-700 shadow-lg">
+      <div className="relative m-auto flex flex-col rounded-2xl bg-white bg-clip-border text-[#493628] shadow-lg">
         <UserForm isEdit={true} onEditSubmit={handleUserEdit} initialData={user} />
         <Toaster />
       </div>
