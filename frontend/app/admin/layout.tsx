@@ -80,9 +80,6 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
     }
   };
 
-  // errorCode Handling
-  if (loading) return <p className="text-center mt-5">Loading...</p>;
-
   if (errorCode === 401) {
     return (
       <ErrorMessage
