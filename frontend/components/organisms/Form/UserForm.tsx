@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import ImageUploader from "../ImageUploader/ImageUploder";
 import ModalConfirmation from "../Modal/ModalConfirmation";
+import { showConfirmationAlert } from "@/components/Atoms/AlertConfirmation";
 
 interface UserFormProps {
   onSubmit?: (formData: any) => void;
@@ -86,10 +87,21 @@ const UserForm: React.FC<UserFormProps> = ({ onSubmit, onEditSubmit, isEdit = fa
   }
 
   // Handle Open & Close Modal Confirmation
-  const handleIsOpenCloseModalConfirmation = (e: React.FormEvent) => {
+  const handleIsOpenCloseModalConfirmation = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitEvent(e);
-    setIsOpenCloseModalConfirmation(true);
+
+    const isConfirmed = await showConfirmationAlert({
+      title: "Confirmation",
+      text: isEdit
+        ? "Are you sure you want to edit this user?"
+        : "Are you sure you want to add this user?",
+      icon: "question",
+    });
+
+    if (isConfirmed) {
+      handleSubmit(e);
+    }
   }
 
   // handle submit
@@ -312,19 +324,6 @@ const UserForm: React.FC<UserFormProps> = ({ onSubmit, onEditSubmit, isEdit = fa
           </div>
         </div>
       </form>
-
-      <ModalConfirmation
-        isOpen={isOpenCloseModalConfirmation}
-        onClose={() => setIsOpenCloseModalConfirmation(false)}
-        onConfirm={() => handleSubmit(submitEvent!)}
-        textModal="Are you sure add this users?"
-      />
-
-      {/* <ModalConfirmationDelete 
-    isOpen={isOpenCloseModalDeleteConfirmation}
-    onClose={()=> setIsOpenCloseModalDeleteConfirmation(false)}
-    onConfirm={}
-  /> */}
     </div>
 
   );

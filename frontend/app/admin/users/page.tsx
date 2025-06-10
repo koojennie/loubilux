@@ -7,8 +7,8 @@ import toast, { Toaster } from "react-hot-toast";
 import { User } from "@/types/type";
 import TableComponents from "@/components/organisms/Table/TableComponents";
 import HeaderContentAdmin from "@/components/organisms/HeaderContetntAdmin/HeaderContentAdmin";
-import ModalConfirmationDelete from "@/components/organisms/Modal/ModalConfirmationDelete";
 import ModalViewDetail from "@/components/organisms/Modal/ModalViewDetail";
+import DeleteConfirmation from "@/components/Atoms/DeleteConfirmation";
 
 interface UsersProps {
   initialUsers: User[];
@@ -169,11 +169,13 @@ const UserPage = ({ initialUsers }: UsersProps) => {
         ]}
       />
 
-      <ModalConfirmationDelete
+      <DeleteConfirmation
         isOpen={isModalConfirmationDeleteOpen}
         onClose={handleOpenCloseModalConfirmationDelete}
         // onConfirm={() => handleDeleteUsers}
         onConfirm={() => handleDeleteUsers(selectedDeleteUser)}
+        title="Delete User"
+        message="Are you sure? This action cannot be undone."
       />
 
       <Toaster />

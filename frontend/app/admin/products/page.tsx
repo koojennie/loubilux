@@ -7,8 +7,8 @@ import { Product } from '@/types/type';
 import toast, { Toaster } from "react-hot-toast";
 import TableComponents from "@/components/organisms/Table/TableComponents";
 import HeaderContentAdmin from "@/components/organisms/HeaderContetntAdmin/HeaderContentAdmin";
-import ModalConfirmationDelete from "@/components/organisms/Modal/ModalConfirmationDelete";
 import ModalViewDetails from "@/components/organisms/Modal/ModalViewDetail";
+import DeleteConfirmation from "@/components/Atoms/DeleteConfirmation";
 
 
 type ProductsProps = {
@@ -199,12 +199,13 @@ const ProductPage = ({ initialProducts }: ProductsProps) => {
         ref={modalViewDetailRef}
       />
 
-      <ModalConfirmationDelete
+      <DeleteConfirmation
         isOpen={isModalConfirmationDeleteOpen}
         onClose={handleOpenCloseModalConfirmationDelete}
         // onConfirm={() => handleDeleteProduct} 
         onConfirm={() => handleDeleteProduct(selectedDeleteProduct)}
-        ref={modalConfirmationDeleteRef}
+        title="Delete Product"
+        message="Are you sure? This action cannot be undone."
       />
 
       <Toaster />

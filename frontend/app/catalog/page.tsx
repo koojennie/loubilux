@@ -30,8 +30,6 @@ function classNames(...classes: string[]) {
 export default function page() {
 
   const sortOptions = [
-    { name: 'All Products', href: '#', curent: true },
-    { name: 'Best Rating', href: '#', current: false },
     { name: 'Newest', href: '#', current: false },
     { name: 'Price: Low to High', href: '#', current: false },
     { name: 'Price: High to Low', href: '#', current: false },
@@ -76,7 +74,7 @@ export default function page() {
   const [products, setProducts] = useState<Product[]>([]);
 
   const [searchQuery, setSearchQuery] = useState("");
-  const [sortOption, setSortOption] = useState("All Products");
+  const [sortOption, setSortOption] = useState("Newest");
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -180,8 +178,6 @@ export default function page() {
           return b.price - a.price;
         case "Newest":
           return new Date(b.createdAt ?? 0).getTime() - new Date(a.createdAt ?? 0).getTime();
-        // case "Best Rating":
-        //   return b.rating - a.rating; // assuming `rating` exists
         default:
           return 0;
       }
@@ -403,7 +399,39 @@ export default function page() {
 
                   {/* Product grid */}
                   <div className="lg:col-span-3">
-                    {isLoading ? (<div>Loading...</div>) : (<ProductItem products={filteredProducts} />)}
+                    {isLoading ? (
+                      <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6">
+                        {Array.from({ length: 4 }).map((_, i) => (
+                          <div key={i} className="space-y-2">
+                            <div className="bg-secondary bg-opacity-10 rounded-xl w-full aspect-[1/1] placeholder-glow">
+                              <div className="w-full h-full placeholder rounded-xl"></div>
+                            </div>
+                            <p className="placeholder-wave">
+                              <span className="placeholder col-6 rounded"></span>
+                            </p>
+                            <p className="placeholder-wave">
+                              <span className="placeholder col-4 rounded"></span>
+                            </p>
+                            <div className="d-flex justify-center gap-1">
+                              <span className="placeholder btn btn-sm col-2 rounded-pill"></span>
+                              <span className="placeholder btn btn-sm col-3 rounded-pill"></span>
+                              <span className="placeholder btn btn-sm col-2 rounded-pill"></span>
+                            </div>
+                          </div>
+                        ))}
+                      </div>     
+                  ) : filteredProducts.length === 0 ? (
+                    <div className="flex flex-col items-center justify-center py-10 text-center text-[#705C53]">
+                      <img
+                        src="/img/products-empty.svg" 
+                        alt="No products found"
+                        className="w-96 h-96 mb-6"
+                      />
+                      <h3 className="text-2xl font-semibold">No products found</h3>
+                      <p className="mt-1 text-lg">Try adjusting your filters or come back later.</p>
+                    </div>
+                  ) :   
+                  (<ProductItem products={filteredProducts} />)}
                   </div>
                 </div>
               </section>

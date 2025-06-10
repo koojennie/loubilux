@@ -26,18 +26,11 @@ export default function MainBanner() {
               </p>
               <div className="d-flex flex-lg-row flex-column gap-4">
                 <a
-                  className="btn btn-get text-lg text-white rounded-pill"
+                  className="!rounded-full py-3 px-10 text-center bg-[#493628] !font-semibold text-lg text-white transition-all duration-500 hover:bg-[#705C53]"
                   href="#feature"
                   role="button"
                 >
                   Get Started
-                </a>
-                <a
-                  className="btn-learn text-lg color-palette-1 my-auto text-center"
-                  href="#"
-                  role="button"
-                >
-                  Learn More
                 </a>
               </div>
             </div>

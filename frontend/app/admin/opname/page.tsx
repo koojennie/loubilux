@@ -8,7 +8,7 @@ import { Opname } from '@/types/type';
 
 import HeaderContentAdmin from "@/components/organisms/HeaderContetntAdmin/HeaderContentAdmin";
 import TableComponents from '@/components/organisms/Table/TableComponents';
-import ModalConfirmationDelete from '@/components/organisms/Modal/ModalConfirmationDelete';
+import DeleteConfirmation from '@/components/Atoms/DeleteConfirmation';
 
 type OpnameProps = {
     initialOpnames: Opname[];
@@ -184,28 +184,12 @@ const OpnamePage = ({ initialOpnames }: OpnameProps) => {
 
             </div>
 
-            {/* <ModalViewDetails
-        isOpen={isModalViewDetailOpen}
-        onClose={handleOpenCloseModalViewDetail}
-        tableType="products"
-        data={selectedViewDetailProduct}
-        columns={[
-          { key: 'productId', label: 'Product Code' },
-          { key: 'name', label: 'Name' },
-          { key: 'quantity', label: 'Quantity' },
-          { key: 'price', label: 'Price' },
-          { key: 'statusPublish', label: 'Status' },
-          { key: 'category', label: 'Category' },
-        ]}
-        ref={modalViewDetailRef}
-      /> */}
-
-            <ModalConfirmationDelete
+            <DeleteConfirmation
                 isOpen={isModalConfirmationDeleteOpenClosed}
                 onClose={handleOpenCloseModalConfirmationDelete}
-                // onConfirm={() => handleDeleteProduct} 
                 onConfirm={() => handleDeleteOpname(selectedDeleteOpname)}
-                ref={modalConfirmationDeleteRef}
+                title="Delete Opname"
+                message="Are you sure? This action cannot be undone."
             />
 
             <Toaster />

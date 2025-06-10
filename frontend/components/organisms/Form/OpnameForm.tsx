@@ -2,10 +2,8 @@
 import React, { useState, useEffect, FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
-import ImageUploader from "../ImageUploader/ImageUploadersMulti";
-import ModalConfirmation from "../Modal/ModalConfirmation";
-import ModalConfirmationDelete from "../Modal/ModalConfirmationDelete";
 import toast, { Toaster } from "react-hot-toast";
+import { showConfirmationAlert } from "@/components/Atoms/AlertConfirmation";
 
 interface OpnameFormProps {
   onSubmit?: (formData: any) => void;
@@ -79,10 +77,21 @@ const OpnameForm: React.FC<OpnameFormProps> = ({ onSubmit, onEditSubmit, isEdit 
   }
 
   // Handle Open & Close Modal Confirmation
-  const handleIsOpenCloseModalConfirmation = (e: React.FormEvent) => {
+  const handleIsOpenCloseModalConfirmation = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitEvent(e);
-    setIsOpenCloseModalConfirmation(true);
+    
+    const isConfirmed = await showConfirmationAlert({
+      title: "Confirmation",
+      text: isEdit
+      ? "Are you sure you want to edit stock of this product?"
+      : "Are you sure you want to add stock of this product?",
+      icon: "question",
+    });
+        
+    if (isConfirmed) {
+      handleSubmit(e);
+    }
   }
 
   // handle submit
@@ -243,19 +252,6 @@ const OpnameForm: React.FC<OpnameFormProps> = ({ onSubmit, onEditSubmit, isEdit 
           </div>
         </div>
       </form>
-
-      <ModalConfirmation
-        isOpen={isOpenCloseModalConfirmation}
-        onClose={() => setIsOpenCloseModalConfirmation(false)}
-        onConfirm={() => handleSubmit(submitEvent!)}
-        textModal="Are you sure edit this Opname?"
-      />
-
-      {/* <ModalConfirmationDelete 
-    isOpen={isOpenCloseModalDeleteConfirmation}
-    onClose={()=> setIsOpenCloseModalDeleteConfirmation(false)}
-    onConfirm={}
-  /> */}
     </div>
 
   );

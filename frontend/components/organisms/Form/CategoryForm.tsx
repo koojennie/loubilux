@@ -1,10 +1,7 @@
 "use client";
 import React, { useState, useEffect, FormEvent } from "react";
 import { useRouter } from "next/navigation";
-import axios from "axios";
-import ImageUploader from "../ImageUploader/ImageUploadersMulti";
-import ModalConfirmation from "../Modal/ModalConfirmation";
-import ModalConfirmationDelete from "../Modal/ModalConfirmationDelete";
+import { showConfirmationAlert } from "@/components/Atoms/AlertConfirmation";
 
 interface CategoryFormProps {
   onSubmit?: (formData: any) => void;
@@ -23,7 +20,6 @@ const CategoryForm: React.FC<CategoryFormProps> = ({ onSubmit, onEditSubmit, isE
 
   // state open modal 
   const [isOpenCloseModalConfirmation, setIsOpenCloseModalConfirmation] = useState<boolean>(false);
-  const [isOpenCloseModalDeleteConfirmation, setIsOpenCloseModalDeleteConfirmation] = useState<boolean>(false);
   const [submitEvent, setSubmitEvent] = useState<FormEvent | null>(null); // Simpan event
 
 
@@ -37,11 +33,22 @@ const CategoryForm: React.FC<CategoryFormProps> = ({ onSubmit, onEditSubmit, isE
   }, [initialData, isEdit]);
 
   // Handle Open & Close Modal Confirmation
-  const handleIsOpenCloseModalConfirmation = (e: React.FormEvent) => {
+  const handleIsOpenCloseModalConfirmation = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitEvent(e);
-    setIsOpenCloseModalConfirmation(true);
-  }
+
+    const isConfirmed = await showConfirmationAlert({
+      title: "Confirmation",
+      text: isEdit
+        ? "Are you sure you want to edit this category?"
+        : "Are you sure you want to add this category?",
+      icon: "question",
+    });
+
+    if (isConfirmed) {
+      handleSubmit(e);
+    }
+  };
 
   // handle submit
   const handleSubmit = (e: React.FormEvent) => {
@@ -144,19 +151,6 @@ const CategoryForm: React.FC<CategoryFormProps> = ({ onSubmit, onEditSubmit, isE
           </div>
         </div>
       </form>
-
-      <ModalConfirmation
-        isOpen={isOpenCloseModalConfirmation}
-        onClose={() => setIsOpenCloseModalConfirmation(false)}
-        onConfirm={() => handleSubmit(submitEvent!)}
-        textModal={isEdit ? `Are you sure want edit this category?` : `Are you sure want add this category?`}
-      />
-
-      {/* <ModalConfirmationDelete 
-    isOpen={isOpenCloseModalDeleteConfirmation}
-    onClose={()=> setIsOpenCloseModalDeleteConfirmation(false)}
-    onConfirm={}
-  /> */}
     </div>
 
   );

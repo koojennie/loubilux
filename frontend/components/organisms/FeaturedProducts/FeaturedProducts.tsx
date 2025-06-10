@@ -26,21 +26,14 @@ export default function FeaturedProducts() {
             <div className="flex items-start justify-between mt-4 space-x-4">
               <div>
                 <h3 className="text-lg no-underline font-bold text-gray-900 sm:text-sm md:text-base">
-                  <a href="" title="">
-                  Coach Mollie Tote
+                  <a href="/catalog" title="">
+                  Coach Mollie Tote Bag
                     <span
                       className="absolute inset-0"
                       aria-hidden="true"
                     ></span>
                   </a>
                 </h3>
-                <div className="flex items-center mt-2.5 space-x-px">
-                  <Star />
-                  <Star />
-                  <Star />
-                  <Star />
-                  <NoStar />
-                </div>
               </div>
 
               <div className="text-right">
@@ -67,7 +60,7 @@ export default function FeaturedProducts() {
             <div className="flex items-start justify-between mt-4 space-x-4">
               <div>
                 <h3 className="text-lg font-bold text-gray-900 sm:text-sm md:text-base">
-                  <a href="#" title="">
+                  <a href="/catalog" title="">
                     Michael Kors Crossbody
                     <span
                       className="absolute inset-0"
@@ -75,13 +68,6 @@ export default function FeaturedProducts() {
                     ></span>
                   </a>
                 </h3>
-                <div className="flex items-center mt-2.5 space-x-px">
-                    <Star />
-                    <Star />
-                    <Star />
-                    <Star />
-                    <Star />
-                </div>
               </div>
 
               <div className="text-right">
@@ -103,7 +89,7 @@ export default function FeaturedProducts() {
             <div className="flex items-start justify-between mt-4 space-x-4">
               <div>
                 <h3 className="text-lg font-bold text-gray-900 sm:text-sm md:text-base">
-                  <a href="#" title="">
+                  <a href="/catalog" title="">
                     Lacoste Geneva 2001138
                     <span
                       className="absolute inset-0"
@@ -111,13 +97,6 @@ export default function FeaturedProducts() {
                     ></span>
                   </a>
                 </h3>
-                <div className="flex items-center mt-2.5 space-x-px">
-                  <Star />
-                  <Star />
-                  <Star />
-                  <Star />
-                  <Star />
-                </div>
               </div>
 
               <div className="text-right">
@@ -139,7 +118,7 @@ export default function FeaturedProducts() {
             <div className="flex items-start justify-between mt-4 space-x-4">
               <div>
                 <h3 className="text-lg font-bold text-gray-900 sm:text-sm md:text-base">
-                  <a href="#" title="">
+                  <a href="/catalog" title="">
                     Longchamp Sunglasses
                     <span
                       className="absolute inset-0"
@@ -147,13 +126,6 @@ export default function FeaturedProducts() {
                     ></span>
                   </a>
                 </h3>
-                <div className="flex items-center mt-2.5 space-x-px">
-                  <Star />
-                  <Star />
-                  <Star />
-                  <NoStar />
-                  <NoStar />
-                </div>
               </div>
 
               <div className="text-right">

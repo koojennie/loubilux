@@ -30,7 +30,7 @@ export default function Auth() {
         if (axios.isAxiosError(err)) {
           if (err.response?.status === 401) {
             setIsAuth(false);
-            toast.error("Unauthorized: Please login first.");
+            toast.error("Please login first.");
           } else {
             toast.error(`Unexpected error: ${err.response?.statusText || err.message}`);
           }
