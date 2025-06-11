@@ -4,14 +4,19 @@ import Navbar from "@/components/organisms/Navbar/Navbar";
 import { useState, useEffect } from "react";
 import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from "@headlessui/react";
 import { TbRosetteDiscount } from "react-icons/tb";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import axios from "axios";
 import { useCheckout } from "@/context/CheckoutContext";
 import { User } from "@/types/type";
+import toast, { Toaster } from "react-hot-toast";
+
 
 
 export default function page() {
+  const router = useRouter();
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [isOpenModalConfirmation, setIsOpenModalConfirmation] = useState<boolean>(false);
   const [userShipping, setUserShipping] = useState<User | null>(null);
   const [addresses, setAddresses] = useState<any[]>([]);
   const [selectedAddressId, setSelectedAddressId] = useState<string | null>(null);
@@ -86,6 +91,22 @@ export default function page() {
     fetchAddresses();
   }, []);
 
+  useEffect(() => {
+    const midtransScriptUrl = 'https://app.sandbox.midtrans.com/snap/snap.js';
+
+    let scriptTag = document.createElement('script');
+    scriptTag.src = midtransScriptUrl;
+
+    scriptTag.setAttribute('data-client-key', process.env.NEXT_PUBLIC_MIDTRANS_CLIENT_KEY || "");
+
+    document.body.appendChild(scriptTag);
+
+    return () => {
+      document.body.removeChild(scriptTag);
+    }
+  }, []);
+
+
   const subtotal = cart?.products.reduce((acc: number, item: any) => acc + item.product.price * item.quantity, 0) ?? 0;
   const delivery = 15000;
   const total = subtotal + delivery;
@@ -96,10 +117,67 @@ export default function page() {
   };
   const selectedAddress = addresses.find(addr => addr.addressId === selectedAddressId);
 
+  const handleCheckout = async () => {
+    try {
+      const createOrderResponse = await axios.post(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/orders/create`,
+        {
+          shippingAddressId: selectedAddressId,
+          selectedProducts: cart?.products.map((p: any) => p.product.productId),
+        },
+        { withCredentials: true }
+      );
+
+
+      const newOrderId = createOrderResponse.data.order.orderId;
+
+      console.log(createOrderResponse);
+      console.log(newOrderId);
+
+      // 2. Lanjutkan ke payment
+      const paymentResponse = await axios.post(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/payments`,
+        {
+          orderId: newOrderId,
+          amount: total,
+          addressId: selectedAddressId,
+        },
+        { withCredentials: true }
+      );
+
+      const snapToken = paymentResponse.data.token;
+
+      window.snap.pay(snapToken, {
+        onSuccess: function (result) {
+          console.log("Payment success", result);
+          // redirect ke halaman success
+          toast.success("paymment success");
+          router.push('/complete-checkout');
+        },
+        onPending: function (result) {
+          console.log("Payment pending", result);
+          toast(`Payments Pendint + ${result}`, {icon: '⌚'})
+        },
+        onError: function (result) {
+          console.error("Payment error", result);
+          toast.error(`Payment error + ${result}`);
+        },
+        onClose: function () {
+          console.log("Payment popup closed");
+        },
+      });
+    } catch (err) {
+      console.error("Checkout failed", err);
+    } finally {
+      setIsOpenModalConfirmation(false);
+    }
+  };
+
 
   return (
     <>
       <Navbar />
+      <Toaster />
       <div className="grid grid-cols-2 sm:grid-cols-2 max-md:grid-cols-1 max-md:grid-rows-2">
         {/* order form */}
         <div className="px-20 pb-20 max-sm:p-5">
@@ -118,50 +196,6 @@ export default function page() {
             <p className="text-lg text-[#493628] leading-none align-middle">{userShipping?.email}</p> */}
 
           </div>
-          {/* shipping adress */}
-
-          {/* <div className="!mt-10">
-            <p className="text-left text-2xl font-semibold">Shipping Address</p>
-            <p className="text-left !mt-10 text-lg font-medium">Address</p>
-            <input
-              type="text"
-              className="mt-1 px-3 py-2 border rounded-lg w-full outline-none focus:ring-2 focus:ring-[#493628]"
-              placeholder="Enter your address"
-            />
-            <p className="text-left !mt-10 text-lg font-medium">Apartment, suite, etc.</p>
-            <input
-              type="text"
-              className="mt-1 px-3 py-2 border rounded-lg w-full outline-none focus:ring-2 focus:ring-[#493628]"
-              placeholder="Enter your address details"
-            />
-            <div className="grid grid-flow-col grid-cols-3 gap-4">
-              <div className="grid grid-rows-1">
-                <p className="text-left !mt-10 text-lg font-medium">City</p>
-                <input
-                  type="text"
-                  className="mt-1 px-3 !py-2 border rounded-lg w-full outline-none focus:ring-2 focus:ring-[#493628]"
-                  placeholder="Indonesia"
-                />
-              </div>
-              <div className="grid grid-rows-1">
-                <p className="text-left !mt-10 text-lg font-medium">State / Province</p>
-                <input
-                  type="text"
-                  className="mt-1 px-3 py-2 border rounded-lg w-full outline-none focus:ring-2 focus:ring-[#493628]"
-                  placeholder="Jakarta"
-                />
-              </div>
-              <div className="grid grid-rows-1">
-                <p className="text-left !mt-10 text-lg font-medium">Postal code</p>
-                <input
-                  type="text"
-                  className="mt-1 px-3 py-2 border rounded-lg w-full outline-none focus:ring-2 focus:ring-[#493628]"
-                  placeholder="15110"
-                />
-              </div>
-            </div>
-          </div> */}
-
           <div className="mt-10 ">
             <p className="text-2xl font-semibold mb-4">Select Shipping Address</p>
             <div className="grid gap-4 overflow-y-auto max-h-[300px] pr-2">
@@ -246,11 +280,52 @@ export default function page() {
               className="!rounded-full py-3 px-4 text-center border-2 border-[#493628] bg-white font-semibold text-lg text-[#493628] flex transition-all duration-500 hover:!bg-[#705C53] hover:text-white">
               Apply Coupon
             </button>
-            <Link href="/complete-checkout">
-              <button className="!rounded-full py-3 px-4 text-center bg-[#493628] font-semibold text-lg text-white flex transition-all duration-500 hover:bg-[#705C53]">Continue</button>
-            </Link>
+            {/* <Link href="/complete-checkout"> */}
+            <button className="!rounded-full py-3 px-4 text-center bg-[#493628] font-semibold text-lg text-white flex transition-all duration-500 hover:bg-[#705C53]"
+              onClick={() => setIsOpenModalConfirmation(true)}
+            >Continue</button>
+            {/* </Link> */}
           </div>
         </div>
+
+        {/* Dialog Confirm */}
+        <Dialog open={isOpenModalConfirmation} onClose={() => setIsOpenModalConfirmation(false)} className="relative z-50">
+          {/* Backdrop dengan efek blur */}
+          <DialogBackdrop className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm" />
+
+          {/* Modal Content */}
+          <div className="fixed inset-0 flex items-center justify-center p-4">
+            <DialogPanel className="relative max-w-lg w-full bg-white rounded-lg shadow-lg p-6">
+              <div className="flex flex-col items-center text-center">
+                <div className="mx-auto flex size-12 items-center justify-center rounded-full bg-[#f8f5f2]">
+                  <TbRosetteDiscount className="size-6 text-[#AB886D]" />
+                </div>
+                <DialogTitle className="text-lg font-semibold text-gray-900 mt-3">Confirmation Payments</DialogTitle>
+                <p className="text-base text-gray-500">Apakah kamu yakin ingin membayar.</p>
+                <p className="text-sm text-gray-500">Setelah ini anda akan di arahkan ke halaman bayar.</p>
+                {/* <input
+                  type="text"
+                  className="mt-3 px-4 py-2 border rounded-lg w-full outline-none focus:ring-2 focus:ring-[#493628]"
+                  placeholder="Enter coupon code"
+                /> */}
+              </div>
+
+              {/* Buttons */}
+              <div className="mt-4 flex justify-end gap-3">
+                <button
+                  onClick={() => setIsOpenModalConfirmation(false)}
+                  className="px-3 py-2 !rounded-full max-w-[280px] border-2 border-[#493628] bg-white font-semibold text-lg text-[#493628] flex transition-all duration-500 hover:!bg-[#705C53] hover:text-white"
+                >
+                  Cancel
+                </button>
+                <button className="px-4 py-2 !rounded-full bg-[#493628] text-white transition-all duration-500 font-medium text-lg hover:bg-[#705C53]"
+                  onClick={handleCheckout}
+                >Apply</button>
+              </div>
+            </DialogPanel>
+          </div>
+        </Dialog>
+
         <Dialog open={isOpen} onClose={() => setIsOpen(false)} className="relative z-50">
           {/* Backdrop dengan efek blur */}
           <DialogBackdrop className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm" />

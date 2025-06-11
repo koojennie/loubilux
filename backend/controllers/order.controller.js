@@ -25,6 +25,7 @@ const createOrderFromCart = async (req, res) => {
   try {
     const userId = req.user.id;
     const selectedProductIds = req.body.selectedProducts;
+    const shippingAddressId = req.body.shippingAddressId;
 
     if (!selectedProductIds?.length) {
       return res.status(400).json({ message: "No products selected for checkout" });
@@ -70,7 +71,7 @@ const createOrderFromCart = async (req, res) => {
       status: "Pending",
       orderDate: new Date(),
       paymentMethod: req.body.paymentMethod || "COD",
-      // shippingAddressId: req.body.shippingAddressId, // use FK if related
+      shippingAddressId: shippingAddressId, // use FK if related
     });
 
     // Create OrderLineItems
@@ -94,8 +95,17 @@ const createOrderFromCart = async (req, res) => {
       },
     });
 
-    // Optional: update cart total to reflect removed items
-    cart.totalPrice = 0;
+    // Update cart total to reflect removed items
+    const remainingCartItems = await CartItem.findAll({
+      where: { cartId: cart.cartId },
+      include: {
+        model: Product,
+        as: "product"
+      }
+    });
+    cart.totalPrice = remainingCartItems.reduce((sum, item) => {
+      return sum + (item.product ? item.product.price * item.quantity : 0);
+    }, 0);
     await cart.save();
 
     return res.status(201).json({
@@ -453,6 +463,48 @@ const getRevenueByCategory = async (req, res) => {
     res.status(500).json({
       status: 'error',
       message: 'Internal Server Error',
+      error: error.message,
+    });
+  }
+};
+
+const updateOrder = async (req, res) => {
+  try {
+    const { orderId } = req.params;
+    const updateFields = req.body;
+
+    if (!orderId) {
+      return res.status(400).json({ status: "error", message: "Order ID is required" });
+    }
+
+    const order = await Order.findOne({ where: { orderId } });
+    if (!order) {
+      return res.status(404).json({ status: "error", message: "Order not found" });
+    }
+
+    // Only allow certain fields to be updated
+    const allowedFields = [
+      "status",
+      "shippingAddressId",
+    ];
+    for (const key of Object.keys(updateFields)) {
+      if (allowedFields.includes(key)) {
+        order[key] = updateFields[key];
+      }
+    }
+
+    await order.save();
+
+    res.status(200).json({
+      status: "success",
+      message: "Order updated successfully",
+      data: order,
+    });
+  } catch (error) {
+    console.error("Error updating order:", error);
+    res.status(500).json({
+      status: "error",
+      message: "Internal Server Error",
       error: error.message,
     });
   }
