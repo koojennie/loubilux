@@ -1,4 +1,4 @@
-const dotenv = require('dotenv');
+    const dotenv = require('dotenv');
 const { Sequelize } = require('sequelize');
 
 dotenv.config();
@@ -11,6 +11,7 @@ const sequelize = new Sequelize(
         host: process.env.POSTGRES_DB_HOST,
         port: process.env.POSTGRES_DB_PORT,
         dialect: 'postgres',
+        logging:false
     }
 );
 
