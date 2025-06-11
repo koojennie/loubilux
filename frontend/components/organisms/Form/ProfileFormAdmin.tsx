@@ -152,7 +152,7 @@ const ProfileFormAdmin: React.FC<UserFormProps> = ({ onSubmit, onEditSubmit, isE
       <form onSubmit={handleSubmit} action="">
         <div className="flex flex-col py-8 pt-8 mb-12 px-8 ">
           <h4 className="flex text-2xl mb-1 !font-semibold text-[#493628]">
-            {isEdit ? "Edit Profile Page" : " My Profile Page"}
+            {isEdit ? "Edit Profile Page" : "My Profile Page"}
           </h4>
           {!isEdit && (
             <button className="flex justify-end gap-2 text-base font-medium" onClick={() => { router.push('/admin/profile/edit') }}>
