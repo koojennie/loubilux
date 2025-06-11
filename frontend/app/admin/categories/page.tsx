@@ -8,7 +8,7 @@ import { Category } from "@/types/type"
 import HeaderContentAdmin from "@/components/organisms/HeaderContetntAdmin/HeaderContentAdmin";
 import TableComponents from "@/components/organisms/Table/TableComponents";
 import ModalViewDetails from "@/components/organisms/Modal/ModalViewDetail";
-import ModalConfirmationDelete from "@/components/organisms/Modal/ModalConfirmationDelete";
+import DeleteConfirmation from "@/components/Atoms/DeleteConfirmation";
 
 const CategoriesPage = () => {
   const router = useRouter();
@@ -152,11 +152,12 @@ const CategoriesPage = () => {
         ]}
       />
 
-      <ModalConfirmationDelete
+      <DeleteConfirmation
         isOpen={isModalConfirmationDeleteOpen}
-        onClose={handleOpenCloseModalConfirmationDelete}
-        // onConfirm={() => handleDeleteProduct} 
+        onClose={() => setIsModalConfirmationDeleteOpen(false)}
         onConfirm={() => handleDeletedCategory(selectedDeletedConfirmationCategory)}
+        title="Delete Category"
+        message="Are you sure you want to delete this category? This action cannot be undone."
       />
 
       <Toaster />

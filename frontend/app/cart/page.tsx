@@ -8,17 +8,27 @@ import { useRouter } from 'next/navigation';
 import { useCart } from "@/context/CartContext";
 import { useCheckout } from "@/context/CheckoutContext";
 import Navbar from "@/components/organisms/Navbar/Navbar";
-import ModalConfirmation from "@/components/organisms/Modal/ModalConfirmation";
+import { showConfirmationAlert, showSuccessAlert } from '@/components/Atoms/AlertConfirmation';
 
 export default function page() {
   const { refreshCart } = useCart();
   const { setCheckoutData } = useCheckout() ?? {};
   const router = useRouter();
 
+const showDeleteConfirmation = async (productId: string) => {
+  const confirmed = await showConfirmationAlert({
+    title: "Remove this item?",
+    text: "Are you sure you want to remove this item from your cart?",
+  });
+
+  if (confirmed) {
+    await updateCartItem(productId, 0);
+    showSuccessAlert("The item has been successfully removed from your cart.");
+  }
+};
+
   // data cart
   const [cart, setCart] = useState<any>(null);
-  const [isModal, setIsModal] = useState<boolean>(false);
-  const [selectedProduct, setSelectedProduct] = useState<string | null>(null);
 
   const fetchCartUser = async () => {
     try {
@@ -114,7 +124,20 @@ export default function page() {
             </p>
           </div>
 
-          {cart && cart.products.map((item: any) => (
+          {cart && cart.products.length === 0 ? (
+            <div className="flex flex-col items-center justify-center py-10 text-center text-[#BFB29E]">
+              <Image
+                src="/img/products-empty.svg" // Ganti dengan path gambar kosong kamu
+                alt="Empty cart"
+                width={350}
+                height={350}
+                className="mb-6"
+              />
+              <h3 className="text-2xl font-semibold">No products in the cart</h3>
+              <p className="mt-1 text-lg">Add some products to start your order.</p>
+            </div>
+          ) : (
+          cart?.products.map((item: any) => (
             <div key={item.cartItemId} className="grid grid-cols-1 lg:grid-cols-2 min-[550px]:gap-6 border-t border-gray-200 py-6">
               <div className="flex items-center flex-col min-[550px]:flex-row gap-3 min-[550px]:gap-6 w-full max-xl:justify-center max-xl:max-w-xl max-xl:mx-auto">
                 <div className="img-box">
@@ -148,8 +171,7 @@ export default function page() {
                     // onClick={() => updateCartItem(item.product.productId, item.quantity - 1)}
                     onClick={() => {
                       if(item.quantity === 1){
-                        setSelectedProduct(item.product.productId);
-                        setIsModal(true);
+                        showDeleteConfirmation(item.product.productId);
                       } else {
                         updateCartItem(item.product.productId, item.quantity - 1);
                       }
@@ -198,9 +220,10 @@ export default function page() {
                 </h6>
               </div>
             </div>
-          ))}
+          )))}
 
-
+          {cart && cart.products.length > 0 && (
+          <>
           <div className="bg-[#f8f5f2] !rounded-xl p-6 w-full mb-5 max-lg:max-w-xl max-lg:mx-auto">
             <div className="flex items-center justify-between w-full mb-6">
               <p className="font-normal text-xl leading-8 text-[#705C53]">Sub Total</p>
@@ -211,35 +234,21 @@ export default function page() {
               <h6 className="font-medium text-2xl leading-9 text-[#493628]">{total.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })}</h6>
             </div>
           </div>
-          <div className="flex items-center flex-col sm:flex-row justify-center gap-4 mt-8">
+          <div className="flex items-center flex-col sm:flex-row justify-center mt-8">
             <button
-              className="!rounded-full w-full max-w-[280px] py-4 px-4 text-center justify-center items-center bg-[#493628] font-semibold text-lg text-white flex transition-all duration-500 hover:bg-[#705C53]"
+              className="!rounded-full py-4 px-10 text-center justify-center items-center bg-[#493628] font-semibold text-lg text-white flex transition-all duration-500 hover:bg-[#705C53]"
               onClick={handleButtonCheckout}
-            >Continue
-              to Checkout
-              <svg className="ml-2" xmlns="http://www.w3.org/2000/svg" width="23" height="22" viewBox="0 0 23 22"
+            >Continue to Checkout
+              <svg className="" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 23 22"
                 fill="none">
                 <path d="M8.75324 5.49609L14.2535 10.9963L8.75 16.4998" stroke="white" strokeWidth="1.6"
                   strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </button>
           </div>
+          </>
+          )}
         </div>
-        <ModalConfirmation
-          isOpen={isModal}
-          onClose={() => { 
-            setIsModal(!isModal);
-            setSelectedProduct(null);
-          }}
-          onConfirm={() => {
-            if(selectedProduct){
-              updateCartItem(selectedProduct, 0);
-              setIsModal(false);
-              setSelectedProduct(null);
-            }
-           }}
-          textModal="Apakah ada yakin ingin menghapus item ini dari keranjang kamu ?"
-        />
       </section>
     </>
   )

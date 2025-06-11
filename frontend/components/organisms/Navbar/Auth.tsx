@@ -30,7 +30,7 @@ export default function Auth() {
         if (axios.isAxiosError(err)) {
           if (err.response?.status === 401) {
             setIsAuth(false);
-            toast.error("Unauthorized: Please login first.");
+            toast.error("Please login first.");
           } else {
             toast.error(`Unexpected error: ${err.response?.statusText || err.message}`);
           }
@@ -76,7 +76,7 @@ export default function Auth() {
           <Link href="/cart">
             <FaCartShopping className="text-3xl color-palette-1 cursor-pointer mb-16 mt-16" href="/cart" />
           </Link>
-          <span className="absolute top-2 left-4 md:top-2 md:left-4 lg:top-2 lg:-right-3 bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full">
+          <span className="absolute top-2 left-4 md:top-2 md:left-4 lg:top-2 lg:-right-3 bg-red-500 text-white text-center text-xs font-bold px-2 py-0.5 rounded-full">
             {/* {} */}
             {totalItems}
           </span>

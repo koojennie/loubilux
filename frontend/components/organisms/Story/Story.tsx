@@ -29,7 +29,7 @@ export default function Story() {
               </p>
               <div className="d-md-block d-flex flex-column w-100">
                 <a
-                  className="btn btn-read text-white rounded-pill"
+                  className="!rounded-full py-3 px-10 text-center bg-[#493628] !font-semibold text-lg text-white transition-all duration-500 hover:bg-[#705C53]"
                   href="./about-us"
                   role="button"
                 >

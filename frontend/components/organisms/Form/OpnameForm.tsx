@@ -2,10 +2,8 @@
 import React, { useState, useEffect, FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
-import ImageUploader from "../ImageUploader/ImageUploadersMulti";
-import ModalConfirmation from "../Modal/ModalConfirmation";
-import ModalConfirmationDelete from "../Modal/ModalConfirmationDelete";
 import toast, { Toaster } from "react-hot-toast";
+import { showConfirmationAlert } from "@/components/Atoms/AlertConfirmation";
 
 interface OpnameFormProps {
   onSubmit?: (formData: any) => void;
@@ -79,10 +77,21 @@ const OpnameForm: React.FC<OpnameFormProps> = ({ onSubmit, onEditSubmit, isEdit 
   }
 
   // Handle Open & Close Modal Confirmation
-  const handleIsOpenCloseModalConfirmation = (e: React.FormEvent) => {
+  const handleIsOpenCloseModalConfirmation = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitEvent(e);
-    setIsOpenCloseModalConfirmation(true);
+    
+    const isConfirmed = await showConfirmationAlert({
+      title: "Confirmation",
+      text: isEdit
+      ? "Are you sure you want to edit stock of this product?"
+      : "Are you sure you want to add stock of this product?",
+      icon: "question",
+    });
+        
+    if (isConfirmed) {
+      handleSubmit(e);
+    }
   }
 
   // handle submit
@@ -111,10 +120,10 @@ const OpnameForm: React.FC<OpnameFormProps> = ({ onSubmit, onEditSubmit, isEdit 
     <div>
       <form onSubmit={handleSubmit} action="">
         <div className="flex flex-col py-8 pt-8 mb-12 px-8 ">
-          <h4 className="flex text-lg mb-1 font-semibold text-slate-700">
+          <h4 className="flex text-lg mb-1 font-semibold text-[#493628]">
             {isEdit ? `Edit Opname ${generatedOpnameId}` : 'Add Data Opname'}
           </h4>
-          <p className="mb-4 text-sm mt-1 text-slate-400">
+          <p className="mb-4 text-sm mt-1 text-[#493628]">
             Fill in the information below to add a new opname.
           </p>
           <div className="grid grid-rows-1 gap-4">
@@ -129,10 +138,10 @@ const OpnameForm: React.FC<OpnameFormProps> = ({ onSubmit, onEditSubmit, isEdit 
 
               {/* Quantity */}
               <div className="w-full max-w-24">
-                <label className="block mb-2 text-sm text-slate-700">Stock Fisik</label>
+                <label className="block mb-2 text-sm text-[#493628]">Stock Fisik</label>
                 <input
                   type="number"
-                  className="w-full h-10 bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded px-3 shadow-sm focus:border-slate-400"
+                  className="w-full h-10 bg-transparent placeholder:text-[#493628] text-[#493628] text-sm border border-slate-200 rounded px-3 shadow-sm focus:border-slate-400"
                   placeholder="0"
                   min="0"
                   value={physicalStock}
@@ -147,10 +156,10 @@ const OpnameForm: React.FC<OpnameFormProps> = ({ onSubmit, onEditSubmit, isEdit 
 
               {/* Product Name */}
               <div className="w-full relative">
-                <label className="block mb-1 text-sm text-slate-700">Product Name</label>
+                <label className="block mb-1 text-sm text-[#493628]">Product Name</label>
                 <input
                   type="text"
-                  className="w-full h-10 bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded px-3 shadow-sm focus:border-slate-400"
+                  className="w-full h-10 bg-transparent placeholder:text-[#493628] text-[#493628] text-sm border border-slate-200 rounded px-3 shadow-sm focus:border-slate-400"
                   placeholder="Search Product"
                   value={queryProduct}
                   onChange={(e) => {
@@ -181,10 +190,10 @@ const OpnameForm: React.FC<OpnameFormProps> = ({ onSubmit, onEditSubmit, isEdit 
 
               {/* Stock */}
               <div className="w-full max-w-24">
-                <label className="block mb-2 text-sm text-slate-700">Stock</label>
+                <label className="block mb-2 text-sm text-[#493628]">Stock</label>
                 <input
                   type="number"
-                  className="w-full h-10 bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 rounded px-3 shadow-sm focus:border-slate-400"
+                  className="w-full h-10 bg-transparent placeholder:text-[#493628] text-[#493628] text-sm border border-slate-200 rounded px-3 shadow-sm focus:border-slate-400"
                   placeholder="0"
                   min="0"
                   value={recordedStock}
@@ -198,10 +207,10 @@ const OpnameForm: React.FC<OpnameFormProps> = ({ onSubmit, onEditSubmit, isEdit 
                 />
               </div>
               <div className="w-full">
-                <label className="block mb-1 text-sm text-slate-700">Notes</label>
+                <label className="block mb-1 text-sm text-[#493628]">Notes</label>
                 <input
                   // rows={4}
-                  className="bg-transparent border border-gray-300 text-slate-700 text-sm rounded-lg focus:ring-2 focus:ring-fuchsia-50 focus:border-fuchsia-300 block w-full p-2.5"
+                  className="bg-transparent border border-gray-300 text-[#493628] text-sm rounded-lg focus:ring-2 focus:ring-fuchsia-50 focus:border-fuchsia-300 block w-full p-2.5"
                   placeholder="Notes..."
                   value={notes}
                   onChange={(e) => { setNotes(e.target.value) }}
@@ -243,19 +252,6 @@ const OpnameForm: React.FC<OpnameFormProps> = ({ onSubmit, onEditSubmit, isEdit 
           </div>
         </div>
       </form>
-
-      <ModalConfirmation
-        isOpen={isOpenCloseModalConfirmation}
-        onClose={() => setIsOpenCloseModalConfirmation(false)}
-        onConfirm={() => handleSubmit(submitEvent!)}
-        textModal="Are you sure edit this Opname?"
-      />
-
-      {/* <ModalConfirmationDelete 
-    isOpen={isOpenCloseModalDeleteConfirmation}
-    onClose={()=> setIsOpenCloseModalDeleteConfirmation(false)}
-    onConfirm={}
-  /> */}
     </div>
 
   );

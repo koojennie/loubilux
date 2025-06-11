@@ -3,10 +3,7 @@ import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation"
-import { IoPersonCircleSharp } from "react-icons/io5";
-import { FaGear, FaHouseChimney } from "react-icons/fa6";
-
-import { VscSignOut } from "react-icons/vsc";
+import { FaArrowRightFromBracket, FaGear, FaHouseChimney, FaUser } from "react-icons/fa6";
 
 interface SidebarAdminProps {
   isSidebarOpen: boolean;
@@ -64,15 +61,14 @@ const NavbarAdmin = ({ isSidebarOpen, toggleSidebar, handleSignOut }: SidebarAdm
                 className="p-2 mr-2 text-gray-600 rounded cursor-pointer lg:hidden hover:text-gray-900 hover:bg-gray-100 focus:bg-gray-100 focus:ring-2 focus:ring-gray-100"
               >
               </button>
-              <a className="navbar-brand" href="/#">
-                <Image src="/icon/loubilux-logo.png" width={30} height={30} alt="Logo" />
-              </a>
-              <p className="text-md font-semibold flex items-center mt-3 lg:mr-1.5">
-
-                <span className="hidden pl-3 md:inline-block text-[#493628] self-center text-xl font-bold whitespace-nowrap no-underline">
-                  Loubilux
-                </span>
-              </p>
+              <div className="gap-3 flex flex-row justify-center items-center">
+                <a className="" href="/#">
+                  <Image src="/icon/loubilux-logo.png" width={30} height={30} alt="Logo" />
+                </a>
+                <p className="text-xl font-semibold flex items-center justify-center color-palette-1 !mb-0">
+                    Loubilux
+                </p>
+              </div>
             </div>
 
             <div className="flex justify-end my-2">
@@ -85,7 +81,7 @@ const NavbarAdmin = ({ isSidebarOpen, toggleSidebar, handleSignOut }: SidebarAdm
               {/* dropdown item */}
               {openCloseDropDown && (
               <div
-                className={`absolute z-10 min-w-[150px] overflow-auto rounded-lg border border-slate-200 bg-white p-1.5 shadow-lg focus:outline-none top-14
+                className={`absolute z-10 min-w-[150px] overflow-auto rounded-lg bg-white p-1.5 shadow-lg focus:outline-none top-14
                             origin-top-right transition-all duration-300 ease-out transform
                             ${openCloseDropDown ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}`}
                 ref={dropdownRef}
@@ -93,10 +89,10 @@ const NavbarAdmin = ({ isSidebarOpen, toggleSidebar, handleSignOut }: SidebarAdm
                 <Link href={"/"}>
                   <li
                     role="menuitem"
-                    className="cursor-pointer text-slate-800 flex w-full text-sm items-center rounded-md p-3 transition-all hover:bg-slate-100 focus:bg-slate-100 active:bg-slate-100"
+                    className="cursor-pointer gap-2 color-palette-2 flex w-full text-sm items-center rounded-md p-2 transition-all hover:bg-gray-100 focus:bg-slate-100 active:bg-slate-100"
                   >
-                    <FaHouseChimney size={21} className="text-slate-400" />
-                    <p className="text-slate-800 font-medium m-1">
+                    <FaHouseChimney size={20} />
+                    <p className="font-medium m-1">
                       Home Page
                     </p>
                   </li>
@@ -104,10 +100,10 @@ const NavbarAdmin = ({ isSidebarOpen, toggleSidebar, handleSignOut }: SidebarAdm
                 <Link href={"/admin/profile"}>
                   <li
                     role="menuitem"
-                    className="cursor-pointer text-slate-800 flex w-full text-sm items-center rounded-md p-3 transition-all hover:bg-slate-100 focus:bg-slate-100 active:bg-slate-100"
+                    className="cursor-pointer color-palette-2 flex w-full text-sm items-center gap-2 rounded-md p-2 transition-all hover:bg-gray-100 focus:bg-slate-100 active:bg-slate-100"
                   >
-                    <IoPersonCircleSharp size={24} className="text-slate-400" />
-                    <p className="text-slate-800 font-medium m-1">
+                    <FaUser size={20} className="" />
+                    <p className="font-medium m-1">
                       My Profile
                     </p>
                   </li>
@@ -115,26 +111,25 @@ const NavbarAdmin = ({ isSidebarOpen, toggleSidebar, handleSignOut }: SidebarAdm
                 <Link href={"/admin/profile/edit"}>
                   <li
                     role="menuitem"
-                    className="cursor-pointer text-slate-800 flex w-full text-sm items-center rounded-md p-3 transition-all hover:bg-slate-100 focus:bg-slate-100 active:bg-slate-100"
+                    className="cursor-pointer color-palette-2 gap-2 flex w-full text-sm items-center rounded-md p-2 transition-all hover:bg-gray-100 focus:bg-slate-100 active:bg-slate-100"
                   >
-                    <FaGear size={18} className="text-slate-400" />
-                    <p className="text-slate-800 font-medium m-1">
+                    <FaGear size={20} className="" />
+                    <p className="font-medium m-1">
                       Edit Profile
                     </p>
                   </li>
                 </Link>
-                <hr className="my-2 border-slate-200" role="menuitem" />
                 <li
                   role="menuitem"
-                  className="cursor-pointer text-slate-800 flex w-full text-sm items-center rounded-md p-3 transition-all hover:bg-slate-100 focus:bg-slate-100 active:bg-slate-100"
+                  className="cursor-pointer color-palette-2 gap-2 flex w-full text-sm items-center rounded-md p-2 transition-all hover:bg-gray-100 focus:bg-slate-100 active:bg-slate-100"
                 >
-                  {/* <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5 text-slate-400">
+                  {/* <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5 text-[#493628]">
                       <path fillRule="evenodd" d="M3 4.25A2.25 2.25 0 0 1 5.25 2h5.5A2.25 2.25 0 0 1 13 4.25v2a.75.75 0 0 1-1.5 0v-2a.75.75 0 0 0-.75-.75h-5.5a.75.75 0 0 0-.75.75v11.5c0 .414.336.75.75.75h5.5a.75.75 0 0 0 .75-.75v-2a.75.75 0 0 1 1.5 0v2A2.25 2.25 0 0 1 10.75 18h-5.5A2.25 2.25 0 0 1 3 15.75V4.25Z" clipRule="evenodd" />
                       <path fillRule="evenodd" d="M19 10a.75.75 0 0 0-.75-.75H8.704l1.048-.943a.75.75 0 1 0-1.004-1.114l-2.5 2.25a.75.75 0 0 0 0 1.114l2.5 2.25a.75.75 0 1 0 1.004-1.114l-1.048-.943h9.546A.75.75 0 0 0 19 10Z" clipRule="evenodd" />
                     </svg> */}
-                  <VscSignOut size={18} className="text-slate-400" />
+                  <FaArrowRightFromBracket size={20} className="" />
 
-                  <p className="text-slate-800 font-medium m-1">
+                  <p className="font-medium m-1">
                     <button onClick={handleSignOut}>
                       Sign Out
                     </button>

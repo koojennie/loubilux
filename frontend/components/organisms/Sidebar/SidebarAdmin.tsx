@@ -9,6 +9,7 @@ import { FaBasketShopping } from "react-icons/fa6";
 import { FaUser } from "react-icons/fa";
 import { BiCategory } from "react-icons/bi";
 import { HiOutlineDocumentMagnifyingGlass } from "react-icons/hi2";
+import { HiMenu } from "react-icons/hi";
 
 
 interface SidebarAdminProps {
@@ -36,15 +37,15 @@ const SidebarAdmin = ({ isSidebarOpen, toggleSidebar, setIsSidebarOpen, userRole
         aria-label="Sidebar"
       >
 
-        <div className="flex relative flex-col flex-1 pt-0 min-h-0 bg-white drop-shadow-lg">
+        <div className="flex relative flex-col flex-1 pt-0 min-h-0 bg-white drop-shadow-lg color-palette-1">
           <div className="flex overflow-y-auto flex-col flex-1 pt-8 pb-4">
             <div className={`${isSidebarOpen ? "px-3" : "pr-3"} flex-1`} id="sidebar-items">
               <ul className={`pb-2 pt-1`}
                 style={{ paddingLeft: isSidebarOpen ? '0px' : '13px' }}
               >
                 <li className="hidden md:flex">
-                  <button onClick={toggleSidebar} className={`text-3xl ml-5`}>
-                    ☰
+                  <button onClick={toggleSidebar} className={`text-3xl mt-3`}>
+                    <HiMenu />
                   </button>
                 </li>
                 <Link href={'/admin'}
@@ -52,10 +53,10 @@ const SidebarAdmin = ({ isSidebarOpen, toggleSidebar, setIsSidebarOpen, userRole
                 >
                   <li className="mt-3">
                     <div
-                      className={` ${pathName === '/admin' ? 'bg-white shadow-lg ' : ''} ${isSidebarOpen ? "pl-2" : ""} flex items-center py-2.5 rounded-lg hover:bg-gray-200 group shadow-gray-200 transition-all duration-200`}
+                      className={` ${pathName === '/admin' ? 'bg-white shadow-lg ' : ''} ${isSidebarOpen ? "pl-2" : ""} mt-3 flex items-center py-2.5 rounded-lg hover:bg-gray-100 group shadow-gray-200 transition-all duration-200`}
                     >
                       <div className={` ${pathName === '/admin' ? 'bg-white' : ''} shadow-lg shadow-gray-300 text-white text-dark-700 w-8 h-8 mr-1 rounded-lg text-center grid place-items-center `}>
-                        <FaHouse className="text-slate-700" />
+                        <FaHouse className="color-palette-1" />
                       </div>
                       {isSidebarOpen ? (
                         <span
@@ -73,11 +74,11 @@ const SidebarAdmin = ({ isSidebarOpen, toggleSidebar, setIsSidebarOpen, userRole
                 >
                   <li className="mt-2">
                     <div
-                      className={` ${pathName === '/admin/products' ? 'bg-white shadow-lg ' : ''} ${isSidebarOpen ? "pl-2" : ""} flex items-center py-2.5 text-base font-normal text-dark-500 rounded-lg hover:bg-gray-200 group shadow-gray-200 transition-all duration-200 no-underline`}
+                      className={` ${pathName === '/admin/products' ? 'bg-white shadow-lg ' : ''} ${isSidebarOpen ? "pl-2" : ""} mt-3 flex items-center py-2.5 text-base font-normal text-dark-500 rounded-lg hover:bg-gray-100 group shadow-gray-200 transition-all duration-200 no-underline`}
 
                     >
                       <div className={` ${pathName === '/admin/products' ? 'bg-white' : ''} shadow-lg shadow-gray-300 !text-white  text-dark-700 w-8 h-8 mr-1 rounded-lg text-center grid place-items-center`}>
-                        <FaBoxArchive className="text-slate-700" />
+                        <FaBoxArchive className="color-palette-1" />
                       </div>
 
                       {isSidebarOpen ? (
@@ -97,11 +98,11 @@ const SidebarAdmin = ({ isSidebarOpen, toggleSidebar, setIsSidebarOpen, userRole
                 >
                   <li className="mt-2">
                     <div
-                      className={` ${pathName === '/admin/categories' ? 'bg-white shadow-lg ' : ''} ${isSidebarOpen ? "pl-2" : ""} flex items-center py-2.5 text-base font-normal text-dark-500 rounded-lg hover:bg-gray-200 group shadow-gray-200 transition-all duration-200 no-underline`}
+                      className={` ${pathName === '/admin/categories' ? 'bg-white shadow-lg ' : ''} ${isSidebarOpen ? "pl-2" : ""} mt-3 flex items-center py-2.5 text-base font-normal text-dark-500 rounded-lg hover:bg-gray-100 group shadow-gray-200 transition-all duration-200 no-underline`}
 
                     >
                       <div className={` ${pathName === '/admin/categories' ? 'bg-fuchsia-400' : ''} shadow-lg shadow-gray-300 !text-white  text-dark-700 w-8 h-8 mr-1 rounded-lg text-center grid place-items-center bg-white `}>
-                        <BiCategory className="text-slate-700" />
+                        <BiCategory className="color-palette-1" />
                       </div>
 
                       {isSidebarOpen ? (
@@ -121,11 +122,11 @@ const SidebarAdmin = ({ isSidebarOpen, toggleSidebar, setIsSidebarOpen, userRole
                 >
                   <li className="mt-2">
                     <div
-                      className={` ${pathName === '/admin/orders' ? 'bg-white shadow-lg ' : ''} ${isSidebarOpen ? "pl-2" : ""} flex items-center py-2.5 text-base font-normal text-dark-500 rounded-lg hover:bg-gray-200 group shadow-gray-200 transition-all duration-200 no-underline`}
+                      className={` ${pathName === '/admin/orders' ? 'bg-white shadow-lg ' : ''} ${isSidebarOpen ? "pl-2" : ""} mt-3 flex items-center py-2.5 text-base font-normal text-dark-500 rounded-lg hover:bg-gray-100 group shadow-gray-200 transition-all duration-200 no-underline`}
 
                     >
                       <div className={` ${pathName === '/admin/orders' ? 'bg-fuchsia-400' : ''} shadow-lg shadow-gray-300 !text-white  text-dark-700 w-8 h-8 mr-1 rounded-lg text-center grid place-items-center bg-white `}>
-                        <FaBasketShopping className="text-slate-700" />
+                        <FaBasketShopping className="color-palette-1" />
                       </div>
 
                       {isSidebarOpen ? (
@@ -145,11 +146,11 @@ const SidebarAdmin = ({ isSidebarOpen, toggleSidebar, setIsSidebarOpen, userRole
                 >
                   <li className="mt-2">
                     <div
-                      className={` ${pathName === '/admin/opname' ? 'bg-white shadow-lg ' : ''} ${isSidebarOpen ? "pl-2" : ""} flex items-center py-2.5 text-base font-normal text-dark-500 rounded-lg hover:bg-gray-200 group shadow-gray-200 transition-all duration-200 no-underline`}
+                      className={` ${pathName === '/admin/opname' ? 'bg-white shadow-lg ' : ''} ${isSidebarOpen ? "pl-2" : ""} mt-3 flex items-center py-2.5 text-base font-normal text-dark-500 rounded-lg hover:bg-gray-100 group shadow-gray-200 transition-all duration-200 no-underline`}
 
                     >
                       <div className={` ${pathName === '/admin/opname' ? 'bg-fuchsia-400' : ''} shadow-lg shadow-gray-300 !text-white  text-dark-700 w-8 h-8 mr-1 rounded-lg text-center grid place-items-center bg-white `}>
-                        <HiOutlineDocumentMagnifyingGlass  className="text-slate-700" />
+                        <HiOutlineDocumentMagnifyingGlass className="color-palette-1" />
                       </div>
 
                       {isSidebarOpen ? (
@@ -171,11 +172,11 @@ const SidebarAdmin = ({ isSidebarOpen, toggleSidebar, setIsSidebarOpen, userRole
                   >
                     <li className="mt-2">
                       <div
-                        className={` ${pathName === '/admin/users' ? 'bg-white shadow-lg ' : ''} ${isSidebarOpen ? "pl-2" : ""} flex items-center py-2.5 text-base font-normal text-dark-500 rounded-lg hover:bg-gray-200 group shadow-gray-200 transition-all duration-200 no-underline`}
+                        className={` ${pathName === '/admin/users' ? 'bg-white shadow-lg ' : ''} ${isSidebarOpen ? "pl-2" : ""} mt-3 flex items-center py-2.5 text-base font-normal text-dark-500 rounded-lg hover:bg-gray-100 group shadow-gray-200 transition-all duration-200 no-underline`}
 
                       >
                         <div className={` ${pathName === '/admin/users' ? 'bg-fuchsia-400' : ''} shadow-lg shadow-gray-300 !text-white  text-dark-700 w-8 h-8 mr-1 rounded-lg text-center grid place-items-center bg-white `}>
-                          <FaUser className="text-slate-700" />
+                          <FaUser className="color-palette-1" />
                         </div>
 
                         {isSidebarOpen ? (

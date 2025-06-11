@@ -80,9 +80,6 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
     }
   };
 
-  // errorCode Handling
-  if (loading) return <p className="text-center mt-5">Loading...</p>;
-
   if (errorCode === 401) {
     return (
       <ErrorMessage
@@ -98,7 +95,7 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
       <ErrorMessage
         errorCode={errorCode}
         title="Forbidden"
-        message="Anda tidak memiliki izin untuk mengakses halaman ini."
+        message="You don't have access for this page."
       />
     );
   }
@@ -119,7 +116,7 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
       <ErrorMessage
         errorCode={403}
         title="Access Denied"
-        message="Anda tidak memiliki akses ke halaman ini."
+        message="You don't have access for this page."
       />
     );
   }

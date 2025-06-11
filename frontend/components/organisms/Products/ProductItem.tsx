@@ -1,4 +1,6 @@
 // import { Product } from "@/utils/data";
+'use client';
+
 import { useState } from "react";
 import Image from "next/image";
 import { toast } from "react-hot-toast";
@@ -25,7 +27,7 @@ export default function ProductItem({ products }: ProductItemProps) {
     const qty = quantities[id] || 1;
     try {
       await addToCart(id, qty);
-      toast.success("Ditambahkan ke keranjang");
+      toast.success("Successfully added to your cart!");
     } catch (error) {
       console.error("Ini adalah error : ", error);
       toast.error("Gagal menambahkan ke keranjang");
@@ -54,10 +56,6 @@ export default function ProductItem({ products }: ProductItemProps) {
             </button>
             </div>
           <p className="text-lg font-semibold pt-1">{item.name}</p>
-          <div className="flex flex-row items-center gap-1 pb-2">
-            <Image src="/icon/star.svg" width={18} height={18} alt="" />
-            <p className="text-base font-medium text-gray-600 leading-none !mb-0">5.00</p>
-          </div>
           <p className="text-base font-medium text-gray-800">{new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(Number(item.price))}</p>
           {/* qty inputs */}
           <div className="flex items-center flex-col">

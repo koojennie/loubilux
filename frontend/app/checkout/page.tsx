@@ -22,9 +22,6 @@ export default function page() {
   const [selectedAddressId, setSelectedAddressId] = useState<string | null>(null);
   const { checkoutData } = useCheckout() ?? {};
 
-
-  // if(!checkoutData) return <h1>Loading...</h1>
-
   // console.log(checkoutData);
 
   const [cart, setCart] = useState<any>(null);
@@ -196,7 +193,7 @@ export default function page() {
           <div className="mt-3">
             {/* <p className="text-left text-2xl font-semibold">Contact Information</p> */}
             {/* <p className="text-left !mt-10 text-lg font-medium">Email address</p>
-            <p className="text-lg text-slate-400 leading-none align-middle">{userShipping?.email}</p> */}
+            <p className="text-lg text-[#493628] leading-none align-middle">{userShipping?.email}</p> */}
 
           </div>
           <div className="mt-10 ">
@@ -221,13 +218,13 @@ export default function page() {
           {selectedAddressId && (
             <div className="mt-10">
               <p className="text-left !mt-10 text-lg font-medium">Receiver Name</p>
-              <p className="text-lg text-slate-400 leading-none align-middle">{selectedAddress?.receiverName}</p>
-
+              <p className="text-lg text-[#493628] leading-none align-middle">{selectedAddress?.receiverName}</p>
+              
               <p className="text-left !mt-10 text-lg font-medium">Email address</p>
-              <p className="text-lg text-slate-400 leading-none align-middle">{userShipping?.email}</p>
-
+              <p className="text-lg text-[#493628] leading-none align-middle">{userShipping?.email}</p>
+              
               <p className="text-left !mt-10 text-lg font-medium">Phone Number</p>
-              <p className="text-lg text-slate-400 leading-none align-middle">{selectedAddress?.phoneNumber}</p>
+              <p className="text-lg text-[#493628] leading-none align-middle">{selectedAddress?.phoneNumber}</p>
 
               <p className="text-lg font-medium">Address</p>
               <input
