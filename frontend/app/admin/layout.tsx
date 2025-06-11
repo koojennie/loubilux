@@ -137,7 +137,7 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
       />
       <div className="w-full">
         <div
-          className={`flex-1 pt-18 transition-all duration-300 ${isSidebarOpen ? "pl-5 md:pl-44" : "pl-5 md:pl-16"
+          className={`flex-1 pt-18 bg-[#f6f8f9] transition-all duration-300 ${isSidebarOpen ? "pl-5 md:pl-44" : "pl-5 md:pl-16"
             }`}
         >
           {children}

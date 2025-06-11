@@ -44,7 +44,7 @@ const NavbarAdmin = ({ isSidebarOpen, toggleSidebar, handleSignOut }: SidebarAdm
 
   return (
     <div>
-      <nav className="fixed z-30 w-full bg-white border-b border-gray-200 shadow-md">
+      <nav className="fixed z-30 w-full bg-[#AB886D] drop-shadow-md">
         <div className="py-1 px-4 lg:px-5 lg:pl-3">
           <div className="flex justify-between items-center">
             <div className="md:hidden">
@@ -63,9 +63,9 @@ const NavbarAdmin = ({ isSidebarOpen, toggleSidebar, handleSignOut }: SidebarAdm
               </button>
               <div className="gap-3 flex flex-row justify-center items-center">
                 <a className="" href="/#">
-                  <Image src="/icon/loubilux-logo.png" width={30} height={30} alt="Logo" />
+                  <Image src="/icon/loubilux-logo-white.png" width={30} height={30} alt="Logo" />
                 </a>
-                <p className="text-xl font-semibold flex items-center justify-center color-palette-1 !mb-0">
+                <p className="text-xl font-semibold flex items-center justify-center text-white !mb-0">
                     Loubilux
                 </p>
               </div>

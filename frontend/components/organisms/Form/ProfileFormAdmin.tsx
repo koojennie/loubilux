@@ -59,17 +59,6 @@ const ProfileFormAdmin: React.FC<UserFormProps> = ({ onSubmit, onEditSubmit, isE
 
   })
 
-  //   const getGenerateNewUserId = async () => {
-  //     try {
-  //       const result = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/users/generateuserid`);
-
-  //       setGeneratedUserCode(result.data.userId);
-  //     } catch (error) {
-  //       console.error("error when get generate newe user Id", error)
-  //     }
-  //   }
-
-
   const validatePassword = (password: string) => {
     const strongPasswordRegex =
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
@@ -162,7 +151,7 @@ const ProfileFormAdmin: React.FC<UserFormProps> = ({ onSubmit, onEditSubmit, isE
     <div>
       <form onSubmit={handleSubmit} action="">
         <div className="flex flex-col py-8 pt-8 mb-12 px-8 ">
-          <h4 className="flex text-lg mb-1 !font-semibold text-[#493628]">
+          <h4 className="flex text-2xl mb-1 !font-semibold text-[#493628]">
             {isEdit ? "Edit Profile Page" : " My Profile Page"}
           </h4>
           {!isEdit && (
@@ -171,36 +160,29 @@ const ProfileFormAdmin: React.FC<UserFormProps> = ({ onSubmit, onEditSubmit, isE
             </button>
 
           )}
-          <p className="mb-4 text-lg font-medium mt-1 text-[#493628]">
-            {isEdit ? "Edit Profile." : "Profile User"}
+          <p className="mb-4 text-xl font-medium mt-1 text-[#493628]">
+            {isEdit ? "Edit Profile" : "Profile User"}
           </p>
           <div className="grid grid-cols-1 gap-3">
 
             {isEdit ? (
               <div className="w-full">
-                <label className="block mb-1 text-sm text-[#493628]">Image</label>
                 <ImageUploader isProfileAdmin={true} image={profilePicture} setImage={setProfilePicture} />
-                {/* <div className="image-upload">
-                  <label htmlFor="avatar">
-                    <img src="/icon/upload.svg" alt="upload" />
-                  </label>
-                  <input id="avatar" type="file" name="avatar" accept="image/png, image/jpeg" />
-                </div> */}
               </div>
             ) : (
               <img src={profilePicture || defaultImage} width="90" height="90" className="avatar img-fluid" />
             )}
 
             {/* User Form */}
-            <div className="w-full">
-              <p className="block mb-2 font-semibold text-base text-slate-600">User ID</p>
-              <p className="text-slate-500 text-base truncate">{generatedUserCode || `Please Choose Category first`}</p>
+            <div className="w-full mt-2">
+              <p className="block mb-2 font-medium text-lg text-[#493628]">User ID</p>
+              <p className="text-gray-900 text-base truncate">{generatedUserCode || `Please Choose Category first`}</p>
               <input type="hidden" name='productCode' value={generatedUserCode} />
             </div>
 
             {/* Name */}
             <div className="w-full">
-              <label className="block mb-1 font-semibold text-base text-[#493628]">Name</label>
+              <label className="block mb-1 font-medium text-lg text-[#493628]">Name</label>
               {isEdit ? (
 
                 <input
@@ -212,13 +194,13 @@ const ProfileFormAdmin: React.FC<UserFormProps> = ({ onSubmit, onEditSubmit, isE
                   }
                 />
               ) : (
-                <p className="text-slate-500 text-base truncate">{name || `Please Choose Category first`}</p>
+                <p className="text-gray-900 text-base truncate">{name || `Please Choose Category first`}</p>
               )}
             </div>
 
             {/* username */}
             <div className="w-full">
-              <label className="block mb-1 font-semibold text-base text-[#493628]">Username</label>
+              <label className="block mb-1 font-medium text-lg text-[#493628]">Username</label>
               {isEdit ? (
                 <input
                   type="text"
@@ -229,13 +211,13 @@ const ProfileFormAdmin: React.FC<UserFormProps> = ({ onSubmit, onEditSubmit, isE
                   }
                 />
               ) : (
-                <p className="text-slate-500 text-base truncate">{username}</p>
+                <p className="text-gray-900 text-base truncate">{username}</p>
               )}
             </div>
 
             {/* phone number */}
             <div className="w-full">
-              <label className="block mb-1 font-semibold text-base text-[#493628]">Phone Number</label>
+              <label className="block mb-1 font-medium text-lg text-[#493628]">Phone Number</label>
               {isEdit ? (
 
                 <input
@@ -247,15 +229,14 @@ const ProfileFormAdmin: React.FC<UserFormProps> = ({ onSubmit, onEditSubmit, isE
                   }
                 />
               ) : (
-                <p className="text-slate-500 text-base truncate">{phoneNumber}</p>
+                <p className="text-gray-900 text-base truncate">{phoneNumber}</p>
               )}
             </div>
 
             {/* Email */}
             <div className="w-full">
-              <label className="block mb-1 font-semibold text-base text-[#493628]">Email</label>
+              <label className="block mb-1 font-medium text-lg text-[#493628]">Email</label>
               {isEdit ? (
-
                 <input
                   type="email"
                   className="w-full h-10 bg-transparent placeholder:text-[#493628] text-[#493628] text-sm border border-slate-200 rounded px-3 shadow-sm focus:border-slate-400"
@@ -265,13 +246,13 @@ const ProfileFormAdmin: React.FC<UserFormProps> = ({ onSubmit, onEditSubmit, isE
                   }
                 />
               ) : (
-                <p className="text-slate-500 text-base truncate">{email}</p>
+                <p className="text-gray-900 text-base truncate">{email}</p>
               )}
             </div>
 
             {/* Role */}
             <div className="w-full">
-              <label className="block mb-1 font-semibold text-base text-[#493628]">Role</label>
+              <label className="block mb-1 font-medium text-lg text-[#493628]">Role</label>
               {isEdit ? (
 
                 <select
@@ -284,11 +265,9 @@ const ProfileFormAdmin: React.FC<UserFormProps> = ({ onSubmit, onEditSubmit, isE
                   <option value="superadmin">Super Admin</option>
                 </select>
               ) : (
-                <p className="text-slate-500 text-base truncate">
-                  <span className={`px-3 py-1 rounded-md text-xs font-semibold ${role === 'user' ? 'bg-yellow-200 text-yellow-800' : role === 'admin' ? 'bg-indigo-200 text-indigo-800' : role === 'superadmin' ? 'bg-purple-200 text-purple-800' : 'bg-gray-200 text-gray-800'}`}
+                <p className={`px-3 py-2 rounded-lg w-40 text-lg text-center font-semibold ${role === 'user' ? 'bg-yellow-200 text-yellow-800' : role === 'admin' ? 'bg-indigo-200 text-indigo-800' : role === 'superadmin' ? 'bg-purple-200 text-purple-800' : 'bg-gray-200 text-gray-800'}`}
                   >
                     {role === 'superadmin' ? String('Super Admin') : role === 'admin' ? String('Admin') : role === 'user' ? String('User') : String(role)}
-                  </span>
                 </p>
               )}
             </div>
@@ -339,10 +318,10 @@ const ProfileFormAdmin: React.FC<UserFormProps> = ({ onSubmit, onEditSubmit, isE
         </div>
 
 
-        <div className={`${isEdit ? 'p-6 pl-12' : "pl-6 pb-3 "} `}>
-          <div className="right-0 content-end">
+        <div className={`${isEdit ? 'p-8 pl-8' : "pl-8 pb-3 "} `}>
+          <div className=" content-end">
             <button
-              className="mx-auto select-none rounded border border-red-600 py-2 px-4 text-center text-sm font-semibold text-red-600 transition-all hover:bg-red-600 hover:text-white hover:shadow-md hover:shadow-red-600/20 active:bg-red-700 active:text-white active:opacity-[0.85] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+              className="select-none rounded border-2 border-[#493628] py-2 px-4 text-center text-sm font-semibold text-[#493628] transition-all hover:bg-[#493628] hover:text-white disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
               type="button"
               onClick={() => router.push('/admin')}
             >
