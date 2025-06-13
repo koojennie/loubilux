@@ -9,20 +9,14 @@ import CategoryRevenueChart from "@/components/organisms/Charts/CategoryRevenue"
 
 export default function dashboard() {
   return (
-    <div className="top-16 pl-10">
-      {/* <div className="grid grid-cols-12 gap-4 md:gap-6"> */}
+    <div className="top-16 pl-4 pr-4 py-2">
       <div className="grid grid-cols-1 gap-4 md:gap-3">
         <div className="col-span-12 space-y-6 xl:col-span-7">
           <CardDashboard />
           <div className="pb-2"></div>
-          {/* <MonthSales /> */}
           <CategoryRevenueChart />
-        </div>
-        {/* <div className="col-span-12 xl:col-span-5">
-        </div> */}
-        <div className="col-span-12">
+          <div className="pb-2"></div>
           <RecentOrders />
-          {/* <StatisticsChart /> */}
         </div>
       </div>
     </div>

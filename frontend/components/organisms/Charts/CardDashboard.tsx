@@ -8,6 +8,7 @@ import Image from "next/image";
 import axios from "axios";
 import { Product, Order } from "@/types/type";
 import toast from 'react-hot-toast';
+import { TbBuildingWarehouse } from 'react-icons/tb';
 
 
 function CardDashboard() {
@@ -64,19 +65,19 @@ function CardDashboard() {
 
   return (
     // <div className="grid grid-cols-1 gap-4 sm:grid-cols-3 md:gap-6">
-    <div className="grid grid-cols-1 gap-4 sm:grid-cols-3 md:gap-6">
+    <div className="grid grid-cols-1 gap-4 sm:grid-cols-4 md:gap-6">
       {/* <!-- Metric Item Start --> */}
-      <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6">
-        <div className="flex items-center justify-center w-12 h-12 bg-gray-100 rounded-xl dark:bg-gray-800">
-          <FaBox className="text-gray-800 size-6 dark:text-white/90" />
+      <div className="rounded-2xl bg-white p-4 md:p-6">
+        <div className="flex items-center justify-center w-12 h-12 bg-[#f4e6e0] rounded-xl">
+          <FaBox className="text-[#493628] size-6" />
         </div>
 
-        <div className="flex items-end justify-between mt-5">
+        <div className="flex items-end justify-between mt-3">
           <div>
-            <span className="text-sm text-gray-500 dark:text-gray-400">
+            <span className="text-lg font-medium text-[#493628]">
               Products
             </span>
-            <h4 className="mt-2 font-bold text-gray-800 text-title-sm dark:text-white/90">
+            <h4 className="mt-2 font-bold text-[#493628] text-3xl">
               {totalProducts}
             </h4>
           </div>
@@ -89,16 +90,16 @@ function CardDashboard() {
       {/* <!-- Metric Item End --> */}
 
       {/* <!-- Metric Item Start --> */}
-      <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6">
-        <div className="flex items-center justify-center w-12 h-12 bg-gray-100 rounded-xl dark:bg-gray-800">
-          <FaFileInvoiceDollar className="text-gray-800 dark:text-white/90" size={27} />
+      <div className="rounded-2xl bg-white p-4 md:p-6">
+        <div className="flex items-center justify-center w-12 h-12 bg-[#f4e6e0] rounded-xl">
+          <FaFileInvoiceDollar className="text-[#493628] size-6" />
         </div>
-        <div className="flex items-end justify-between mt-5">
+        <div className="flex items-end justify-between mt-3">
           <div>
-            <span className="text-sm text-gray-500 dark:text-gray-400">
+            <span className="text-lg font-medium text-[#493628]">
               Orders
             </span>
-            <h4 className="mt-2 font-bold text-gray-800 text-title-sm dark:text-white/90">
+            <h4 className="mt-2 font-bold text-[#493628] text-3xl">
               {totalOrders}
             </h4>
           </div>
@@ -112,17 +113,40 @@ function CardDashboard() {
       {/* <!-- Metric Item End --> */}
 
       {/* <!-- Metric Item Start --> */}
-      <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6">
-        <div className="flex items-center justify-center w-12 h-12 bg-gray-100 rounded-xl dark:bg-gray-800">
-          <MdPeopleAlt className="text-gray-800 dark:text-white/90" size={27} />
+      <div className="rounded-2xl bg-white p-4 md:p-6">
+        <div className="flex items-center justify-center w-12 h-12 bg-[#f4e6e0] rounded-xl">
+          <MdPeopleAlt className="text-[#493628] size-6" />
         </div>
-        <div className="flex items-end justify-between mt-5">
+        <div className="flex items-end justify-between mt-3">
           <div>
-            <span className="text-sm text-gray-500 dark:text-gray-400">
+            <span className="text-lg font-medium text-[#493628]">
               Users
             </span>
-            <h4 className="mt-2 font-bold text-gray-800 text-title-sm dark:text-white/90">
+            <h4 className="mt-2 font-bold text-[#493628] text-3xl">
               {totalUsers}
+            </h4>
+          </div>
+
+          {/* <Badge color="error">
+            <ArrowDownIcon className="text-error-500" />
+            9.05%
+          </Badge> */}
+        </div>
+      </div>
+      {/* <!-- Metric Item End --> */}
+
+      {/* <!-- Metric Item Start --> */}
+      <div className="rounded-2xl bg-white p-4 md:p-6">
+        <div className="flex items-center justify-center w-12 h-12 bg-[#f4e6e0] rounded-xl">
+          <TbBuildingWarehouse className="text-[#493628] size-6" />
+        </div>
+        <div className="flex items-end justify-between mt-3">
+          <div>
+            <span className="text-lg font-medium text-[#493628]">
+              Opname
+            </span>
+            <h4 className="mt-2 font-bold text-[#493628] text-3xl">
+              {totalUsers} 
             </h4>
           </div>
 

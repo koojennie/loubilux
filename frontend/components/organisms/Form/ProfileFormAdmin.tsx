@@ -187,7 +187,7 @@ const ProfileFormAdmin: React.FC<UserFormProps> = ({ onSubmit, onEditSubmit, isE
 
                 <input
                   type="text"
-                  className="w-full h-10 bg-transparent placeholder:text-[#493628] text-[#493628] text-sm border border-slate-200 rounded px-3 shadow-sm focus:border-slate-400"
+                  className="w-full h-10 placeholder:text-[#493628] text-[#493628] text-base border rounded px-3 focus:border-[#493628]"
                   placeholder="username..."
                   value={name}
                   onChange={(e) => { setName(e.target.value) }
@@ -204,7 +204,7 @@ const ProfileFormAdmin: React.FC<UserFormProps> = ({ onSubmit, onEditSubmit, isE
               {isEdit ? (
                 <input
                   type="text"
-                  className="w-full h-10 bg-transparent placeholder:text-[#493628] text-[#493628] text-sm border border-slate-200 rounded px-3 shadow-sm focus:border-slate-400"
+                  className="w-full h-10 placeholder:text-[#493628] text-[#493628] text-base border rounded px-3 focus:border-[#493628]"
                   placeholder="username..."
                   value={username}
                   onChange={(e) => { setUsername(e.target.value) }
@@ -222,7 +222,7 @@ const ProfileFormAdmin: React.FC<UserFormProps> = ({ onSubmit, onEditSubmit, isE
 
                 <input
                   type="text"
-                  className="w-full h-10 bg-transparent placeholder:text-[#493628] text-[#493628] text-sm border border-slate-200 rounded px-3 shadow-sm focus:border-slate-400"
+                  className="w-full h-10 placeholder:text-[#493628] text-[#493628] text-base border rounded px-3 focus:border-[#493628]"
                   placeholder="Phone Number..."
                   value={phoneNumber}
                   onChange={(e) => { setPhoneNumber(e.target.value) }
@@ -239,7 +239,7 @@ const ProfileFormAdmin: React.FC<UserFormProps> = ({ onSubmit, onEditSubmit, isE
               {isEdit ? (
                 <input
                   type="email"
-                  className="w-full h-10 bg-transparent placeholder:text-[#493628] text-[#493628] text-sm border border-slate-200 rounded px-3 shadow-sm focus:border-slate-400"
+                  className="w-full h-10 placeholder:text-[#493628] text-[#493628] text-base border rounded px-3 focus:border-[#493628]"
                   placeholder="email..."
                   value={email}
                   onChange={(e) => { setEmail(e.target.value) }
@@ -256,7 +256,7 @@ const ProfileFormAdmin: React.FC<UserFormProps> = ({ onSubmit, onEditSubmit, isE
               {isEdit ? (
 
                 <select
-                  className="w-full h-10 bg-transparent text-[#493628] text-sm border border-slate-200 rounded px-3 shadow-sm focus:border-slate-400"
+                  className="w-full h-10 placeholder:text-[#493628] text-[#493628] text-base border rounded px-3 focus:border-[#493628]"
                   value={role || 'user'}
                   onChange={(e) => setRole(e.target.value)}
                 >
@@ -279,7 +279,7 @@ const ProfileFormAdmin: React.FC<UserFormProps> = ({ onSubmit, onEditSubmit, isE
                   <label className="block mb-1 text-sm text-[#493628]">Password</label>
                   <input
                     type="password"
-                    className="w-full h-10 bg-transparent placeholder:text-[#493628] text-[#493628] text-sm border border-slate-200 rounded px-3 shadow-sm focus:border-slate-400"
+                    className="w-full h-10 placeholder:text-[#493628] text-[#493628] text-base border rounded px-3 focus:border-[#493628]"
                     placeholder="Your Password..."
                     value={password}
                     onChange={handlePasswordChange}
@@ -297,7 +297,7 @@ const ProfileFormAdmin: React.FC<UserFormProps> = ({ onSubmit, onEditSubmit, isE
                   <label className="block mb-1 text-sm text-[#493628]">Confirm Password</label>
                   <input
                     type="password"
-                    className="w-full h-10 bg-transparent placeholder:text-[#493628] text-[#493628] text-sm border border-slate-200 rounded px-3 shadow-sm focus:border-slate-400"
+                    className="w-full h-10 placeholder:text-[#493628] text-[#493628] text-base border rounded px-3 focus:border-[#493628]"
                     placeholder="Confirm Password..."
                     value={confirmPassword}
                     onChange={handleConfirmPasswordChange}
@@ -321,7 +321,7 @@ const ProfileFormAdmin: React.FC<UserFormProps> = ({ onSubmit, onEditSubmit, isE
         <div className={`${isEdit ? 'p-8 pl-8' : "pl-8 pb-3 "} `}>
           <div className=" content-end">
             <button
-              className="select-none rounded border-2 border-[#493628] py-2 px-4 text-center text-sm font-semibold text-[#493628] transition-all hover:bg-[#493628] hover:text-white disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+              className="select-none rounded border-2 border-[#493628] py-2 px-4 text-center text-base font-semibold text-[#493628] transition-all hover:bg-[#493628] hover:text-white disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
               type="button"
               onClick={() => router.push('/admin')}
             >
@@ -330,7 +330,7 @@ const ProfileFormAdmin: React.FC<UserFormProps> = ({ onSubmit, onEditSubmit, isE
             <span className="px-2"></span>
             {isEdit && (
               <button
-                className=" mx-auto select-none rounded bg-slate-800 py-2 px-4 text-center text-sm font-semibold text-white shadow-md shadow-slate-900/10 transition-all hover:shadow-lg hover:shadow-slate-900/20 active:opacity-[0.85] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+                className="select-none rounded bg-[#493628] py-2 px-4 text-center text-base font-semibold text-white transition-all hover:bg-[#705C53] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
                 type="submit"
                 onClick={handleIsOpenCloseModalConfirmation}
                 disabled={!isEdit && (!isPasswordValid || !isMatchPassword)}

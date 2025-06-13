@@ -55,7 +55,7 @@ const profileAdminEdit = () => {
 
   return (
     <div className="p-8 md:p-8 ">
-      <div className="relative flex flex-col rounded-2xl bg-white bg-clip-border text-[#493628] shadow-lg max-w-xl">
+      <div className="relative flex flex-col rounded-2xl bg-white text-[#493628] max-w-xl">
         <ProfileFormAdmin isEdit={true} initialData={user} />
         <Toaster />
       </div>
