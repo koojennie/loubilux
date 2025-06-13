@@ -17,8 +17,11 @@ const OrdersPage = () => {
   const [page, setPage] = useState<number>(1);
   const [totalItems, setTotalItems] = useState<number>(1);
   const [limit, setLimit] = useState<number>(5);
+  const [sortBy, setSortBy] = useState<string>("createdAt");
+  const [orderBy, setOrderBy] = useState<string>("asc");
+  const [searchQuery, setSearchQuery] = useState<string>("");
   const [user, setUser] = useState(null);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isModalConfirmationDeleteOpen, setIsModalConfirmationDeleteOpen] = useState<boolean>(false);
   const [isModalViewDetailOpen, setIsModalViewDetailOpen] = useState<boolean>(true);
   const [selectedViewDetailOrder, setSelectedViewDetailOrder] = useState<Order | null>(null);
@@ -28,7 +31,7 @@ const OrdersPage = () => {
   const fetchAllOrders = async () => {
     setIsLoading(true);
     try {
-      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/orders/all`,
+      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/orders/all?page=${page}&limit=${limit}&sortBy=${sortBy}&sortOrder=${orderBy}&searchQuery=${searchQuery}`,
         {
           withCredentials: true
         }
@@ -47,14 +50,14 @@ const OrdersPage = () => {
       setLimit(response.data.limit);
     } catch (error) {
       console.error('error when fetch all orders :', error);
+    } finally {
+      setIsLoading(false);
     }
-
-    setIsLoading(false);
   }
 
   useEffect(() => {
     fetchAllOrders();
-  }, []);
+  }, [page, limit, sortBy, orderBy, searchQuery]);
 
   const handleOpenCloseModalViewDetail = (order?: Order) => {
     console.log('ini adalah orders yang dipilih', order);
@@ -78,7 +81,7 @@ const OrdersPage = () => {
           { key: 'paymentMethod', label: 'PaymentMethod' as keyof Order },
           // { key: 'category', label: 'Category' },
         ]}
-        onChangeDropDownLimitData={() => { }}
+        onChangeDropDownLimitData={setLimit}
         onChangeDropDownOrderBy={() => { }}
         onChangeDropDownSortBy={() => { }}
         onChangeSearchQuery={() => { }}
@@ -103,9 +106,7 @@ const OrdersPage = () => {
         page={page}
         limit={limit}
         totalItems={totalItems}
-        onPageChange={(newPage) => {
-          console.log('Page changed to:', newPage);
-        }}
+        onPageChange={setPage}
       />
 
       <ModalViewDetails
@@ -123,7 +124,7 @@ const OrdersPage = () => {
           { key: 'totalPrice', label: 'Total Price' as keyof Order },
           { key: 'items', label: 'Items' as keyof Order },
         ]}
-      /> 
+      />
       <ModalReport isOpen={isModaReport} setIsOpen={setIsModalReport} />
     </div>
   );
