@@ -7,6 +7,7 @@ import { IoPersonAdd } from "react-icons/io5";
 import { TbCategoryPlus } from "react-icons/tb";
 import { FaFileExcel } from "react-icons/fa6";
 import { MdNoteAdd } from "react-icons/md";
+import { HiPlus } from "react-icons/hi";
 
 
 
@@ -73,10 +74,10 @@ const HeaderContentAdmin = <T,>({
       <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
         <div>
           <p className="text-2xl font-semibold text-[#493628]">{header}</p>
-          <p className="text-base text-[#493628] mt-1">{subHeader}</p>
+          <p className="text-lg text-[#493628] mt-1">{subHeader}</p>
         </div>
           <button
-            className="flex items-center gap-2 bg-[#493628] py-2 px-3 text-white text-xs font-bold uppercase rounded-lg shadow-md hover:shadow-lg"
+            className="flex items-center gap-2 bg-[#493628] hover:bg-[#705C53] py-2 px-3 text-white text-sm font-medium !rounded-lg"
             type="button"
             onClick={toAddPage}
           >
@@ -84,7 +85,7 @@ const HeaderContentAdmin = <T,>({
             <path d="M6.25 6.375a4.125 4.125 0 118.25 0 4.125 4.125 0 01-8.25 0zM3.25 19.125a7.125 7.125 0 0114.25 0v.003l-.001.119a.75.75 0 01-.363.63 13.067 13.067 0 01-6.761 1.873c-2.472 0-4.786-.684-6.76-1.873a.75.75 0 01-.364-.63l-.001-.122zM19.75 7.5a.75.75 0 00-1.5 0v2.25H16a.75.75 0 000 1.5h2.25v2.25a.75.75 0 001.5 0v-2.25H22a.75.75 0 000-1.5h-2.25V7.5z"></path>
             </svg> */
             }
-            {tableType === "products" && <MdAddBox size={19} />}
+            {tableType === "products" && <HiPlus size={14} />}
             {tableType === "users" && <IoPersonAdd size={14} />}
             {tableType === "categories" && <TbCategoryPlus size={14} />}
             {tableType === "orders" && <FaFileExcel size={14}/>}
@@ -98,9 +99,9 @@ const HeaderContentAdmin = <T,>({
       <div className="grid grid-cols-1 mt-3 sm:grid-cols-2 md:grid-cols-4 gap-2">
         {/* Dropdown Show Data */}
         <div>
-          <p className="text-xs text-gray-700">Show Data</p>
+          <p className="text-sm font-semibold text-gray-700">Show Data</p>
           <select
-            className="w-full text-xs border rounded p-2 cursor-pointer"
+            className="w-full text-sm border rounded-lg p-2 cursor-pointer"
             value={selectedLimit}
             onChange={(e) => handleSelectLimit(Number(e.target.value))}
           >
@@ -114,9 +115,9 @@ const HeaderContentAdmin = <T,>({
 
         {/* Dropdown Sort By */}
         <div>
-          <p className="text-xs text-gray-700">Order By</p>
+          <p className="text-sm font-semibold text-gray-700">Order By</p>
           <select
-            className="w-full text-xs border rounded p-2 cursor-pointer"
+            className="w-full text-sm border rounded-lg p-2 cursor-pointer"
             value={selectedSortBy}
             onChange={(e) => handleSelectSortBy(e.target.value)}
           >
@@ -134,9 +135,9 @@ const HeaderContentAdmin = <T,>({
 
         {/* Dropdown Order By */}
         <div>
-          <p className="text-xs text-gray-700">Sort By</p>
+          <p className="text-sm font-semibold text-gray-700">Sort By</p>
           <select
-            className="w-full text-xs border rounded p-2 cursor-pointer"
+            className="w-full text-sm border rounded-lg p-2 cursor-pointer"
             value={selectedSortOrderBy}
             onChange={(e) => handleSelectOrderBy(e.target.value)}
           >
@@ -147,10 +148,10 @@ const HeaderContentAdmin = <T,>({
 
         {/* Search Input */}
         <div>
-          <p className="text-xs text-gray-700">Search</p>
+          <p className="text-sm font-semibold text-gray-700">Search</p>
           <div className="relative">
             <input
-              className="w-full pr-11 h-10 pl-3 text-sm border rounded focus:outline-none"
+              className="w-full pr-11 h-10 pl-3 text-sm border rounded-lg focus:outline-none"
               placeholder={searchPlaceholder}
               value={searchQuery}
               onChange={(e) => handleSearchQuery(e.target.value)}

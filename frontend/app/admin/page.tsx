@@ -13,9 +13,9 @@ export default function dashboard() {
       <div className="grid grid-cols-1 gap-4 md:gap-3">
         <div className="col-span-12 space-y-6 xl:col-span-7">
           <CardDashboard />
-          <div className="pb-2"></div>
+          <div className="pb-4"></div>
           <CategoryRevenueChart />
-          <div className="pb-2"></div>
+          <div className="pb-4"></div>
           <RecentOrders />
         </div>
       </div>

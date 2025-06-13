@@ -55,11 +55,11 @@ export default function RecentOrders() {
         </div>
 
         <div className="flex items-center gap-3">
-          <button className="inline-flex items-center gap-2 !rounded-lg border-2 border-[#493628] px-4 py-3 text-base font-medium text-[#493628] hover:bg-[#493628] hover:text-white">
+          <button className="inline-flex items-center gap-2 !rounded-lg border-2 border-[#493628] px-3 py-2 text-base font-medium text-[#493628] hover:bg-[#493628] hover:text-white">
             <FaFilter width={20} height={20}/>
             Filter
           </button>
-          <button className="inline-flex items-center gap-2 !rounded-lg border-2 border-[#493628] px-4 py-3 text-base font-medium text-[#493628] hover:bg-[#493628] hover:text-white">
+          <button className="inline-flex items-center gap-2 !rounded-lg border-2 border-[#493628] px-3 py-2 text-base font-medium text-[#493628] hover:bg-[#493628] hover:text-white">
             See all
           </button>
         </div>
