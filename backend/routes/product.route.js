@@ -5,6 +5,7 @@ const multer = require('multer');
 const {
   createProduct,
   getAllProducts,
+  getProductByStatus,
   getProductById,
   updateProduct,
   deleteProduct,
@@ -21,6 +22,7 @@ const upload = multer({
 
 
 router.get("/", getAllProducts);
+router.get("/catalog", getProductByStatus);
 router.get("/count", countProductByCategory);
 router.get("/:id", getProductById);
 router.post("/create", authenticateUser, authorizeRoles('admin', 'superadmin'), createProduct);

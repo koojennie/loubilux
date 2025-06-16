@@ -104,6 +104,48 @@ const getAllProducts = async (req, res) => {
     }
 };
 
+const getProductByStatus = async (req, res) => {
+    try {
+        let { page, limit, sortOrder, sortBy, searchQuery } = req.query;
+        page = parseInt(page) || 1;
+        limit = parseInt(limit) || 10;
+        sortOrder = sortOrder === 'desc' ? 'DESC' : 'ASC';
+
+        const where = {
+            statusPublish: 'active'
+        };
+
+        if (searchQuery) {
+            where.name = { [Op.iLike]: `%${searchQuery}%` }; // Case-insensitive search
+        }
+
+        const totalProducts = await Product.count();
+
+        const { rows: products } = await Product.findAndCountAll({
+            where,
+            include: [{ model: Category, attributes: ['name', 'description'] }],
+            order: sortBy ? [[sortBy, sortOrder]] : [],
+            offset: (page - 1) * limit,
+            limit,
+        });
+
+        const totalPages = Math.ceil(totalProducts / limit);
+
+        return res.status(200).json({
+            status: 'success',
+            message: 'Products retrieved successfully',
+            total: totalProducts,
+            page,
+            limit,
+            totalPages,
+            data: products,
+        });
+    } catch (error) {
+        console.error('Error retrieving products:', error);
+        return res.status(500).json({ status: 'error', message: 'Internal Server Error' });
+    }
+};
+
 const getProductById = async (req, res) => {
     try {
         const { id } = req.params;
@@ -247,6 +289,7 @@ const countProductByCategory = async (req, res) => {
 module.exports = {
     createProduct,
     getAllProducts,
+    getProductByStatus,
     getProductById,
     updateProduct,
     deleteProduct,

@@ -81,7 +81,6 @@ const ProductPage = ({ initialProducts }: ProductsProps) => {
         ...product,
         no: (page - 1) * limit + (index + 1),
         category: product.Category?.name || "N/A",
-        // image: product.image || "/icon/loubilux-logo.png",
       }));
       setProducts(results.data);
       setTotalItems(results.total);
@@ -133,7 +132,7 @@ const ProductPage = ({ initialProducts }: ProductsProps) => {
 
   return (
     <>
-      <div className="flex flex-col px-8 rounded-2xl shadow-xl bg-white shadow-gray-200">
+      <div className="flex px-8 mx-3 my-2 flex-col rounded-2xl bg-white">
         {/*Title */}
         <HeaderContentAdmin
           header="Products"

@@ -66,7 +66,7 @@ const NavbarAdmin = ({ isSidebarOpen, toggleSidebar, handleSignOut }: SidebarAdm
                   <Image src="/icon/loubilux-logo-white.png" width={30} height={30} alt="Logo" />
                 </a>
                 <p className="text-xl font-semibold flex items-center justify-center text-white !mb-0">
-                    Loubilux
+                    LouBiShop
                 </p>
               </div>
             </div>

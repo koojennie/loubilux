@@ -119,7 +119,7 @@ const InvoiceOrderPdf: React.FC<{ order: Order }> = ({ order }) => {
         <View style={styles.header}>
           <View>
             <Image src={`/icon/loubilux-logo.png`} style={styles.logo} />
-            <Text style={styles.company}>Loubilux</Text>
+            <Text style={styles.company}>LouBiShop</Text>
             <Text style={styles.infoText}>Cimanggis, Depok, Jawa Barat</Text>
             <Text style={styles.infoText}>@loubi.shop24</Text>
             <Text style={styles.infoText}>+6281212768921</Text>

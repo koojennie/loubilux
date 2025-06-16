@@ -159,10 +159,10 @@ const ProductForm: React.FC<ProductFormProps> = ({ onSubmit, onEditSubmit ,isEdi
     <div>
       <form onSubmit={handleSubmit} action="">
         <div className="flex flex-col py-8 pt-8 mb-12 px-8 ">
-          <p className="flex text-lg mb-1 font-semibold text-[#493628]">
+          <p className="flex text-2xl font-semibold text-[#493628]">
             {isEdit ? `Edit Product ${generatedProductCode}`: 'Add New Product'}
           </p>
-          <p className="mb-4 text-sm mt-1 text-[#493628]">
+          <p className="mb-4 text-lg text-[#493628]">
             Fill in the information below to add a new product.
           </p>
           <div className="grid grid-rows-1 gap-4">
@@ -171,16 +171,16 @@ const ProductForm: React.FC<ProductFormProps> = ({ onSubmit, onEditSubmit ,isEdi
               {/* Product Code */}
               <div className="w-full">
                 <p className="block mb-2 font-semibold text-base text-[#493628]">Product Code</p>
-                <p className="text-slate-500 text-sm truncate">{generatedProductCode || `Please Choose Category first`}</p>
+                <p className="text-gray-500 text-sm truncate">{generatedProductCode || `Please Choose Category first`}</p>
                 <input type="hidden" name='productCode' value={generatedProductCode} />
               </div>
 
               {/* Quantity */}
               <div className="w-full max-w-24">
-                <label className="block mb-2 text-sm text-[#493628]">Quantity</label>
+                <label className="block mb-2 text-sm font-semibold text-[#493628]">Quantity</label>
                 <input
                   type="number"
-                  className="w-full h-10 bg-transparent placeholder:text-[#493628] text-[#493628] text-sm border border-slate-200 rounded px-3 shadow-sm focus:border-slate-400"
+                  className="w-full h-10 bg-transparent placeholder:text-[#493628] text-[#493628] text-sm border rounded-lg px-3 focus:border-[#493628]"
                   placeholder="0"
                   min="0"
                   value={quantity}
@@ -195,10 +195,10 @@ const ProductForm: React.FC<ProductFormProps> = ({ onSubmit, onEditSubmit ,isEdi
 
               {/* Product Name */}
               <div className="w-full">
-                <label className="block mb-1 text-sm text-[#493628]">Product Name</label>
+                <label className="block mb-1 text-sm font-semibold text-[#493628]">Product Name</label>
                 <input
                   type="text"
-                  className="w-full h-10 bg-transparent placeholder:text-[#493628] text-[#493628] text-sm border border-slate-200 rounded px-3 shadow-sm focus:border-slate-400"
+                  className="w-full h-10 bg-transparent placeholder:text-[#493628] text-[#493628] text-sm border rounded-lg px-3 focus:border-[#493628]"
                   placeholder="Enter Product Name"
                   value={productName}
                   onChange={(e) => { setProductName(e.target.value) }
@@ -208,11 +208,11 @@ const ProductForm: React.FC<ProductFormProps> = ({ onSubmit, onEditSubmit ,isEdi
 
               {/* Amount */}
               <div className="w-full">
-                <label className="block mb-1 text-sm text-[#493628]">Price</label>
+                <label className="block mb-1 text-sm font-semibold text-[#493628]">Price</label>
                 <div className="relative">
                   <input
                     type="text"
-                    className="w-full h-10 pl-12 bg-transparent placeholder:text-[#493628] text-[#493628] text-sm border border-slate-200 rounded px-3 shadow-sm focus:border-slate-400"
+                    className="w-full h-10 bg-transparent placeholder:text-[#493628] text-[#493628] text-sm border rounded-lg px-3 focus:border-[#493628]"
                     placeholder="Enter Price"
                     min='1'
                     step={'any'}
@@ -233,9 +233,9 @@ const ProductForm: React.FC<ProductFormProps> = ({ onSubmit, onEditSubmit ,isEdi
 
               {/* Category */}
               <div className="w-full">
-                <label className="block mb-1 text-sm text-[#493628]">Category</label>
+                <label className="block mb-1 text-sm font-semibold text-[#493628]">Category</label>
                 <select
-                  className="w-full h-10 bg-transparent text-[#493628] text-sm border border-slate-200 rounded px-3 shadow-sm focus:border-slate-400"
+                  className="w-full h-10 bg-transparent placeholder:text-[#493628] text-[#493628] text-sm border rounded-lg px-3 focus:border-[#493628]"
                   value={selectedCategory}
                   onChange={handleCategoryChange}
                 >
@@ -252,8 +252,8 @@ const ProductForm: React.FC<ProductFormProps> = ({ onSubmit, onEditSubmit ,isEdi
 
               {/* Status */}
               <div className="w-full">
-                <label className="block mb-1 text-sm text-[#493628]">Status Publish</label>
-                <select className="w-full h-10 bg-transparent text-[#493628] text-sm border border-slate-200 rounded px-3 shadow-sm focus:border-slate-400"
+                <label className="block mb-1 text-sm font-semibold text-[#493628]">Status Publish</label>
+                <select className="w-full h-10 bg-transparent placeholder:text-[#493628] text-[#493628] text-sm border rounded-lg px-3 focus:border-[#493628]"
                   value={statusPublish}
                   onChange={(e) => { setStatusPublish(e.target.value) }}
                 >
@@ -264,23 +264,22 @@ const ProductForm: React.FC<ProductFormProps> = ({ onSubmit, onEditSubmit ,isEdi
 
               {/* description */}
               <div className="col-span-2 w-full">
-                <label className="block mb-1 text-sm text-[#493628]">Description</label>
+                <label className="block mb-1 text-sm font-semibold text-[#493628]">Description</label>
                 <textarea
                   rows={4}
-                  className="bg-transparent border border-gray-300 text-[#493628] text-sm rounded-lg focus:ring-2 focus:ring-fuchsia-50 focus:border-fuchsia-300 block w-full p-2.5"
-                  placeholder="Leave a description product..."
+                  className="bg-transparent border text-[#493628] text-sm rounded-lg focus:border-[#493628] block w-full p-3"
+                  placeholder="Leave a description for this product..."
                   value={descriptionProduct}
                   onChange={(e) => { setDescriptionProduct(e.target.value) }
                   }
                 >
                 </textarea>
-
               </div>
             </div>
 
 
             <div className="col-span-1">
-              <label className="block mb-1 text-sm text-[#493628]">Image</label>
+              <label className="block mb-1 text-sm font-semibold text-[#493628]">Image</label>
               <ImageUploader images={images} setImages={setImages} />
             </div>
           </div>

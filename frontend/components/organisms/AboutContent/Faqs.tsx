@@ -19,9 +19,9 @@ const faqData = [
       "Yes, we offer Cash on Delivery (COD) services, but only within Depok, West Java.",
   },
   {
-    question: "Where is Loubilux located?",
+    question: "Where is LouBiShop located?",
     answer:
-      "Loubilux is based in Cimanggis, Depok, Indonesia, 16452.",
+      "LouBiShop is based in Cimanggis, Depok, Indonesia, 16452.",
   },
 ];
 

@@ -46,22 +46,22 @@ const TableComponents = <T extends Record<string, any>>({
   const paginationButtons = generatePagination();
 
   return (
-    <div className="relative flex flex-col w-full h-full overflow-y-auto text-gray-700 bg-white shadow-md rounded-lg my-3">
+    <div className="relative flex flex-col w-full h-full overflow-y-auto text-[#493628] bg-white rounded-lg my-3">
       <table className="w-full text-center table-auto min-w-max">
-        <thead className="sticky top-0 bg-[#D6C0B3] shadow">
+        <thead className="sticky top-0 bg-[#D6C0B3]">
           <tr className="bg-slate-50">
             {columns.map((col) => (
               <th
                 key={col.key as string}
-                className="transition-colors cursor-pointer border-b border-slate-300 bg-[#E4E0E1] hover:bg-[#D6C0B3] px-2"
+                className="transition-colors cursor-pointer border-b border-slate-300 bg-[#E4E0E1] hover:bg-[#D6C0B3]"
               >
-                <div className="flex justify-center text-sm font-semibold leading-none text-[#493628]">
+                <div className="flex justify-center text-sm p-3 font-semibold leading-none text-[#493628]">
                   {col.label}
                 </div>
               </th>
             ))}
-            <th className="pt-3 transition-colors cursor-pointer border-b border-slate-300 bg-[#E4E0E1] hover:bg-[#D6C0B3]">
-              <p className="flex justify-center text-sm font-semibold leading-none text-[#493628]">Action</p>
+            <th className="transition-colors cursor-pointer border-b border-slate-300 bg-[#E4E0E1] hover:bg-[#D6C0B3]">
+              <p className="flex justify-center text-sm p-3 mb-0 font-semibold leading-none text-[#493628]">Action</p>
             </th>
           </tr>
         </thead>
@@ -96,7 +96,7 @@ const TableComponents = <T extends Record<string, any>>({
         </div>
         <div className="flex space-x-1">
           <button
-            className="px-3 py-1 min-w-9 min-h-9 text-sm font-normal text-[#493628] bg-white border border-slate-200 rounded hover:bg-slate-50 hover:border-slate-400 transition duration-200 ease"
+            className="px-3 mx-2 py-1 min-w-9 min-h-9 text-sm font-medium text-[#493628] border-2 border-[#493628] !rounded-lg transition duration-200 ease"
             onClick={() => onPageChange(page - 1)}
             disabled={page === 1}
           >
@@ -108,10 +108,10 @@ const TableComponents = <T extends Record<string, any>>({
               key={p === "..." ? `ellipsis-${i}` : `page-${p}`} // Gunakan key yang unik
               onClick={() => typeof p === "number" && onPageChange(p)}
               disabled={p === "..."}
-              className={`px-3 py-1 min-w-9 min-h-9 text-sm font-normal rounded ${
+              className={`px-3 py-1 min-w-9 min-h-9 text-sm font-medium !rounded-lg ${
                 page === p
-                  ? "text-[#493628] bg-[#D6C0B3] border border-slate-200 hover:bg-[#493628] hover:text-[#D6C0B3] transition duration-200"
-                  : "text-[#493628] bg-white border border-slate-200 hover:bg-[#E4E0E1]"
+                  ? "text-white bg-[#493628] hover:bg-[#705C53] transition duration-200"
+                  : "text-[#493628] border-2 border-[#493628] hover:bg-[#493628] hover:text-white transition duration-200"
               }`}
             >
               {p}
@@ -119,7 +119,7 @@ const TableComponents = <T extends Record<string, any>>({
           ))}
 
           <button
-            className="px-3 py-1 min-w-9 min-h-9 text-sm font-normal text-[#493628] bg-white border border-slate-200 rounded hover:bg-slate-50 hover:border-slate-400 transition duration-200 ease"
+            className="px-3 mx-2 py-1 min-w-9 min-h-9 text-sm font-medium text-[#493628] border-2 border-[#493628] !rounded-lg transition duration-200 ease"
             onClick={() => onPageChange(page + 1)}
             disabled={page === totalPages}
           >
