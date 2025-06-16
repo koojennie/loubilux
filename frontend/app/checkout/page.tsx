@@ -10,6 +10,7 @@ import axios from "axios";
 import { useCheckout } from "@/context/CheckoutContext";
 import { User } from "@/types/type";
 import toast, { Toaster } from "react-hot-toast";
+import { HiOutlineQrCode } from "react-icons/hi2";
 
 
 
@@ -217,16 +218,16 @@ export default function page() {
 
           {selectedAddressId && (
             <div className="mt-10">
-              <p className="text-left !mt-10 text-lg font-medium">Receiver Name</p>
+              <p className="text-left !mt-5 text-lg font-medium">Receiver Name</p>
               <p className="text-lg text-[#493628] leading-none align-middle">{selectedAddress?.receiverName}</p>
               
-              <p className="text-left !mt-10 text-lg font-medium">Email address</p>
+              <p className="text-left !mt-5 text-lg font-medium">Email address</p>
               <p className="text-lg text-[#493628] leading-none align-middle">{userShipping?.email}</p>
               
-              <p className="text-left !mt-10 text-lg font-medium">Phone Number</p>
+              <p className="text-left !mt-5 text-lg font-medium">Phone Number</p>
               <p className="text-lg text-[#493628] leading-none align-middle">{selectedAddress?.phoneNumber}</p>
 
-              <p className="text-lg font-medium">Address</p>
+              <p className="text-lg !mt-5 font-medium">Address</p>
               <input
                 type="text"
                 value={selectedAddress.detail}
@@ -234,7 +235,7 @@ export default function page() {
                 className="mt-1 px-3 py-2 border rounded-lg w-full outline-none focus:ring-2 focus:ring-[#493628]"
               />
 
-              <p className="text-lg font-medium mt-6">City</p>
+              <p className="text-lg font-medium !mt-5">City</p>
               <input
                 type="text"
                 value={selectedAddress.city}
@@ -242,7 +243,7 @@ export default function page() {
                 className="mt-1 px-3 py-2 border rounded-lg w-full outline-none focus:ring-2 focus:ring-[#493628]"
               />
 
-              <p className="text-lg font-medium mt-6">Province</p>
+              <p className="text-lg font-medium !mt-5">Province</p>
               <input
                 type="text"
                 value={selectedAddress.province}
@@ -250,7 +251,7 @@ export default function page() {
                 className="mt-1 px-3 py-2 border rounded-lg w-full outline-none focus:ring-2 focus:ring-[#493628]"
               />
 
-              <p className="text-lg font-medium mt-6">Postal Code</p>
+              <p className="text-lg font-medium !mt-5">Postal Code</p>
               <input
                 type="text"
                 value={selectedAddress.postalCode}
@@ -298,27 +299,22 @@ export default function page() {
             <DialogPanel className="relative max-w-lg w-full bg-white rounded-lg shadow-lg p-6">
               <div className="flex flex-col items-center text-center">
                 <div className="mx-auto flex size-12 items-center justify-center rounded-full bg-[#f8f5f2]">
-                  <TbRosetteDiscount className="size-6 text-[#AB886D]" />
+                  <HiOutlineQrCode className="size-6 text-[#AB886D]" />
                 </div>
-                <DialogTitle className="text-lg font-semibold text-gray-900 mt-3">Confirmation Payments</DialogTitle>
-                <p className="text-base text-gray-500">Apakah kamu yakin ingin membayar.</p>
-                <p className="text-sm text-gray-500">Setelah ini anda akan di arahkan ke halaman bayar.</p>
-                {/* <input
-                  type="text"
-                  className="mt-3 px-4 py-2 border rounded-lg w-full outline-none focus:ring-2 focus:ring-[#493628]"
-                  placeholder="Enter coupon code"
-                /> */}
+                <DialogTitle className="text-lg font-semibold text-gray-900 mt-3">Confirm Payments</DialogTitle>
+                <p className="text-base text-gray-500">Are you sure you want to proceed with the payment?</p>
+                <p className="text-sm text-gray-500">You will be redirected to the payment page</p>
               </div>
 
               {/* Buttons */}
               <div className="mt-4 flex justify-end gap-3">
                 <button
                   onClick={() => setIsOpenModalConfirmation(false)}
-                  className="px-3 py-2 !rounded-full max-w-[280px] border-2 border-[#493628] bg-white font-semibold text-lg text-[#493628] flex transition-all duration-500 hover:!bg-[#705C53] hover:text-white"
+                  className="px-3 py-2 !rounded-full max-w-[280px] border-2 border-[#493628] bg-white font-semibold text-base text-[#493628] flex transition-all duration-500 hover:!bg-[#705C53] hover:text-white"
                 >
                   Cancel
                 </button>
-                <button className="px-4 py-2 !rounded-full bg-[#493628] text-white transition-all duration-500 font-medium text-lg hover:bg-[#705C53]"
+                <button className="px-4 py-2 !rounded-full bg-[#493628] text-white transition-all duration-500 font-medium text-base hover:bg-[#705C53]"
                   onClick={handleCheckout}
                 >Apply</button>
               </div>

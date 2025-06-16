@@ -149,9 +149,9 @@ export default function ProfileContent() {
             <div className="photo d-flex">
               <div className="position-relative me-20">
                 {imageBase64 ? (
-                  <img src={imageBase64} alt="Preview" width="90" height="90" className="avatar img-fluid" />
+                  <img src={imageBase64} alt="Preview" width="90" height="90" className="avatar img-fluid rounded-full" />
                 ) : (
-                  <img src={user?.profilePicture || "icon/upload.svg"} width="90" height="90" className="avatar img-fluid" />
+                  <img src={user?.profilePicture || "icon/upload.svg"} width="90" height="90" className="avatar img-fluid rounded-full" />
                 )}
                 
                 <div className="avatar-overlay position-absolute top-0 d-flex justify-content-center align-items-center">
