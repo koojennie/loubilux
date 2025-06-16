@@ -34,7 +34,7 @@ const renderDataDetail = (colKey: string, value: any, tableType: TableType) => {
     } else if (colKey === "statusPublish") {
       return (
         <span
-          className={`text-sm px-2 py-1 rounded-md w-fit ${value === "active" ? "bg-green-200 text-green-800" : "bg-yellow-200 text-yellow-800"
+          className={`text-sm px-3 py-1 rounded-lg font-semibold ${value === "active" ? "bg-green-100 text-green-600" : "bg-yellow-100 text-yellow-600"
             }`}
         >
           {value === "active" ? "Published" : "Draft"}
@@ -115,7 +115,7 @@ const ModalViewDetails = forwardRef<HTMLDivElement, ModalViewDetailsProps>(({ is
     <div
       className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-xs transition-opacity duration-300 z-50"
     >
-      <div className="relative flex flex-col w-[90%] max-w-screen-sm sm:max-w-screen-md lg:max-w-screen-lg rounded-xl bg-white shadow-lg" ref={ref}>
+      <div className="relative flex flex-col w-[50%] max-w-screen-sm sm:max-w-screen-md lg:max-w-screen-lg rounded-xl bg-white shadow-lg" ref={ref}>
         <div className="flex flex-col p-4 sm:p-6">
           {/* Close Button and Title */}
           <div className="flex justify-between items-center mb-4">
@@ -123,9 +123,8 @@ const ModalViewDetails = forwardRef<HTMLDivElement, ModalViewDetailsProps>(({ is
               {data.name || data.orderId || "Detail"}
             </p>
             <button
-              className="text-gray-500 hover:bg-gray-300 p-2 rounded-full"
-              onClick={onClose}
-            >
+              className="text-gray-500 hover:text-gray-300 p-2 rounded-full"
+              onClick={onClose}>
               <IoCloseSharp size={24} />
             </button>
           </div>
@@ -137,10 +136,10 @@ const ModalViewDetails = forwardRef<HTMLDivElement, ModalViewDetailsProps>(({ is
               } gap-4 md:gap-6`}
           >
             {/* Details Section */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 md:grid-cols-2">
               {columns.map(({ key, label }) => (
-                <div key={String(key)} className="mb-2">
-                  <p className="font-semibold text-gray-600 text-sm sm:text-base">
+                <div key={String(key)} className="mb-3">
+                  <p className="font-semibold text-[#493628] text-base">
                     {label}
                   </p>
                   {renderDataDetail(String(key), data[key], tableType)}
@@ -151,7 +150,7 @@ const ModalViewDetails = forwardRef<HTMLDivElement, ModalViewDetailsProps>(({ is
             {/* Image Preview Section */}
             {tableType !== "orders" && tableType !== "categories" && (
               <div className="flex flex-col items-center">
-                <p className="font-semibold text-sm sm:text-base text-[#493628]">
+                <p className="font-semibold text-base text-[#493628]">
                   {tableType === "users"
                     ? "Profile Picture"
                     : "Preview Image"}
@@ -163,11 +162,11 @@ const ModalViewDetails = forwardRef<HTMLDivElement, ModalViewDetailsProps>(({ is
                     pagination={{ type: "fraction" }}
                     navigation
                     modules={[Pagination, Navigation]}
-                    className="w-full max-h-48 sm:max-h-64 rounded-lg overflow-hidden"
+                    className="w-48 h-48 rounded-lg overflow-hidden"
                   >
                     {images.map((image: string, index: number) => (
                       <SwiperSlide key={index}>
-                        <div className="relative w-full h-48 sm:h-64 flex justify-center items-center">
+                        <div className="relative w-48 h-48 flex justify-center items-center">
                           <Image
                             src={image}
                             alt={`Image ${index + 1}`}

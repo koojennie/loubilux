@@ -96,7 +96,7 @@ const TableComponents = <T extends Record<string, any>>({
         </div>
         <div className="flex space-x-1">
           <button
-            className="px-3 mx-3 py-1 min-w-9 min-h-9 text-sm font-medium text-[#493628] border-2 border-[#493628] !rounded-lg transition duration-200 ease"
+            className="px-3 mx-2 py-1 min-w-9 min-h-9 text-sm font-medium text-[#493628] border-2 border-[#493628] !rounded-lg transition duration-200 ease"
             onClick={() => onPageChange(page - 1)}
             disabled={page === 1}
           >
@@ -119,7 +119,7 @@ const TableComponents = <T extends Record<string, any>>({
           ))}
 
           <button
-            className="px-3 mx-3 py-1 min-w-9 min-h-9 text-sm font-medium text-[#493628] border-2 border-[#493628] !rounded-lg transition duration-200 ease"
+            className="px-3 mx-2 py-1 min-w-9 min-h-9 text-sm font-medium text-[#493628] border-2 border-[#493628] !rounded-lg transition duration-200 ease"
             onClick={() => onPageChange(page + 1)}
             disabled={page === totalPages}
           >

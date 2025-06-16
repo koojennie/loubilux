@@ -180,7 +180,6 @@ export const renderCellContent = <T extends { [key: string]: any }>(
               type="button"
               className="text-[#493628] border-2 border-[#493628] font-medium text-sm !rounded-lg p-2 m-1 text-center inline-flex items-center shadow-gray-300 hover:scale-[1.09] transition-transform"
             ><FaInfo />
-              Info
             </button>
           </Link>
         ) : actions.onInfo && (
