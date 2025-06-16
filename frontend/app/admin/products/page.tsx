@@ -81,7 +81,6 @@ const ProductPage = ({ initialProducts }: ProductsProps) => {
         ...product,
         no: (page - 1) * limit + (index + 1),
         category: product.Category?.name || "N/A",
-        // image: product.image || "/icon/loubilux-logo.png",
       }));
       setProducts(results.data);
       setTotalItems(results.total);

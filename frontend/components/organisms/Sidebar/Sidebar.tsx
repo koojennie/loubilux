@@ -52,7 +52,7 @@ export default function Sidebar(props: SidebarProps) {
         <div className="menus">
           <MenuItem title="Orders" icon="ic-menu-transactions" href="/member/transactions" active={activeMenu === 'transactions'} />
           <MenuItem title="Edit Profile" icon="ic-menu-profile" href="/member/edit-profile" active={activeMenu === 'edit-profile'} />
-          <MenuItem title="My Address" icon="ic-menu-address" href="/member/address" active={activeMenu === 'my-address'} />
+          <MenuItem title="Addresses" icon="ic-menu-address" href="/member/address" active={activeMenu === 'my-address'} />
           <MenuItem title="Log Out" icon="ic-menu-logout" onClick={handleLogout} active={activeMenu === 'logout'} />
         </div>
         <Footer />

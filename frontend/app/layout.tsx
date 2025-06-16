@@ -26,7 +26,7 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "Loubilux by Loubi.shop",
+  title: "LouBiShop",
   description: "Made by Alia",
 
 };
