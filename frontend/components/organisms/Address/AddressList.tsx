@@ -6,6 +6,7 @@ import Input from "../Input/Input";
 import toast, { Toaster } from "react-hot-toast";
 import { MdAddHomeWork } from "react-icons/md";
 import { HiX } from "react-icons/hi";
+import { showConfirmationAlert } from "@/components/Atoms/AlertConfirmation";
 
 export default function AddressList() {
   const { expanded } = useSidebar();
@@ -141,7 +142,11 @@ export default function AddressList() {
   };
 
   const handleDeleteAddress = async (addressId: string) => {
-    const confirmDelete = confirm("Are you sure you want to delete this address?");
+    // const confirmDelete = confirm("Are you sure you want to delete this address?");
+    const confirmDelete = await showConfirmationAlert({
+      title: "Remove this Address?",
+      text: "Are you sure want to remove this address ?"
+    })
     if (!confirmDelete) return;
 
     try {

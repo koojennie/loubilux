@@ -15,6 +15,7 @@ function CardDashboard() {
   const [totalOrders, setTotalOrders] = useState<number>(0);
   const [totalProducts, setTotalProducts] = useState<number>(0);
   const [totalUsers, setTotalUsers] = useState<number>(0);
+  const [totalOpname, setTotalOpname] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
 
@@ -57,10 +58,23 @@ function CardDashboard() {
     }
   }
 
+  const fetchCountAllOpname = async () => {
+    try {
+      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/opname/all`, { withCredentials: true });
+
+      setTotalOpname(response.data.totalItems);
+    } catch (error) {
+      console.error('Error When fetch All Users', error);
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
   useEffect(() => {
     fetchCountAllOrders();
     fetchCountAllProducts();
     fetchCountAllUsers();
+    fetchCountAllOpname();
   }, [])
 
   return (
@@ -146,7 +160,7 @@ function CardDashboard() {
               Opname
             </span>
             <h4 className="mt-2 font-bold text-[#493628] text-3xl">
-              {totalUsers} 
+              {totalOpname}
             </h4>
           </div>
 

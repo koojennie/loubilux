@@ -14,7 +14,7 @@ import { HiMenu } from "react-icons/hi";
 
 interface SidebarAdminProps {
   isSidebarOpen: boolean;
-  userRole: string;
+  userRole?: string;
   toggleSidebar: () => void;
   setIsSidebarOpen: (isOpen: boolean) => void;
 }

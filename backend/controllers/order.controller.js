@@ -368,13 +368,13 @@ const getFilteredOrdersReport = async (req, res) => {
 const updateOrderStatus = async (req, res) => {
   try {
     const { orderId, status } = req.body;
-    const validStatuses = ["Pending", "Processing", "Shipped", "Delivered", "Cancelled"];
+    const validStatuses = ["Pending", "Processing", "Shipped", "Delivered", "Completed" ,"Cancelled"];
 
     if (!validStatuses.includes(status)) {
       return res.status(400).json({ status: "error", message: "Invalid order status" });
     }
 
-    const order = await Order.findOne({ where: { id: orderId } });
+    const order = await Order.findOne({ where: { orderId } });
     if (!order) return res.status(404).json({ status: "error", message: "Order not found" });
 
     order.status = status;

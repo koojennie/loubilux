@@ -7,17 +7,21 @@ import { useSidebar } from "@/context/SidebarContext";
 import Input from "../Input/Input";
 import { User } from "@/types/type";
 
+type PropsProfileContent = {
+  setUpdateEvent: (arg0: boolean) => void;
+};
 
-export default function ProfileContent() {
+export default function ProfileContent({ setUpdateEvent }: PropsProfileContent) {
   const { expanded } = useSidebar();
 
   // state user
   const [user, setUser] = useState<User | null>(null);
-  const [userId, setUserId] = useState<string>("");
+  const [userIds, setUserId] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
   const [changePassword, setChangePassword] = useState<boolean>(false);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imageBase64, setImageBase64] = useState<string | null>(null);
+  const [deletedImage, setDeletedImage] = useState<boolean>(false)
 
 
   const fetchUser = async () => {
@@ -27,6 +31,7 @@ export default function ProfileContent() {
       })
 
       const userId = authRes.data.user.id
+      setUserId(userId);
       const userRes = await axios.get(
         `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/users/userbyid/${userId}`,
         {
@@ -71,20 +76,32 @@ export default function ProfileContent() {
         updateData.confirmPassword = user.confirmPassword;
       }
 
-      if(imageBase64) {
+      if (deletedImage) {
+        updateData.deletedImage = true;
+        updateData.profilePicture = user.profilePicture;
+      } else if (imageBase64) {
         updateData.newImage = imageBase64;
+        updateData.profilePicture=imageBase64;
+      } else {
+        updateData.keepImage = true;
+        updateData.profilePicture = user.profilePicture;
       }
 
+      await axios.put(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/users/${userIds}`,
+        updateData,
+        { withCredentials: true }
+      )
       console.log(updateData);
-
-      // await axios.put(
-      //   `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/users/${user.id}`,
-      //   updateData,
-      //   { withCredentials: true }
-      // )
-      toast.success('Profile updated successfully!')
+      toast.success('Profile updated successfully!');
+      console.log('profile updated successfully')
+      fetchUser();
+      setImageBase64(null);
+      setDeletedImage(false);
+      setUpdateEvent(true);
     } catch (error: any) {
       toast.error(error?.response?.data?.message || 'Failed to update profile.')
+      console.error("error update profile", error.message);
     }
   }
 
@@ -96,9 +113,16 @@ export default function ProfileContent() {
 
     const reader = new FileReader();
     reader.onloadend = () => {
-      setImageBase64(reader.result as string); 
+      setImageBase64(reader.result as string);
     };
     reader.readAsDataURL(file);
+  };
+
+
+  const handleDeleteImage = () => {
+    setDeletedImage(true);
+    setImageBase64(null); 
+    fetchUser();
   };
 
   if (loading) {
@@ -148,21 +172,61 @@ export default function ProfileContent() {
           <form action="" onSubmit={handleSubmit} className="w-full max-w-xl">
             <div className="photo d-flex">
               <div className="position-relative me-20">
-                {imageBase64 ? (
-                  <img src={imageBase64} alt="Preview" width="90" height="90" className="avatar img-fluid" />
-                ) : (
-                  <img src={user?.profilePicture || "icon/upload.svg"} width="90" height="90" className="avatar img-fluid" />
-                )}
-                
-                <div className="avatar-overlay position-absolute top-0 d-flex justify-content-center align-items-center">
-                  <FaRegTrashCan className="text-white" />
-                </div>
+              {deletedImage ? (
+                <img
+                src="/img/user-loubilux.svg"
+                alt="Default"
+                width="90"
+                height="90"
+                className="avatar object-cover"
+                style={{ borderRadius: "60px", width: "90px", height: "90px" }}
+                />
+              ) : imageBase64 ? (
+                <img
+                src={imageBase64}
+                alt="Preview"
+                width="90"
+                height="90"
+                className="avatar object-cover"
+                style={{ borderRadius: "60px", width: "90px", height: "90px" }}
+                />
+              ) : (
+                <img
+                src={user?.profilePicture || "/img/user-loubilux.svg"}
+                width="90"
+                height="90"
+                className="avatar object-cover"
+                style={{ borderRadius: "60px", width: "90px", height: "90px" }}
+                />
+              )}
+
+              {(!deletedImage) && (user?.profilePicture || imageBase64) && (
+                <button
+                type="button"
+                onClick={handleDeleteImage}
+                className="avatar-overlay position-absolute top-0 d-flex justify-content-center align-items-center"
+                >
+                <FaRegTrashCan className="text-white" />
+                </button>
+              )}
               </div>
               <div className="image-upload">
-                <label htmlFor="avatar">
-                  <img src="/icon/upload.svg" width="90" height="90" alt="upload" />
-                </label>
-                <input id="avatar" type="file" name="avatar" accept="image/png, image/jpeg" onChange={handleImageChange}/>
+              <label htmlFor="avatar">
+                <img
+                src="/icon/upload.svg"
+                width="90"
+                height="90"
+                alt="upload"
+                style={{ borderRadius: "16px", width: "90px", height: "90px", objectFit: "cover" }}
+                />
+              </label>
+              <input
+                id="avatar"
+                type="file"
+                name="avatar"
+                accept="image/png, image/jpeg"
+                onChange={handleImageChange}
+              />
               </div>
             </div>
 
@@ -171,7 +235,7 @@ export default function ProfileContent() {
                 label=""
                 placeholder="Enter your full name"
                 nameInput={"userId"}
-                value={userId}
+                value={userIds}
                 type="hidden"
               />
             </div>
@@ -252,6 +316,7 @@ export default function ProfileContent() {
           </form>
         </div>
       </div>
+      <Toaster />
     </main>
   )
 }

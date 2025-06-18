@@ -110,8 +110,14 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
     );
   }
 
-  // If user is not an admin or superadmin
-  if (!user || (user.role !== "admin" && user.role !== "superadmin")) {
+  // Check user role after loading is complete
+  useEffect(() => {
+    if (!loading && user && user.role !== "admin" && user.role !== "superadmin") {
+      setErrorCode(403);
+    }
+  }, [loading, user]);
+
+  if (!loading && (!user || (user.role !== "admin" && user.role !== "superadmin"))) {
     return (
       <ErrorMessage
         errorCode={403}
@@ -133,7 +139,7 @@ const AdminLayout = ({ children }: AdminLayoutProps) => {
         isSidebarOpen={isSidebarOpen}
         toggleSidebar={toggleSidebar}
         setIsSidebarOpen={setIsSidebarOpen}
-        userRole={user.role}
+        userRole={user?.role}
       />
       <div className="w-full">
         <div

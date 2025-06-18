@@ -1,17 +1,25 @@
 import Image from "next/image";
+import { User } from "@/types/type";
 
-export default function Profile() {
+interface profileProps {
+  user: User
+}
+
+
+export default function Profile({user}: profileProps) {
   return (
     <div className="user text-center pb-50 pe-30">
       <Image
-        src="/img/user-loubilux.svg"
+        src={user?.profilePicture || "/img/user-loubilux.svg"}
         alt="user"
         width={90}
         height={90}
         className={`img-fluid mb-20`}
+        style={{ borderRadius: "60px", width: "90px", height: "90px" }}
+
       />
-      <h2 className="fw-bold text-xl color-palette-1 m-0">Jennie Koo</h2>
-      <p className="color-palette-2 m-0">jenniekoo@gmail.com</p>
+      <h2 className="fw-bold text-xl color-palette-1 m-0">{user.name}</h2>
+      <p className="color-palette-2 m-0">{user.email}</p>
     </div>
   );
 }
