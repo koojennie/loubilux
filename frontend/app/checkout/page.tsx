@@ -278,10 +278,6 @@ export default function page() {
           <hr className="!mt-10 h-0.5 border-t-0 bg-transparent dark:bg-white/10" />
           <p className="!mt-10 text-lg text-gray-500">You won't be charged until the next step.</p>
           <div className="!mt-10 flex justify-end gap-3">
-            <button onClick={() => setIsOpen(true)}
-              className="!rounded-full py-3 px-4 text-center border-2 border-[#493628] bg-white font-semibold text-lg text-[#493628] flex transition-all duration-500 hover:!bg-[#705C53] hover:text-white">
-              Apply Coupon
-            </button>
             {/* <Link href="/complete-checkout"> */}
             <button className="!rounded-full py-3 px-4 text-center bg-[#493628] font-semibold text-lg text-white flex transition-all duration-500 hover:bg-[#705C53]"
               onClick={() => setIsOpenModalConfirmation(true)}
@@ -317,42 +313,7 @@ export default function page() {
                 </button>
                 <button className="px-4 py-2 !rounded-full bg-[#493628] text-white transition-all duration-500 font-medium text-base hover:bg-[#705C53]"
                   onClick={handleCheckout}
-                >Apply</button>
-              </div>
-            </DialogPanel>
-          </div>
-        </Dialog>
-
-        <Dialog open={isOpen} onClose={() => setIsOpen(false)} className="relative z-50">
-          {/* Backdrop dengan efek blur */}
-          <DialogBackdrop className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm" />
-
-          {/* Modal Content */}
-          <div className="fixed inset-0 flex items-center justify-center p-4">
-            <DialogPanel className="relative max-w-lg w-full bg-white rounded-lg shadow-lg p-6">
-              <div className="flex flex-col items-center text-center">
-                <div className="mx-auto flex size-12 items-center justify-center rounded-full bg-[#f8f5f2]">
-                  <TbRosetteDiscount className="size-6 text-[#AB886D]" />
-                </div>
-                <DialogTitle className="text-lg font-semibold text-gray-900 mt-3">Apply Coupon</DialogTitle>
-                <p className="text-sm text-gray-500">Enter your coupon code to get a discount.</p>
-                <input
-                  type="text"
-                  className="mt-3 px-4 py-2 border rounded-lg w-full outline-none focus:ring-2 focus:ring-[#493628]"
-                  placeholder="Enter coupon code"
-                />
-              </div>
-
-              {/* Buttons */}
-              <div className="mt-4 flex justify-end gap-3">
-                <button
-                  onClick={() => setIsOpen(false)}
-                  className="px-3 py-2 !rounded-full max-w-[280px] border-2 border-[#493628] bg-white font-semibold text-lg text-[#493628] flex transition-all duration-500 hover:!bg-[#705C53] hover:text-white"
-                >
-                  Cancel
-                </button>
-                <button className="px-4 py-2 !rounded-full bg-[#493628] text-white transition-all duration-500 font-medium text-lg hover:bg-[#705C53]
-              ">Apply</button>
+                >Yes</button>
               </div>
             </DialogPanel>
           </div>
