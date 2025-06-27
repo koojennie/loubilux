@@ -3,13 +3,16 @@
 import ProfileContent from "@/components/organisms/Profile/ProfileContent";
 import Sidebar from "@/components/organisms/Sidebar/Sidebar";
 import { SidebarProvider } from "@/context/SidebarContext";
+import { useState } from "react";
 
 export default function EditProfile() {
+  const [updateEvent, setUpdateEvent] = useState<boolean>(false);
+
   return (
     <SidebarProvider>
       <section className="edit-profile overflow-auto">
-        <Sidebar activeMenu="edit-profile"/>
-        <ProfileContent />
+        <Sidebar eventUpdate={updateEvent} activeMenu="edit-profile"/>
+        <ProfileContent setUpdateEvent={setUpdateEvent}/>
       </section>
     </SidebarProvider>
   )

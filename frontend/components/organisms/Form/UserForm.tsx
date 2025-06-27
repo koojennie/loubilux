@@ -22,7 +22,7 @@ const UserForm: React.FC<UserFormProps> = ({ onSubmit, onEditSubmit, isEdit = fa
   const [username, setUsername] = useState(initialData?.username || "");
   const [email, setEmail] = useState(initialData?.email || "");
   const [phoneNumber, setPhoneNumber] = useState(initialData?.phoneNumber || "");
-  const [role, setRole] = useState(initialData?.role || "user");
+  const [role, setRole] = useState(initialData?.role);
   const [password, setPassword] = useState(initialData?.password || "");
   const [confirmPassword, setConfirmPassword] = useState(initialData?.password || "");
   const [profilePicture, setProfilePicture] = useState(initialData?.profilePicture || "");
@@ -48,6 +48,7 @@ const UserForm: React.FC<UserFormProps> = ({ onSubmit, onEditSubmit, isEdit = fa
       setPhoneNumber(initialData.phoneNumber || "")
       setProfilePicture(initialData.profilePicture || "");
       setOldImage(initialData.profilePicture || "");
+      setRole(initialData.role || "")
     }
   }, [initialData, isEdit]);
 
@@ -240,18 +241,21 @@ const UserForm: React.FC<UserFormProps> = ({ onSubmit, onEditSubmit, isEdit = fa
               </div>
 
               {/* Status */}
-              <div className="w-full">
+                <div className="w-full">
                 <label className="block mb-1 text-sm text-[#493628]">Role</label>
                 <select
                   className="w-full h-10 bg-transparent text-[#493628] text-sm border border-slate-200 rounded px-3 shadow-sm focus:border-slate-400"
-                  value={role || 'user'}
+                  value={role || ""}
                   onChange={(e) => setRole(e.target.value)}
                 >
+                  <option value="" disabled>
+                  {role ? "Select Role" : "Select Role"}
+                  </option>
                   <option value="user">Customer</option>
                   <option value="admin">Admin</option>
                   <option value="superadmin">Super Admin</option>
                 </select>
-              </div>
+                </div>
 
               <div className="col-span-2 w-full">
                 {/* Password */}

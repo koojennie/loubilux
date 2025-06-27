@@ -152,7 +152,7 @@ export default function page() {
         onSuccess: function (result) {
           console.log("Payment success", result);
           // redirect ke halaman success
-          toast.success("paymment success");
+          toast.success("Payment success");
           router.push('/complete-checkout');
         },
         onPending: function (result) {

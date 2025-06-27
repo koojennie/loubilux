@@ -87,6 +87,8 @@ exports.getAllOpnames = async (req, res) => {
       ];
     }
 
+    const totalOpname = Opname.count();
+
     // Prepare include for Product model
     const includeProduct = {
       model: Product,
@@ -117,7 +119,8 @@ exports.getAllOpnames = async (req, res) => {
       const data = opname.toJSON();
       return {
         ...data,
-        productName: data.Product ? data.Product.name : null
+        productName: data.Product ? data.Product.name : null,
+        total: totalOpname,
       };
     });
 
@@ -185,6 +188,7 @@ exports.updateOpname = async (req, res) => {
     res.status(500).json({ message: 'Error updating opname', error: err.message });
   }
 };
+
 
 exports.deleteOpname = async (req, res) => {
   try {

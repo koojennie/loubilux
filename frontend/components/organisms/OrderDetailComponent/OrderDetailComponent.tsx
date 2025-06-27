@@ -1,15 +1,47 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { PDFDownloadLink } from "@react-pdf/renderer";
+import toast, { Toaster } from "react-hot-toast";
 import { Order } from "@/types/type";
 import InvoiceOrderPdf from "./InvoiceOrderPdf";
+import axios from "axios";
 
-const OrderDetailComponent: React.FC<{ order: Order }> = ({ order }) => {
+interface OrderDetailComponentProps {
+  order: Order;
+  isEdit?: boolean;
+  setOrder?: (order: Order) => void;
+}
+
+const OrderDetailComponent: React.FC<OrderDetailComponentProps> = ({ order, setOrder, isEdit }) => {
+  // const [order, SetOrder] = useState<Order|null>()
   const formattedDate = new Date(order.orderDate.replace(/\./g, ":")).toLocaleDateString("id-ID", {
     day: "2-digit",
     month: "long",
     year: "numeric",
   });
+
+  const handleStatusChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    if (setOrder) {
+      setOrder({ ...order, statusOrder: e.target.value });
+    }
+    changeStatus();
+  };
+
+  const changeStatus = async () => {
+    try {
+      await axios.put(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/orders/updatestatus`,
+        { 
+          orderId: order.orderId,
+          status: order.statusOrder 
+        },
+        { withCredentials: true });
+      toast.success("Update Status Succesfully!");
+
+    } catch (error) {
+      console.error("error when update status : ", error);
+      toast.error(`Error when changed status : ${error}`)
+    }
+  }
 
   return (
     <div className="p-6">
@@ -20,14 +52,15 @@ const OrderDetailComponent: React.FC<{ order: Order }> = ({ order }) => {
             <p className="text-2xl font-semibold text-[#493628]">Detail Order #{order.orderId}</p>
             <p className="text-base text-[#493628] mt-1">Tanggal: {formattedDate}</p>
           </div>
-
-          <PDFDownloadLink
-            document={<InvoiceOrderPdf order={order} />}
-            fileName={`invoice-${order.orderId}.pdf`}
-            className="bg-[#493628] text-white px-4 py-2 rounded-md hover:bg-[#3b2c21] transition text-sm"
-          >
-            {({ loading }) => (loading ? "Membuat PDF..." : "Download Invoice")}
-          </PDFDownloadLink>
+          {!isEdit && (
+            <PDFDownloadLink
+              document={<InvoiceOrderPdf order={order} />}
+              fileName={`invoice-${order.orderId}.pdf`}
+              className="bg-[#493628] text-white px-4 py-2 rounded-md hover:bg-[#3b2c21] transition text-sm"
+            >
+              {({ loading }) => (loading ? "Membuat PDF..." : "Download Invoice")}
+            </PDFDownloadLink>
+          )}
         </div>
 
         {/* Informasi Pelanggan dan Pembayaran */}
@@ -46,7 +79,7 @@ const OrderDetailComponent: React.FC<{ order: Order }> = ({ order }) => {
         </div>
 
         {/* Status Pesanan */}
-        <div className="pt-4">
+        {/* <div className="pt-4">
           <h3 className="text-lg font-semibold text-[#493628] mb-2">Status Pesanan</h3>
           <span
             className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${order.statusOrder === "Completed"
@@ -56,7 +89,65 @@ const OrderDetailComponent: React.FC<{ order: Order }> = ({ order }) => {
           >
             {order.statusOrder}
           </span>
-        </div>
+        </div> */}
+
+        {isEdit ? (
+          <div className="pt-4">
+            <label
+              htmlFor="statusOrderSelect"
+              className="text-lg font-semibold text-[#493628] mb-2 block"
+            >
+              Status Pesanan
+            </label>
+            <br />
+            {/* Help Text */}
+            <p className="mt-1 text-xs text-gray-500">
+              Pilih status terbaru untuk pesanan ini.
+            </p>
+            <select
+              id="statusOrderSelect"
+              className={`inline-block px-3 py-1 rounded-full text-xs font-semibold cursor-pointer 
+                ${order.statusOrder === "Completed"
+                  ? "bg-green-100 text-green-700"
+                  : order.statusOrder === "Cancelled"
+                    ? "bg-red-100 text-red-700"
+                    : order.statusOrder === "Processing"
+                      ? "bg-blue-100 text-blue-700"
+                      : "bg-yellow-100 text-yellow-700"
+                }`}
+              value={order.statusOrder || ""}
+              onChange={handleStatusChange}
+            // onChange={() => { }}
+            >
+              <option value="" disabled>
+                Select Status Order
+              </option>
+              <option value="Pending">Pending</option>
+              <option value="Processing">Processing</option>
+              <option value="Completed">Completed</option>
+              <option value="Cancelled">Cancelled</option>
+            </select>
+
+          </div>
+        ) : (
+          <div className="pt-4">
+            <h3 className="text-lg font-semibold text-[#493628] mb-2">Status Pesanan</h3>
+            <span
+              className={`inline-block px-3 py-1 rounded-full text-xs font-semibold
+        ${order.statusOrder === "Completed"
+                  ? "bg-green-100 text-green-700"
+                  : order.statusOrder === "Cancelled"
+                    ? "bg-red-100 text-red-700"
+                    : order.statusOrder === "Processing"
+                      ? "bg-blue-100 text-blue-700"
+                      : "bg-yellow-100 text-yellow-700"
+                }`}
+            >
+              {order.statusOrder}
+            </span>
+          </div>
+        )}
+
 
         {/* Tabel Produk */}
         <div className="pt-16">
@@ -100,7 +191,7 @@ const OrderDetailComponent: React.FC<{ order: Order }> = ({ order }) => {
           </div>
         </div>
       </div>
-    </div>
+    </div >
   );
 };
 

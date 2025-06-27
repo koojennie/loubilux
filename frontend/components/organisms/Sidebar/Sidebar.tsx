@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
@@ -9,13 +9,43 @@ import { useSidebar } from "@/context/SidebarContext";
 import Footer from "./Footer";
 import MenuItem from "./MenuItem";
 import Profile from "./Profile";
+import { User } from "@/types/type";
 
 interface SidebarProps {
-  activeMenu: 'transactions' | 'edit-profile'| 'my-address' | 'logout';
+  activeMenu: 'transactions' | 'edit-profile' | 'my-address' | 'logout';
+  eventUpdate? :boolean
 }
 
 export default function Sidebar(props: SidebarProps) {
+  const { activeMenu, eventUpdate } = props;
   const router = useRouter();
+  const { expanded, toggleSidebar } = useSidebar();
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+
+  const fetchUser = async () => {
+    try {
+      const authRes = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/auth/me`, {
+        withCredentials: true,
+      })
+
+      const userId = authRes.data.user.id
+      const userRes = await axios.get(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/users/userbyid/${userId}`,
+        {
+          withCredentials: true,
+        }
+      )
+
+      setUser(userRes.data.data)
+    } catch (error: any) {
+      const msg = error?.response?.data?.message || 'Failed to fetch user data.'
+      toast.error(msg)
+      console.error('Fetch error:', error)
+    } finally {
+      setLoading(false)
+    }
+  }
 
   const handleLogout = async () => {
     try {
@@ -40,15 +70,17 @@ export default function Sidebar(props: SidebarProps) {
     }
   }
 
-  const { activeMenu } = props;
-  const { expanded, toggleSidebar } = useSidebar();
+  useEffect(() => {
+    fetchUser();
+  }, [eventUpdate]);
+
   return (
     <section className={`sidebar ${!expanded ? 'collapsed' : ''}`}>
       <div className="content relative pt-50 pb-30 ps-30">
         <button onClick={toggleSidebar} className="absolute top-4 right-4 p-1.5 !rounded-lg bg-gray-50 hover:bg-gray-100">
           {expanded ? <LuChevronFirst className="w-[32px] h-[32px]" /> : <LuChevronLast className="w-[32px] h-[32px]" />}
         </button>
-        <Profile />
+        {user && <Profile user={user} />}
         <div className="menus">
           <MenuItem title="Orders" icon="ic-menu-transactions" href="/member/transactions" active={activeMenu === 'transactions'} />
           <MenuItem title="Edit Profile" icon="ic-menu-profile" href="/member/edit-profile" active={activeMenu === 'edit-profile'} />

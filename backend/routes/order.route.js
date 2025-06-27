@@ -11,7 +11,7 @@ router.get('/orderbyid/:orderId', authenticateUser, getOrderById)
 router.get('/orderbyuser', authenticateUser, getUserOrders);
 router.get('/montlyrevenue', authenticateUser, getMontlyRevenue);
 router.get('/revenuepercategory', authenticateUser, authorizeRoles('admin', 'superadmin'), getRevenueByCategory)
-router.put('/update-status', authenticateUser, authorizeRoles('admin', 'superadmin'), updateOrderStatus);
+router.put('/updatestatus', authenticateUser, authorizeRoles('admin', 'superadmin'), updateOrderStatus);
 router.get('/report', authenticateUser, authorizeRoles('admin', 'superadmin'), getFilteredOrdersReport);
 
 

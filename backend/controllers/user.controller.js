@@ -130,7 +130,7 @@ exports.updateUser = async (req, res) => {
       try {
         const publicId = profilePicture.split("/").pop().split(".")[0];
         await cloudinary.uploader.destroy(`users/${publicId}`);
-        updates.profilePicture = null;
+        updates.profilePicture =  "https://res.cloudinary.com/dqjlprqcy/image/upload/v1742188549/user-loubilux_ldr7fh.svg";
       } catch (error) {
         return res.status(500).json({
           status: "error",
