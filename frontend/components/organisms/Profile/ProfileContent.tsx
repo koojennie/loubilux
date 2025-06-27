@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { toast, Toaster } from "react-hot-toast"
 import axios from "axios";
-import { FaRegTrashCan } from "react-icons/fa6";
+import { FaRegTrashCan, FaUpload } from "react-icons/fa6";
 import { useSidebar } from "@/context/SidebarContext";
 import Input from "../Input/Input";
 import { User } from "@/types/type";
@@ -206,19 +206,17 @@ export default function ProfileContent({ setUpdateEvent }: PropsProfileContent) 
                 onClick={handleDeleteImage}
                 className="avatar-overlay position-absolute top-0 d-flex justify-content-center align-items-center"
                 >
-                <FaRegTrashCan className="text-white" />
+                <FaRegTrashCan className="text-white text-2xl" />
                 </button>
               )}
               </div>
               <div className="image-upload">
               <label htmlFor="avatar">
-                <img
-                src="/icon/upload.svg"
-                width="90"
-                height="90"
-                alt="upload"
-                style={{ borderRadius: "16px", width: "90px", height: "90px", objectFit: "cover" }}
-                />
+                <div className="flex items-center">
+                  <div className="w-[90px] h-[90px] rounded-full bg-[#f4e6dc] hover:bg-[#f7ece4] flex items-center justify-center text-[#493628] hover:text-[#705C53] text-2xl">
+                  <FaUpload />
+                  </div>
+                </div>
               </label>
               <input
                 id="avatar"
@@ -228,16 +226,6 @@ export default function ProfileContent({ setUpdateEvent }: PropsProfileContent) 
                 onChange={handleImageChange}
               />
               </div>
-            </div>
-
-            <div className="pt-30">
-              <Input
-                label=""
-                placeholder="Enter your full name"
-                nameInput={"userId"}
-                value={userIds}
-                type="hidden"
-              />
             </div>
             <div className="pt-30">
               <Input
