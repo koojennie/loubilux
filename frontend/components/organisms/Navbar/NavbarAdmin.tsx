@@ -44,7 +44,7 @@ const NavbarAdmin = ({ isSidebarOpen, toggleSidebar, handleSignOut }: SidebarAdm
 
   return (
     <div>
-      <nav className="fixed z-30 w-full bg-[#AB886D] drop-shadow-md">
+      <nav className="fixed z-30 w-full bg-[#AB886D]">
         <div className="py-1 px-4 lg:px-5 lg:pl-3">
           <div className="flex justify-between items-center">
             <div className="md:hidden">

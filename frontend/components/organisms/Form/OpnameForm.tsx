@@ -119,11 +119,11 @@ const OpnameForm: React.FC<OpnameFormProps> = ({ onSubmit, onEditSubmit, isEdit 
   return (
     <div>
       <form onSubmit={handleSubmit} action="">
-        <div className="flex flex-col py-8 pt-8 mb-12 px-8 ">
-          <h4 className="flex text-lg mb-1 font-semibold text-[#493628]">
+        <div className="flex flex-col py-8 pt-8 mb-12 px-8">
+          <h4 className="flex text-2xl font-semibold text-[#493628]">
             {isEdit ? `Edit Opname ${generatedOpnameId}` : 'Add Data Opname'}
           </h4>
-          <p className="mb-4 text-sm mt-1 text-[#493628]">
+          <p className="mb-4 text-lg text-[#493628]">
             Fill in the information below to add a new opname.
           </p>
           <div className="grid grid-rows-1 gap-4">
@@ -131,17 +131,17 @@ const OpnameForm: React.FC<OpnameFormProps> = ({ onSubmit, onEditSubmit, isEdit 
             <div className="col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
               {/* Opname Id */}
               <div className="w-full">
-                <p className="block mb-2 font-semibold text-base text-slate-600">Opname Id</p>
-                <p className="text-slate-500 text-sm truncate">{generatedOpnameId || `Please Choose Category first`}</p>
+                <p className="block mb-2 font-semibold text-base text-[#493628]">Opname Id</p>
+                <p className="text-gray-500 text-sm truncate">{generatedOpnameId || `Please Choose Category first`}</p>
                 <input type="hidden" name='opnameId' value={generatedOpnameId} />
               </div>
 
               {/* Quantity */}
               <div className="w-full max-w-24">
-                <label className="block mb-2 text-sm text-[#493628]">Stock Fisik</label>
+                <label className="block mb-2 text-base font-semibold text-[#493628]">Stock Fisik</label>
                 <input
                   type="number"
-                  className="w-full h-10 bg-transparent placeholder:text-[#493628] text-[#493628] text-sm border border-slate-200 rounded px-3 shadow-sm focus:border-slate-400"
+                  className="w-full h-10 bg-transparent placeholder:text-gray-500 text-[#493628] text-sm border rounded-lg px-3 focus:border-[#493628]"
                   placeholder="0"
                   min="0"
                   value={physicalStock}
@@ -156,10 +156,10 @@ const OpnameForm: React.FC<OpnameFormProps> = ({ onSubmit, onEditSubmit, isEdit 
 
               {/* Product Name */}
               <div className="w-full relative">
-                <label className="block mb-1 text-sm text-[#493628]">Product Name</label>
+                <label className="block mb-2 text-base font-semibold text-[#493628]">Product Name</label>
                 <input
                   type="text"
-                  className="w-full h-10 bg-transparent placeholder:text-[#493628] text-[#493628] text-sm border border-slate-200 rounded px-3 shadow-sm focus:border-slate-400"
+                  className="w-full h-10 bg-transparent placeholder:text-gray-500 text-[#493628] text-sm border rounded-lg px-3 focus:border-[#493628]"
                   placeholder="Search Product"
                   value={queryProduct}
                   onChange={(e) => {
@@ -190,10 +190,10 @@ const OpnameForm: React.FC<OpnameFormProps> = ({ onSubmit, onEditSubmit, isEdit 
 
               {/* Stock */}
               <div className="w-full max-w-24">
-                <label className="block mb-2 text-sm text-[#493628]">Stock</label>
+                <label className="block mb-2 text-base font-semibold text-[#493628]">Stock</label>
                 <input
                   type="number"
-                  className="w-full h-10 bg-transparent placeholder:text-[#493628] text-[#493628] text-sm border border-slate-200 rounded px-3 shadow-sm focus:border-slate-400"
+                  className="w-full h-10 bg-transparent placeholder:text-gray-500 text-[#493628] text-sm border rounded-lg px-3 focus:border-[#493628]"
                   placeholder="0"
                   min="0"
                   value={recordedStock}
@@ -207,10 +207,10 @@ const OpnameForm: React.FC<OpnameFormProps> = ({ onSubmit, onEditSubmit, isEdit 
                 />
               </div>
               <div className="w-full">
-                <label className="block mb-1 text-sm text-[#493628]">Notes</label>
+                <label className="block mb-2 text-base font-semibold text-[#493628]">Notes</label>
                 <input
                   // rows={4}
-                  className="bg-transparent border border-gray-300 text-[#493628] text-sm rounded-lg focus:ring-2 focus:ring-fuchsia-50 focus:border-fuchsia-300 block w-full p-2.5"
+                  className="w-full h-10 bg-transparent placeholder:text-gray-500 text-[#493628] text-sm border rounded-lg px-3 focus:border-[#493628]"
                   placeholder="Notes..."
                   value={notes}
                   onChange={(e) => { setNotes(e.target.value) }}
@@ -218,8 +218,8 @@ const OpnameForm: React.FC<OpnameFormProps> = ({ onSubmit, onEditSubmit, isEdit 
                 {/* </textarea> */}
               </div>
               <div className="w-full">
-                <p className="block mb-2 font-semibold text-base text-slate-600">Opname Date</p>
-                <p className="text-slate-500 text-sm truncate">
+                <p className="block mb-2 font-semibold text-base text-[#493628]">Opname Date</p>
+                <p className="text-gray-500 mt-3 text-sm truncate">
                   {new Date().toLocaleDateString("id-ID", { day: "2-digit", month: "long", year: "numeric" })}
                 </p>
                 {/* <input type="hidden" name="opnameDate" value={new Date().toISOString()} /> */}
@@ -232,10 +232,10 @@ const OpnameForm: React.FC<OpnameFormProps> = ({ onSubmit, onEditSubmit, isEdit 
 
 
         </div>
-        <div className="p-6 pl-12">
-          <div className="right-0 content-end">
+        <div className="p-6 pl-8">
+          <div className="right-0 content-end flex justify-start min-h-10">
             <button
-              className="mx-auto select-none rounded border border-red-600 py-2 px-4 text-center text-sm font-semibold text-red-600 transition-all hover:bg-red-600 hover:text-white hover:shadow-md hover:shadow-red-600/20 active:bg-red-700 active:text-white active:opacity-[0.85] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+              className="select-none !rounded-lg border-2 border-[#493628] px-4 text-center text-base font-semibold text-[#493628] transition-all hover:bg-[#493628] hover:text-white disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
               type="button"
               onClick={() => router.push('/admin/opname')}
             >
@@ -243,7 +243,7 @@ const OpnameForm: React.FC<OpnameFormProps> = ({ onSubmit, onEditSubmit, isEdit 
             </button>
             <span className="px-2"></span>
             <button
-              className=" mx-auto select-none rounded bg-slate-800 py-2 px-4 text-center text-sm font-semibold text-white shadow-md shadow-slate-900/10 transition-all hover:shadow-lg hover:shadow-slate-900/20 active:opacity-[0.85] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+              className="select-none !rounded-lg bg-[#493628] px-4 text-center text-base font-semibold text-white transition-all hover:bg-[#705C53] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
               type="submit"
               onClick={handleIsOpenCloseModalConfirmation}
             >

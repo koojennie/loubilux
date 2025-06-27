@@ -1,4 +1,3 @@
-// components/InvoiceOrderPdf.tsx
 import React from "react";
 import {
   Document,
@@ -9,21 +8,40 @@ import {
   Image,
 } from "@react-pdf/renderer";
 import { Order } from "@/types/type";
+import { Font } from "@react-pdf/renderer";
 
 // Optional: Custom font (use Google Fonts via Font.register if needed)
 // Font.register({ family: 'Open Sans', src: '...' })
 // const logobase64
 
+Font.register({
+  family: "Poppins",
+  fonts: [
+    {
+      src: "/fonts/Poppins/Poppins-Medium.ttf",
+      fontWeight: 500,
+    },
+    {
+      src: "/fonts/Poppins/Poppins-SemiBold.ttf",
+      fontWeight: 600,
+    },
+    {
+      src: "/fonts/Poppins/Poppins-Regular.ttf",
+      fontWeight: "normal",
+    },
+  ],
+});
+
 const styles = StyleSheet.create({
   page: {
-    fontFamily: "Helvetica",
+    fontFamily: "Poppins",
     fontSize: 11,
     padding: 40,
     backgroundColor: "#fff",
     color: "#333",
   },
   header: {
-    borderBottom: "2 solid #eee",
+    borderBottom: "1 dashed #e5e7eb",
     paddingBottom: 10,
     marginBottom: 20,
     flexDirection: "row",
@@ -33,16 +51,19 @@ const styles = StyleSheet.create({
 
   company: {
     fontSize: 14,
-    fontWeight: "bold",
+    fontWeight: "600",
+    fontFamily: "Poppins",
   },
   invoiceTitle: {
     fontSize: 26,
     color: "#493628", 
-    fontWeight: "bold",
+    fontFamily: "Poppins",
+    fontWeight: "600",
   },
   sectionTitle: {
     fontSize: 12,
-    fontWeight: "bold",
+    fontFamily: "Poppins",
+    fontWeight: "600",
     marginBottom: 6,
     color: "#4B5563", // Gray-700
   },
@@ -59,12 +80,12 @@ const styles = StyleSheet.create({
     borderBottom: "1 solid #e5e7eb",
     paddingBottom: 6,
     marginTop: 10,
-    fontWeight: "bold",
+    fontFamily: "Poppins",
+    fontWeight: "600",
     color: "#374151", // Gray-700
   },
   tableRow: {
     flexDirection: "row",
-    borderBottom: "1 solid #f3f4f6",
     paddingVertical: 6,
   },
   col1: { width: "40%" },
@@ -106,7 +127,7 @@ const InvoiceOrderPdf: React.FC<{ order: Order }> = ({ order }) => {
         // minute: "2-digit",
       };
 
-      return dateObj.toLocaleDateString("id-ID", options);
+      return dateObj.toLocaleDateString("en-EN", options);
     } catch {
       return rawDateStr;
     }
@@ -131,13 +152,13 @@ const InvoiceOrderPdf: React.FC<{ order: Order }> = ({ order }) => {
         <View style={[styles.section, { flexDirection: "row", justifyContent: "space-between" }]}>
           {/* Invoice Details (Kiri) */}
           <View style={{ width: "48%" }}>
-            <Text style={styles.sectionTitle}>Detail Invoice</Text>
-            <Text style={styles.infoText}>Invoice #: {order.orderId}</Text>
+            <Text style={styles.sectionTitle}>Details</Text>
+            <Text style={styles.infoText}>Invoice: #{order.orderId}</Text>
             <Text style={styles.infoText}>
               {/* Tanggal: {new Date(order.orderDate).toLocaleDateString("id-ID")} */}
-              Tanggal: {formatDateTime(order.orderDate)}
+              Date: {formatDateTime(order.orderDate)}
             </Text>
-            <Text style={styles.infoText}>Metode: {order.paymentMethod}</Text>
+            <Text style={styles.infoText}>Payment: Midtrans</Text>
             {/* <Text style={styles.infoText}>Status: {order.paymentStatus}</Text> */}
           </View>
 
@@ -152,9 +173,9 @@ const InvoiceOrderPdf: React.FC<{ order: Order }> = ({ order }) => {
         {/* Item Table */}
         <View>
           <View style={styles.tableHeader}>
-            <Text style={styles.col1}>Produk</Text>
-            <Text style={styles.col2}>Jumlah</Text>
-            <Text style={styles.col3}>Harga</Text>
+            <Text style={styles.col1}>Product</Text>
+            <Text style={styles.col2}>Quantity</Text>
+            <Text style={styles.col3}>Price</Text>
             <Text style={styles.col4}>Subtotal</Text>
           </View>
 

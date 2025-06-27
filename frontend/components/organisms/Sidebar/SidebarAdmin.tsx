@@ -8,7 +8,7 @@ import { FaBoxArchive } from "react-icons/fa6";
 import { FaBasketShopping } from "react-icons/fa6";
 import { FaUser } from "react-icons/fa";
 import { BiCategory } from "react-icons/bi";
-import { HiOutlineDocumentMagnifyingGlass } from "react-icons/hi2";
+import { HiDocumentMagnifyingGlass, HiOutlineDocumentMagnifyingGlass } from "react-icons/hi2";
 import { HiMenu } from "react-icons/hi";
 
 
@@ -150,7 +150,7 @@ const SidebarAdmin = ({ isSidebarOpen, toggleSidebar, setIsSidebarOpen, userRole
 
                     >
                       <div className={` ${pathName === '/admin/opname' ? 'bg-[#AB886D]' : ''} shadow-lg shadow-gray-300 !text-white w-8 h-8 mr-1 rounded-lg text-center grid place-items-center bg-white`}>
-                        <HiOutlineDocumentMagnifyingGlass className="color-palette-1" />
+                        <HiDocumentMagnifyingGlass className="color-palette-1" />
                       </div>
 
                       {isSidebarOpen ? (

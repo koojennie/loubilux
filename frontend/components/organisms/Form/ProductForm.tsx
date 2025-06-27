@@ -158,12 +158,12 @@ const ProductForm: React.FC<ProductFormProps> = ({ onSubmit, onEditSubmit ,isEdi
   return (
     <div>
       <form onSubmit={handleSubmit} action="">
-        <div className="flex flex-col py-8 pt-8 mb-12 px-8 ">
+        <div className="flex flex-col py-8 pt-8 mb-12 px-8">
           <p className="flex text-2xl font-semibold text-[#493628]">
             {isEdit ? `Edit Product ${generatedProductCode}`: 'Add New Product'}
           </p>
           <p className="mb-4 text-lg text-[#493628]">
-            Fill in the information below to add a new product.
+            Fill in the information below for product.
           </p>
           <div className="grid grid-rows-1 gap-4">
 
@@ -177,10 +177,10 @@ const ProductForm: React.FC<ProductFormProps> = ({ onSubmit, onEditSubmit ,isEdi
 
               {/* Quantity */}
               <div className="w-full max-w-24">
-                <label className="block mb-2 text-sm font-semibold text-[#493628]">Quantity</label>
+                <label className="block mb-2 text-base font-semibold text-[#493628]">Quantity</label>
                 <input
                   type="number"
-                  className="w-full h-10 bg-transparent placeholder:text-[#493628] text-[#493628] text-sm border rounded-lg px-3 focus:border-[#493628]"
+                  className="w-full h-10 bg-transparent placeholder:text-gray-500 text-[#493628] text-sm border rounded-lg px-3 focus:border-[#493628]"
                   placeholder="0"
                   min="0"
                   value={quantity}
@@ -195,10 +195,10 @@ const ProductForm: React.FC<ProductFormProps> = ({ onSubmit, onEditSubmit ,isEdi
 
               {/* Product Name */}
               <div className="w-full">
-                <label className="block mb-1 text-sm font-semibold text-[#493628]">Product Name</label>
+                <label className="block mb-1 text-base font-semibold text-[#493628]">Product Name</label>
                 <input
                   type="text"
-                  className="w-full h-10 bg-transparent placeholder:text-[#493628] text-[#493628] text-sm border rounded-lg px-3 focus:border-[#493628]"
+                  className="w-full h-10 bg-transparent placeholder:text-gray-500 text-[#493628] text-sm border rounded-lg px-3 focus:border-[#493628]"
                   placeholder="Enter Product Name"
                   value={productName}
                   onChange={(e) => { setProductName(e.target.value) }
@@ -208,11 +208,11 @@ const ProductForm: React.FC<ProductFormProps> = ({ onSubmit, onEditSubmit ,isEdi
 
               {/* Amount */}
               <div className="w-full">
-                <label className="block mb-1 text-sm font-semibold text-[#493628]">Price</label>
+                <label className="block mb-1 text-base font-semibold text-[#493628]">Price</label>
                 <div className="relative">
                   <input
                     type="text"
-                    className="w-full h-10 bg-transparent placeholder:text-[#493628] text-[#493628] text-sm border rounded-lg px-3 focus:border-[#493628]"
+                    className="w-full h-10 bg-transparent placeholder:text-gray-500 text-[#493628] text-sm border rounded-lg px-3 focus:border-[#493628]"
                     placeholder="Enter Price"
                     min='1'
                     step={'any'}
@@ -233,9 +233,9 @@ const ProductForm: React.FC<ProductFormProps> = ({ onSubmit, onEditSubmit ,isEdi
 
               {/* Category */}
               <div className="w-full">
-                <label className="block mb-1 text-sm font-semibold text-[#493628]">Category</label>
+                <label className="block mb-1 text-base font-semibold text-[#493628]">Category</label>
                 <select
-                  className="w-full h-10 bg-transparent placeholder:text-[#493628] text-[#493628] text-sm border rounded-lg px-3 focus:border-[#493628]"
+                  className="w-full h-10 bg-transparent placeholder:text-gray-500 text-[#493628] text-sm border rounded-lg px-3 focus:border-[#493628]"
                   value={selectedCategory}
                   onChange={handleCategoryChange}
                 >
@@ -252,8 +252,8 @@ const ProductForm: React.FC<ProductFormProps> = ({ onSubmit, onEditSubmit ,isEdi
 
               {/* Status */}
               <div className="w-full">
-                <label className="block mb-1 text-sm font-semibold text-[#493628]">Status Publish</label>
-                <select className="w-full h-10 bg-transparent placeholder:text-[#493628] text-[#493628] text-sm border rounded-lg px-3 focus:border-[#493628]"
+                <label className="block mb-1 text-base font-semibold text-[#493628]">Status Publish</label>
+                <select className="w-full h-10 bg-transparent placeholder:text-gray-500 text-[#493628] text-sm border rounded-lg px-3 focus:border-[#493628]"
                   value={statusPublish}
                   onChange={(e) => { setStatusPublish(e.target.value) }}
                 >
@@ -264,10 +264,10 @@ const ProductForm: React.FC<ProductFormProps> = ({ onSubmit, onEditSubmit ,isEdi
 
               {/* description */}
               <div className="col-span-2 w-full">
-                <label className="block mb-1 text-sm font-semibold text-[#493628]">Description</label>
+                <label className="block mb-1 text-base font-semibold text-[#493628]">Description</label>
                 <textarea
                   rows={4}
-                  className="bg-transparent border text-[#493628] text-sm rounded-lg focus:border-[#493628] block w-full p-3"
+                  className="bg-transparent placeholder:text-gray-500 border text-[#493628] text-sm rounded-lg focus:border-[#493628] block w-full p-3"
                   placeholder="Leave a description for this product..."
                   value={descriptionProduct}
                   onChange={(e) => { setDescriptionProduct(e.target.value) }
@@ -279,17 +279,17 @@ const ProductForm: React.FC<ProductFormProps> = ({ onSubmit, onEditSubmit ,isEdi
 
 
             <div className="col-span-1">
-              <label className="block mb-1 text-sm font-semibold text-[#493628]">Image</label>
+              <label className="block mb-2 text-base font-semibold text-[#493628]">Image</label>
               <ImageUploader images={images} setImages={setImages} />
             </div>
           </div>
 
 
         </div>
-        <div className="p-6 pl-12">
-          <div className="right-0 content-end">
+        <div className="p-6 pl-8">
+          <div className="right-0 content-end flex justify-start min-h-10">
             <button
-              className="mx-auto select-none rounded border border-red-600 py-2 px-4 text-center text-sm font-semibold text-red-600 transition-all hover:bg-red-600 hover:text-white hover:shadow-md hover:shadow-red-600/20 active:bg-red-700 active:text-white active:opacity-[0.85] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+              className="select-none !rounded-lg border-2 border-[#493628] px-4 text-center text-base font-semibold text-[#493628] transition-all hover:bg-[#493628] hover:text-white disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
               type="button"
               onClick={() => router.push('/admin/products')}
             >
@@ -297,7 +297,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ onSubmit, onEditSubmit ,isEdi
             </button>
             <span className="px-2"></span>
             <button
-              className=" mx-auto select-none rounded bg-slate-800 py-2 px-4 text-center text-sm font-semibold text-white shadow-md shadow-slate-900/10 transition-all hover:shadow-lg hover:shadow-slate-900/20 active:opacity-[0.85] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+              className="select-none !rounded-lg bg-[#493628] px-4 text-center text-base font-semibold text-white transition-all hover:bg-[#705C53] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
               type="submit"
               onClick={handleIsOpenCloseModalConfirmation}
             >

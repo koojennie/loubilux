@@ -90,9 +90,9 @@ const renderDataDetail = (colKey: string, value: any, tableType: TableType) => {
   } else if (tableType === 'users') {
     if (colKey === 'role') {
       return (
-        <span className={`px-3 py-1 rounded-md text-xs font-semibold ${value === 'user' ? 'bg-yellow-200 text-yellow-800'
-          : value === 'admin' ? 'bg-indigo-200 text-indigo-800'
-            : value === 'superadmin' ? 'bg-purple-200 text-purple-800'
+        <span className={`px-3 py-1 rounded-md text-xs font-semibold ${value === 'user' ? 'bg-yellow-100 text-yellow-600'
+          : value === 'admin' ? 'bg-pink-100 text-pink-600'
+            : value === 'superadmin' ? 'bg-purple-100 text-purple-600'
               : 'bg-gray-200 text-gray-800'
           }`}
         >
@@ -180,7 +180,7 @@ const ModalViewDetails = forwardRef<HTMLDivElement, ModalViewDetailsProps>(({ is
                   </Swiper>
                 ) : profilePicture ? (
                   // Jika hanya ada satu gambar (profilePicture)
-                  <div className="relative w-40 h-40 sm:w-64 sm:h-64 flex justify-center items-center">
+                  <div className="relative w-36 h-36 flex justify-center items-center">
                     <Image
                       src={profilePicture}
                       alt="Profile Picture"

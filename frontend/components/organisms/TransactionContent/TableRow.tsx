@@ -15,15 +15,15 @@ export default function TableRow(props: TableRowProps) {
   const statusConfig = {
     Pending: {
       icon: <HiClock className="text-sm me-1 text-yellow-600" />,
-      className: "bg-yellow-100 text-yellow-800",
+      className: "bg-yellow-100 text-yellow-600",
     },
     Success: {
       icon: <HiCheckCircle className="text-sm me-1 text-green-600" />,
-      className: "bg-green-100 text-green-800",
+      className: "bg-green-100 text-green-600",
     },
     Failed: {
       icon: <HiXCircle className="text-sm me-1 text-red-600" />,
-      className: "bg-red-100 text-red-800",
+      className: "bg-red-100 text-red-600",
     },
   };
 

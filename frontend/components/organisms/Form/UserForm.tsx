@@ -171,11 +171,11 @@ const UserForm: React.FC<UserFormProps> = ({ onSubmit, onEditSubmit, isEdit = fa
   return (
     <div>
       <form onSubmit={handleSubmit} action="">
-        <div className="flex flex-col py-8 pt-8 mb-12 px-8 ">
-          <h4 className="flex text-lg mb-1 font-semibold text-[#493628]">
+        <div className="flex flex-col py-8 pt-8 mb-12 px-8">
+          <h4 className="flex text-2xl font-semibold text-[#493628]">
             {isEdit ? "Edit User" : "Add New User"}
           </h4>
-          <p className="mb-4 text-sm mt-1 text-[#493628]">
+          <p className="mb-4 text-lg text-[#493628]">
             {isEdit ? "Change in the information below to edit user." : "Fill in the information below to add a new user."}
           </p>
           <div className="grid grid-rows-1 gap-4">
@@ -183,17 +183,17 @@ const UserForm: React.FC<UserFormProps> = ({ onSubmit, onEditSubmit, isEdit = fa
             <div className="col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4">
               {/* User Form */}
               <div className="w-full">
-                <p className="block mb-2 font-semibold text-base text-slate-600">User ID</p>
-                <p className="text-slate-500 text-sm truncate">{generatedUserCode || `Please Choose Category first`}</p>
+                <p className="block mb-2 font-semibold text-base text-[#493628]">User ID</p>
+                <p className="text-gray-500 text-sm truncate">{generatedUserCode || `Please Choose Category first`}</p>
                 <input type="hidden" name='productCode' value={generatedUserCode} />
               </div>
 
               {/* Name */}
               <div className="w-full">
-                <label className="block mb-1 text-sm text-[#493628]">Name</label>
+                <label className="block mb-2 text-base font-semibold text-[#493628]">Name</label>
                 <input
                   type="text"
-                  className="w-full h-10 bg-transparent placeholder:text-[#493628] text-[#493628] text-sm border border-slate-200 rounded px-3 shadow-sm focus:border-slate-400"
+                  className="w-full h-10 bg-transparent placeholder:text-gray-500 text-[#493628] text-sm border rounded-lg px-3 focus:border-[#493628]"
                   placeholder="username..."
                   value={name}
                   onChange={(e) => { setName(e.target.value) }
@@ -203,10 +203,10 @@ const UserForm: React.FC<UserFormProps> = ({ onSubmit, onEditSubmit, isEdit = fa
 
               {/* username */}
               <div className="w-full">
-                <label className="block mb-1 text-sm text-[#493628]">Username</label>
+                <label className="block mb-2 text-base font-semibold text-[#493628]">Username</label>
                 <input
                   type="text"
-                  className="w-full h-10 bg-transparent placeholder:text-[#493628] text-[#493628] text-sm border border-slate-200 rounded px-3 shadow-sm focus:border-slate-400"
+                  className="w-full h-10 bg-transparent placeholder:text-gray-500 text-[#493628] text-sm border rounded-lg px-3 focus:border-[#493628]"
                   placeholder="username..."
                   value={username}
                   onChange={(e) => { setUsername(e.target.value) }
@@ -216,10 +216,10 @@ const UserForm: React.FC<UserFormProps> = ({ onSubmit, onEditSubmit, isEdit = fa
 
               {/* phone number */}
               <div className="w-full">
-                <label className="block mb-1 text-sm text-[#493628]">Phone Number</label>
+                <label className="block mb-2 text-base font-semibold text-[#493628]">Phone Number</label>
                 <input
                   type="text"
-                  className="w-full h-10 bg-transparent placeholder:text-[#493628] text-[#493628] text-sm border border-slate-200 rounded px-3 shadow-sm focus:border-slate-400"
+                  className="w-full h-10 bg-transparent placeholder:text-gray-500 text-[#493628] text-sm border rounded-lg px-3 focus:border-[#493628]"
                   placeholder="Phone Number..."
                   value={phoneNumber}
                   onChange={(e) => { setPhoneNumber(e.target.value) }
@@ -229,10 +229,10 @@ const UserForm: React.FC<UserFormProps> = ({ onSubmit, onEditSubmit, isEdit = fa
 
               {/* Email */}
               <div className="w-full">
-                <label className="block mb-1 text-sm text-[#493628]">Email</label>
+                <label className="block mb-2 text-base font-semibold text-[#493628]">Email</label>
                 <input
                   type="email"
-                  className="w-full h-10 bg-transparent placeholder:text-[#493628] text-[#493628] text-sm border border-slate-200 rounded px-3 shadow-sm focus:border-slate-400"
+                  className="w-full h-10 bg-transparent placeholder:text-gray-500 text-[#493628] text-sm border rounded-lg px-3 focus:border-[#493628]"
                   placeholder="email..."
                   value={email}
                   onChange={(e) => { setEmail(e.target.value) }
@@ -242,9 +242,9 @@ const UserForm: React.FC<UserFormProps> = ({ onSubmit, onEditSubmit, isEdit = fa
 
               {/* Status */}
                 <div className="w-full">
-                <label className="block mb-1 text-sm text-[#493628]">Role</label>
+                <label className="block mb-2 text-base font-semibold text-[#493628]">Role</label>
                 <select
-                  className="w-full h-10 bg-transparent text-[#493628] text-sm border border-slate-200 rounded px-3 shadow-sm focus:border-slate-400"
+                  className="w-full h-10 bg-transparent placeholder:text-gray-500 text-[#493628] text-sm border rounded-lg px-3 focus:border-[#493628]"
                   value={role || ""}
                   onChange={(e) => setRole(e.target.value)}
                 >
@@ -260,10 +260,10 @@ const UserForm: React.FC<UserFormProps> = ({ onSubmit, onEditSubmit, isEdit = fa
               <div className="col-span-2 w-full">
                 {/* Password */}
                 <div className="mb-4">
-                  <label className="block mb-1 text-sm text-[#493628]">Password</label>
+                  <label className="block mb-2 text-base font-semibold text-[#493628]">Password</label>
                   <input
                     type="password"
-                    className="w-full h-10 bg-transparent placeholder:text-[#493628] text-[#493628] text-sm border border-slate-200 rounded px-3 shadow-sm focus:border-slate-400"
+                    className="w-full h-10 bg-transparent placeholder:text-gray-500 text-[#493628] text-sm border rounded-lg px-3 focus:border-[#493628]"
                     placeholder="Your Password..."
                     value={password}
                     onChange={handlePasswordChange}
@@ -278,10 +278,10 @@ const UserForm: React.FC<UserFormProps> = ({ onSubmit, onEditSubmit, isEdit = fa
 
                 {/* Confirm Password */}
                 <div className="mb-4">
-                  <label className="block mb-1 text-sm text-[#493628]">Confirm Password</label>
+                  <label className="block mb-2 text-base font-semibold text-[#493628]">Confirm Password</label>
                   <input
                     type="password"
-                    className="w-full h-10 bg-transparent placeholder:text-[#493628] text-[#493628] text-sm border border-slate-200 rounded px-3 shadow-sm focus:border-slate-400"
+                    className="w-full h-10 bg-transparent placeholder:text-gray-500 text-[#493628] text-sm border rounded-lg px-3 focus:border-[#493628]"
                     placeholder="Confirm Password..."
                     value={confirmPassword}
                     onChange={handleConfirmPasswordChange}
@@ -300,17 +300,17 @@ const UserForm: React.FC<UserFormProps> = ({ onSubmit, onEditSubmit, isEdit = fa
 
 
             <div className="col-span-1">
-              <label className="block mb-1 text-sm text-[#493628]">Image</label>
+              <label className="block mb-2 text-base font-semibold text-[#493628]">Image</label>
               <ImageUploader image={profilePicture} setImage={setProfilePicture} />
             </div>
           </div>
 
 
         </div>
-        <div className="p-6 pl-12">
-          <div className="right-0 content-end">
+        <div className="p-6 pl-8">
+          <div className="right-0 content-end flex justify-start min-h-10">
             <button
-              className="mx-auto select-none rounded border border-red-600 py-2 px-4 text-center text-sm font-semibold text-red-600 transition-all hover:bg-red-600 hover:text-white hover:shadow-md hover:shadow-red-600/20 active:bg-red-700 active:text-white active:opacity-[0.85] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+              className="select-none !rounded-lg border-2 border-[#493628] px-4 text-center text-base font-semibold text-[#493628] transition-all hover:bg-[#493628] hover:text-white disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
               type="button"
               onClick={() => router.push('/admin/users')}
             >
@@ -318,7 +318,7 @@ const UserForm: React.FC<UserFormProps> = ({ onSubmit, onEditSubmit, isEdit = fa
             </button>
             <span className="px-2"></span>
             <button
-              className=" mx-auto select-none rounded bg-slate-800 py-2 px-4 text-center text-sm font-semibold text-white shadow-md shadow-slate-900/10 transition-all hover:shadow-lg hover:shadow-slate-900/20 active:opacity-[0.85] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+              className="select-none !rounded-lg bg-[#493628] px-4 text-center text-base font-semibold text-white transition-all hover:bg-[#705C53] disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
               type="submit"
               onClick={handleIsOpenCloseModalConfirmation}
               disabled={!isEdit && (!isPasswordValid || !isMatchPassword)}

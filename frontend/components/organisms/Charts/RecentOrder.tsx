@@ -10,7 +10,6 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import axios from "axios";
 import { Product, Order } from "@/types/type";
-import { FaFilter } from "react-icons/fa6";
 
 
 export default function RecentOrders() {
@@ -52,16 +51,6 @@ export default function RecentOrders() {
           <h3 className="text-lg font-semibold text-[#493628]">
             Recent Orders
           </h3>
-        </div>
-
-        <div className="flex items-center gap-3">
-          <button className="inline-flex items-center gap-2 !rounded-lg border-2 border-[#493628] px-3 py-2 text-base font-medium text-[#493628] hover:bg-[#493628] hover:text-white">
-            <FaFilter width={20} height={20}/>
-            Filter
-          </button>
-          <button className="inline-flex items-center gap-2 !rounded-lg border-2 border-[#493628] px-3 py-2 text-base font-medium text-[#493628] hover:bg-[#493628] hover:text-white">
-            See all
-          </button>
         </div>
       </div>
       <div className="max-w-full overflow-x-auto">
@@ -142,7 +131,7 @@ export default function RecentOrders() {
                 </TableCell>
                 <TableCell className="py-3">
                   <span
-                    className={`px-3 py-1 rounded-md text-xs font-semibold ${order.statusOrder === 'Completed' ? 'bg-green-200 text-green-800' : 'bg-yellow-200 text-yellow-800'
+                    className={`px-3 py-1 rounded-md text-xs font-semibold ${order.statusOrder === 'Completed' ? 'bg-green-100 text-green-600' : 'bg-yellow-100 text-yellow-600'
                       }`}
                   >
                     {String(order.statusOrder)}

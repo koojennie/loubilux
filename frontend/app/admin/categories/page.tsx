@@ -98,7 +98,7 @@ const CategoriesPage = () => {
 
   return (
     <>
-      <div className="flex flex-col px-8 rounded-2xl shadow-xl bg-white shadow-gray-200">
+      <div className="flex px-8 mx-3 my-2 flex-col rounded-2xl bg-white">
         {/*Title */}
         <HeaderContentAdmin
           header="Category"
@@ -127,7 +127,6 @@ const CategoriesPage = () => {
               { key: "name", label: "Name" },
               { key: "description", label: "Description" }
             ]}
-            onInfo={(id) => { handleOpenCloseModalViewDetail(category.find(category => category.id === id)) }}
             onEdit={() => { }}
             onDelete={(id) => { handleOpenCloseModalConfirmationDelete(category.find(category => category.id === id)) }}
             tableType="categories"

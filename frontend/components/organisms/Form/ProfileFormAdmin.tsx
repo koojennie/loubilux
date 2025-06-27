@@ -265,7 +265,7 @@ const ProfileFormAdmin: React.FC<UserFormProps> = ({ onSubmit, onEditSubmit, isE
                   <option value="superadmin">Super Admin</option>
                 </select>
               ) : (
-                <p className={`px-3 py-2 rounded-lg w-40 text-lg text-center font-semibold ${role === 'user' ? 'bg-yellow-200 text-yellow-800' : role === 'admin' ? 'bg-indigo-200 text-indigo-800' : role === 'superadmin' ? 'bg-purple-200 text-purple-800' : 'bg-gray-200 text-gray-800'}`}
+                <p className={`px-3 py-2 rounded-lg w-40 text-lg text-center font-semibold ${role === 'user' ? 'bg-yellow-100 text-yellow-600' : role === 'admin' ? 'bg-pink-100 text-pink-600' : role === 'superadmin' ? 'bg-purple-100 text-purple-600' : 'bg-gray-100 text-gray-600'}`}
                   >
                     {role === 'superadmin' ? String('Super Admin') : role === 'admin' ? String('Admin') : role === 'user' ? String('User') : String(role)}
                 </p>

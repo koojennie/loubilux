@@ -36,12 +36,10 @@ const AddPageCategory = () => {
   }
 
   return (
-    <div className="p-8 md:p-8 ">
-      <div className="relative m-auto flex flex-col rounded-2xl bg-white bg-clip-border text-[#493628] shadow-lg">
+      <div className="relative mx-3 my-2 m-auto flex flex-col rounded-2xl bg-white bg-clip-border text-[#493628]">
         <CategoryForm isEdit={false} onSubmit={handleAddCategory} />
         <Toaster />
       </div>
-    </div>
   )
 }
 

@@ -33,7 +33,7 @@ const AddProduct = () => {
       toast.error(`Gagal when submitting product : ${error}`);
       console.error('Error when submitting new product', error);
     }
-  }
+  } 
 
   return (
       <div className="relative mx-3 my-2 m-auto flex flex-col rounded-2xl bg-white bg-clip-border text-[#493628]">

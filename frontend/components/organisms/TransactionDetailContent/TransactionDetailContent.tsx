@@ -22,7 +22,7 @@ export default function TransactionDetailContent({ order }: TransactionDetailCon
     return (
         <main className={`main-wrapper ${expanded ? 'expanded' : 'collapsed'}`}>
             <div className="ps-lg-0">
-                <h2 className="text-4xl fw-bold color-palette-1 mb-30">Order Detail #{order.orderId}</h2>
+                <h2 className="text-4xl fw-bold color-palette-1 mb-30">Order Details #{order.orderId}</h2>
                 <div className="details">
                     <div className="main-content main-content-card overflow-auto">
                         <section className="checkout mx-auto">

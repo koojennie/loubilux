@@ -96,7 +96,7 @@ const TableComponents = <T extends Record<string, any>>({
         </div>
         <div className="flex space-x-1">
           <button
-            className="px-3 mx-2 py-1 min-w-9 min-h-9 text-sm font-medium text-[#493628] border-2 border-[#493628] !rounded-lg transition duration-200 ease"
+            className="px-3 mx-2 py-1 min-w-9 min-h-9 text-sm font-medium text-[#493628] border-2 border-[#493628] hover:bg-[#493628] hover:text-white disabled:bg-[#493628] disabled:text-white !rounded-lg transition duration-200 ease"
             onClick={() => onPageChange(page - 1)}
             disabled={page === 1}
           >
@@ -108,9 +108,9 @@ const TableComponents = <T extends Record<string, any>>({
               key={p === "..." ? `ellipsis-${i}` : `page-${p}`} // Gunakan key yang unik
               onClick={() => typeof p === "number" && onPageChange(p)}
               disabled={p === "..."}
-              className={`px-3 py-1 min-w-9 min-h-9 text-sm font-medium !rounded-lg ${
+              className={`px-3 mx-1 py-1 max-w-9 min-h-9 text-sm text-center flex items-center justify-center font-medium !rounded-lg ${
                 page === p
-                  ? "text-white bg-[#493628] hover:bg-[#705C53] transition duration-200"
+                  ? "text-white bg-[#493628] transition duration-200"
                   : "text-[#493628] border-2 border-[#493628] hover:bg-[#493628] hover:text-white transition duration-200"
               }`}
             >
@@ -119,7 +119,7 @@ const TableComponents = <T extends Record<string, any>>({
           ))}
 
           <button
-            className="px-3 mx-2 py-1 min-w-9 min-h-9 text-sm font-medium text-[#493628] border-2 border-[#493628] !rounded-lg transition duration-200 ease"
+            className="px-3 mx-2 py-1 min-w-9 min-h-9 text-sm font-medium text-[#493628] border-2 border-[#493628] hover:bg-[#493628] hover:text-white disabled:bg-[#493628] disabled:text-white !rounded-lg transition duration-200 ease"
             onClick={() => onPageChange(page + 1)}
             disabled={page === totalPages}
           >

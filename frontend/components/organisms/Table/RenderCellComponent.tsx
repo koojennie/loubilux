@@ -69,9 +69,9 @@ export const renderCellContent = <T extends { [key: string]: any }>(
       return (
         <span
           className={`px-3 py-1 rounded-md text-sm font-semibold 
-              ${value === 'user' ? 'bg-yellow-200 text-yellow-800'
-              : value === 'admin' ? 'bg-indigo-200 text-indigo-800'
-                : value === 'superadmin' ? 'bg-purple-200 text-purple-800'
+              ${value === 'user' ? 'bg-yellow-100 text-yellow-600'
+              : value === 'admin' ? 'bg-pink-100 text-pink-600'
+                : value === 'superadmin' ? 'bg-purple-100 text-purple-600'
                   : 'bg-gray-200 text-gray-800'
             }`}
         >
@@ -93,7 +93,7 @@ export const renderCellContent = <T extends { [key: string]: any }>(
     } else if (col.key === 'statusOrder') {
       return (
         <span
-          className={`px-3 py-1 rounded-md text-sm font-semibold ${value === 'Completed' ? 'bg-green-200 text-green-800' : 'bg-yellow-200 text-yellow-800'
+          className={`px-3 py-1 rounded-md text-sm font-semibold ${value === 'Completed' ? 'bg-green-100 text-green-600' : 'bg-yellow-100 text-yellow-600'
             }`}
         >
           {String(value)}
@@ -101,7 +101,7 @@ export const renderCellContent = <T extends { [key: string]: any }>(
       );
     } else if (col.key === 'isPaid') {
       return (
-        <span className={`px-3 py-1 rounded-md text-sm font-semibold ${value === 'true' ? 'bg-green-200 text-green-800' : 'bg-yellow-200 text-yellow-800'
+        <span className={`px-3 py-1 rounded-md text-sm font-semibold ${value === 'true' ? 'bg-green-100 text-green-600' : 'bg-yellow-100 text-yellow-600'
           }`}
         >
           {value === 'true' ? 'Paid' : 'Waiting'}
@@ -133,7 +133,7 @@ export const renderCellContent = <T extends { [key: string]: any }>(
       )
     } else if (col.key === 'paymentMethod') {
       return (
-        <span className={`px-3 py-1 rounded-md text-sm font-semibold ${value === 'true' ? 'bg-green-200 text-green-800' : 'bg-yellow-200 text-yellow-800'
+        <span className={`px-3 py-1 rounded-md text-sm font-semibold ${value === 'true' ? 'bg-green-100 text-green-600' : 'bg-yellow-100 text-yellow-600'
           }`}
         >
           {value === 'true' ? 'Paid' : 'Waiting'}
@@ -158,8 +158,8 @@ export const renderCellContent = <T extends { [key: string]: any }>(
           className={`px-3 py-1 rounded-md text-sm font-semibold ${num < 0
             ? 'bg-red-200 text-red-800'
             : num > 0
-              ? 'bg-yellow-200 text-yellow-800'
-              : 'bg-green-200 text-green-800'
+              ? 'bg-yellow-100 text-yellow-600'
+              : 'bg-green-100 text-green-600'
             }`}
         >
           {String(value)}

@@ -5,6 +5,7 @@ import toast, { Toaster } from "react-hot-toast";
 import { Order } from "@/types/type";
 import InvoiceOrderPdf from "./InvoiceOrderPdf";
 import axios from "axios";
+import { FaRegFilePdf } from "react-icons/fa";
 
 interface OrderDetailComponentProps {
   order: Order;
@@ -14,7 +15,7 @@ interface OrderDetailComponentProps {
 
 const OrderDetailComponent: React.FC<OrderDetailComponentProps> = ({ order, setOrder, isEdit }) => {
   // const [order, SetOrder] = useState<Order|null>()
-  const formattedDate = new Date(order.orderDate.replace(/\./g, ":")).toLocaleDateString("id-ID", {
+  const formattedDate = new Date(order.orderDate.replace(/\./g, ":")).toLocaleDateString("en-EN", {
     day: "2-digit",
     month: "long",
     year: "numeric",
@@ -49,55 +50,47 @@ const OrderDetailComponent: React.FC<OrderDetailComponentProps> = ({ order, setO
         {/* Header: Order Detail + PDF Button */}
         <div className="flex justify-between items-center">
           <div>
-            <p className="text-2xl font-semibold text-[#493628]">Detail Order #{order.orderId}</p>
-            <p className="text-base text-[#493628] mt-1">Tanggal: {formattedDate}</p>
+            <p className="text-2xl font-semibold text-[#493628]">Order Details #{order.orderId}</p>
+            <p className="text-base text-[#493628] mt-1">Date: {formattedDate}</p>
           </div>
           {!isEdit && (
-            <PDFDownloadLink
-              document={<InvoiceOrderPdf order={order} />}
-              fileName={`invoice-${order.orderId}.pdf`}
-              className="bg-[#493628] text-white px-4 py-2 rounded-md hover:bg-[#3b2c21] transition text-sm"
-            >
-              {({ loading }) => (loading ? "Membuat PDF..." : "Download Invoice")}
-            </PDFDownloadLink>
+            <div className="">
+              <PDFDownloadLink
+                document={<InvoiceOrderPdf order={order} />}
+                fileName={`invoice-${order.orderId}.pdf`}
+              >
+                {({ loading }) => (
+                  <div className="flex items-center gap-2 bg-[#493628] text-white px-4 py-2 rounded-md hover:bg-[#705C53] transition text-sm font-medium">
+                    <FaRegFilePdf />
+                    {loading ? "Generating PDF..." : "Download Invoice"}
+                  </div>
+                )}
+              </PDFDownloadLink>
+            </div>
           )}
         </div>
 
         {/* Informasi Pelanggan dan Pembayaran */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-8">
           <div>
-            <h3 className="text-lg font-semibold text-[#493628] mb-2">Customer</h3>
-            <p className="text-sm text-gray-700">Nama: {order.user.name}</p>
-            <p className="text-sm text-gray-700">Email: {order.user.email}</p>
+            <h3 className="text-lg !font-semibold text-[#493628] mb-2">Customer</h3>
+            <p className="text-base text-gray-700">{order.user.name}</p>
+            <p className="text-base text-gray-700">{order.user.email}</p>
           </div>
 
           <div>
-            <h3 className="text-lg font-semibold text-[#493628] mb-2">Pembayaran</h3>
-            <p className="text-sm text-gray-700">Metode: {order.paymentMethod}</p>
-            <p className="text-sm text-gray-700">Status: {order.paymentStatus}</p>
+            <h3 className="text-lg !font-semibold text-[#493628] mb-2">Payment</h3>
+            <p className="text-base text-gray-700">Midtrans</p>
           </div>
         </div>
-
-        {/* Status Pesanan */}
-        {/* <div className="pt-4">
-          <h3 className="text-lg font-semibold text-[#493628] mb-2">Status Pesanan</h3>
-          <span
-            className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${order.statusOrder === "Completed"
-                ? "bg-green-100 text-green-700"
-                : "bg-yellow-100 text-yellow-700"
-              }`}
-          >
-            {order.statusOrder}
-          </span>
-        </div> */}
 
         {isEdit ? (
           <div className="pt-4">
             <label
               htmlFor="statusOrderSelect"
-              className="text-lg font-semibold text-[#493628] mb-2 block"
+              className="text-lg !font-semibold text-[#493628] mb-2 block"
             >
-              Status Pesanan
+              Order Status
             </label>
             <br />
             {/* Help Text */}
@@ -106,14 +99,14 @@ const OrderDetailComponent: React.FC<OrderDetailComponentProps> = ({ order, setO
             </p>
             <select
               id="statusOrderSelect"
-              className={`inline-block px-3 py-1 rounded-full text-xs font-semibold cursor-pointer 
+              className={`inline-block px-3 py-1 rounded-lg text-base font-semibold cursor-pointer 
                 ${order.statusOrder === "Completed"
-                  ? "bg-green-100 text-green-700"
+                  ? "bg-green-100 text-green-600"
                   : order.statusOrder === "Cancelled"
-                    ? "bg-red-100 text-red-700"
+                    ? "bg-red-100 text-red-600"
                     : order.statusOrder === "Processing"
-                      ? "bg-blue-100 text-blue-700"
-                      : "bg-yellow-100 text-yellow-700"
+                      ? "bg-blue-100 text-blue-600"
+                      : "bg-yellow-100 text-yellow-600"
                 }`}
               value={order.statusOrder || ""}
               onChange={handleStatusChange}
@@ -131,16 +124,16 @@ const OrderDetailComponent: React.FC<OrderDetailComponentProps> = ({ order, setO
           </div>
         ) : (
           <div className="pt-4">
-            <h3 className="text-lg font-semibold text-[#493628] mb-2">Status Pesanan</h3>
+            <h3 className="text-lg !font-semibold text-[#493628] mb-2">Order Status</h3>
             <span
-              className={`inline-block px-3 py-1 rounded-full text-xs font-semibold
+              className={`inline-block px-3 py-1 rounded-lg text-base font-semibold
         ${order.statusOrder === "Completed"
-                  ? "bg-green-100 text-green-700"
+                  ? "bg-green-100 text-green-600"
                   : order.statusOrder === "Cancelled"
-                    ? "bg-red-100 text-red-700"
+                    ? "bg-red-100 text-red-600"
                     : order.statusOrder === "Processing"
-                      ? "bg-blue-100 text-blue-700"
-                      : "bg-yellow-100 text-yellow-700"
+                      ? "bg-blue-100 text-blue-600"
+                      : "bg-yellow-100 text-yellow-600"
                 }`}
             >
               {order.statusOrder}
@@ -150,15 +143,15 @@ const OrderDetailComponent: React.FC<OrderDetailComponentProps> = ({ order, setO
 
 
         {/* Tabel Produk */}
-        <div className="pt-16">
-          <h3 className="text-lg font-semibold text-[#493628] mb-4">Produk</h3>
+        <div className="pt-5">
+          <h3 className="text-lg !font-semibold text-[#493628] mb-4">Produk</h3>
           <div className="overflow-x-auto">
-            <table className="w-full text-sm text-left border border-[#E4E0E1] rounded overflow-hidden">
+            <table className="w-full text-base text-left border border-[#E4E0E1] rounded overflow-hidden">
               <thead className="bg-[#E4E0E1] text-[#493628]">
                 <tr>
-                  <th className="p-3">Produk</th>
-                  <th className="p-3">Jumlah</th>
-                  <th className="p-3">Harga</th>
+                  <th className="p-3">Product</th>
+                  <th className="p-3">Quantity</th>
+                  <th className="p-3">Price</th>
                   <th className="p-3">Subtotal</th>
                 </tr>
               </thead>
@@ -180,7 +173,7 @@ const OrderDetailComponent: React.FC<OrderDetailComponentProps> = ({ order, setO
                 ))}
               </tbody>
               <tfoot>
-                <tr className="bg-[#E4E0E1] border-t font-semibold text-[#493628]">
+                <tr className="bg-[#E4E0E1] border-t !font-semibold text-[#493628]">
                   <td className="p-3 text-right" colSpan={3}>
                     Total
                   </td>

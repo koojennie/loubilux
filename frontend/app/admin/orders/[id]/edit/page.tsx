@@ -35,8 +35,7 @@ const OrderDetailEditPage: React.FC = () => {
   }, [orderId, fetchOrder]);
 
   return (
-    <div className="p-8 md:p-8">
-      <div className="relative m-auto flex flex-col rounded-2xl bg-white bg-clip-border text-[#493628] shadow-lg">
+      <div className="relative mx-3 my-2 m-auto flex flex-col rounded-2xl bg-white bg-clip-border text-[#493628]">
         <Toaster />
         {isLoading ? (
           <p>Loading...</p>
@@ -46,7 +45,6 @@ const OrderDetailEditPage: React.FC = () => {
           <p>No order found...</p>
         )}
       </div>
-    </div>
   );
 };
 
