@@ -11,5 +11,4 @@ router.get('/:id', authenticateUser, authorizeRoles('admin', 'superadmin'), getO
 router.put('/:id', authenticateUser, authorizeRoles('admin', 'superadmin'), updateOpname);
 router.delete('/:id', authenticateUser, authorizeRoles('admin', 'superadmin'), deleteOpname);
 
-
 module.exports = router;

@@ -171,6 +171,7 @@ export default function page() {
       console.error("Checkout failed", err);
     } finally {
       setIsOpenModalConfirmation(false);
+      router.push('/complete-checkout');
     }
   };
 

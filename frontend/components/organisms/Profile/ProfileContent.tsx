@@ -208,7 +208,7 @@ export default function ProfileContent() {
             <div className="pt-30">
               <Input
                 label="Phone Number"
-                placeholder="Enter your number"
+                placeholder="Enter your phone number"
                 nameInput={"phoneNumber"}
                 value={user?.phoneNumber}
                 type="text"
@@ -221,7 +221,7 @@ export default function ProfileContent() {
                 type="checkbox"
                 checked={changePassword}
                 onChange={() => setChangePassword(!changePassword)}
-                className="w-5 h-5"
+                className="w-5 h-5 accent-[#493628]"
               />
               <label className="ms-2 text-base font-medium text-[#493628]">Change Password</label>
             </div>

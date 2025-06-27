@@ -17,7 +17,7 @@ export default function Footer() {
             className="btn btn-get-started w-100 !font-semibold text-xs text-center text-white rounded-pill"
             role="button"
           >
-            Get Started
+            Home
           </button>
         </Link>
       </div>

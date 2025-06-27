@@ -70,7 +70,7 @@ export default function page() {
     price: new Set<string>(),
   });
 
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [products, setProducts] = useState<Product[]>([]);
 
   const [searchQuery, setSearchQuery] = useState("");

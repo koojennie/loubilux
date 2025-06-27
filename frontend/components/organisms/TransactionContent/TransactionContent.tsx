@@ -38,6 +38,8 @@ export default function TransactionContent() {
 
   const { expanded } = useSidebar();
 
+  console.log(ordersUser)
+
   return (
     <main className={`main-wrapper ${expanded ? 'expanded' : 'collapsed'}`}>
       <div className="ps-lg-0">
@@ -49,16 +51,6 @@ export default function TransactionContent() {
           <h3 className="text-5xl fw-medium color-palette-1">
             {new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(Number(3190000))}
           </h3>
-        </div>
-        <div className="row mt-30 mb-20">
-          <div className="col-lg-12 col-12 main-content">
-            <div id="list_status_title">
-              <ButtonTab title="All" active />
-              <ButtonTab title="Success" active={false} />
-              <ButtonTab title="Pending" active={false} />
-              <ButtonTab title="Failed" active={false} />
-            </div>
-          </div>
         </div>
         <div className="latest-transaction">
           <p className="text-lg fw-medium color-palette-1 mb-14">
@@ -84,7 +76,13 @@ export default function TransactionContent() {
                     key={orderUser.orderId}
                     orderId={orderUser.orderId}
                     name={typeof orderUser.user === "string" ? orderUser.user : orderUser.user?.name ?? ""}
-                    orderDate={orderUser.orderDate}
+                    orderDate={
+                      new Date(orderUser.orderDate.replace(/\./g, ":")).toLocaleDateString("en-EN", {
+                        day: "2-digit",
+                        month: "long",
+                        year: "numeric",
+                    })
+                    }
                     totalPrice={new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(Number(orderUser.totalPrice))}
                     status={orderUser.statusOrder as 'Pending' | 'Success' | 'Failed'}
                   />

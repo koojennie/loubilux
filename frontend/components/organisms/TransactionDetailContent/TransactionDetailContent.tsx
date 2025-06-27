@@ -12,7 +12,7 @@ interface TransactionDetailContentProps {
 
 
 export default function TransactionDetailContent({ order }: TransactionDetailContentProps) {
-    const formattedDate = new Date(order.orderDate.replace(/\./g, ":")).toLocaleDateString("id-ID", {
+    const formattedDate = new Date(order.orderDate.replace(/\./g, ":")).toLocaleDateString("en-EN", {
         day: "2-digit",
         month: "long",
         year: "numeric",
@@ -49,7 +49,7 @@ export default function TransactionDetailContent({ order }: TransactionDetailCon
                                         <tr>
                                             <td className="pr-20">{order.user.name}</td>
                                             <td className="pr-20">{formattedDate}</td>
-                                            <td>{order.paymentMethod}</td>
+                                            <td>Midtrans</td>
                                         </tr>
                                     </tbody>
                                 </table>
