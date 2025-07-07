@@ -110,12 +110,6 @@ export default function TransactionDetail() {
       </SidebarProvider>
     );
   }
-
-
-
-  console.log(order)
-
-
   return (
     <SidebarProvider>
       <section className="transactions-detail overflow-auto">

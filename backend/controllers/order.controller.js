@@ -1,4 +1,4 @@
-const { Op } = require("sequelize");
+const { Op, where } = require("sequelize");
 const { Order, User, OrderLineItem, Product, Cart, CartItem, Category, sequelize, Sequelize } = require("../models");
 
 
@@ -165,7 +165,12 @@ const getUserOrders = async (req, res) => {
 
 const getAllOrders = async (req, res) => {
   try {
-    const { page = 1, limit = 10 } = req.query;
+    let { page = 1, limit = 10, sortBy = "createdAt", sortDir = "DESC", searchQuery } = req.query;
+
+    page = parseInt(page) || 1;
+    limit = parseInt(limit) || 10;
+    sortOrder =  sortDir === 'desc' ? 'DESC' : 'ASC';
+
     const offset = (page - 1) * limit;
 
     const totalOrders = await Order.count();
@@ -177,7 +182,7 @@ const getAllOrders = async (req, res) => {
         {
           model: User,
           as: "user",
-          attributes: ["userId", "name", "email"]
+          attributes: ["userId", "name", "email"],
         },
         {
           model: OrderLineItem,
@@ -198,7 +203,6 @@ const getAllOrders = async (req, res) => {
       email: order.user?.email,
       totalPrice: order.totalPrice,
       statusOrder: order.status,
-      isPaid: order.isPaid,
       paymentMethod: order.paymentMethod,
       orderDate: new Date(order.createdAt).toLocaleString(),
       courier: order.courier?.name || "Not Assigned",
@@ -253,7 +257,7 @@ const getOrderById = async (req, res) => {
             include: {
               model: Category,
               as: "Category",
-              attributes: ["name"], 
+              attributes: ["name"],
             },
           },
         },
@@ -368,7 +372,7 @@ const getFilteredOrdersReport = async (req, res) => {
 const updateOrderStatus = async (req, res) => {
   try {
     const { orderId, status } = req.body;
-    const validStatuses = ["Pending", "Processing", "Shipped", "Delivered", "Completed" ,"Cancelled"];
+    const validStatuses = ["Pending", "Processing", "Shipped", "Delivered", "Completed", "Cancelled"];
 
     if (!validStatuses.includes(status)) {
       return res.status(400).json({ status: "error", message: "Invalid order status" });

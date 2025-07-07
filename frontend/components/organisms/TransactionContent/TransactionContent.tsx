@@ -76,13 +76,7 @@ export default function TransactionContent() {
                     key={orderUser.orderId}
                     orderId={orderUser.orderId}
                     name={typeof orderUser.user === "string" ? orderUser.user : orderUser.user?.name ?? ""}
-                    orderDate={
-                      new Date(orderUser.orderDate.replace(/\./g, ":")).toLocaleDateString("en-EN", {
-                        day: "2-digit",
-                        month: "long",
-                        year: "numeric",
-                    })
-                    }
+                    orderDate={orderUser.orderDate}
                     totalPrice={new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(Number(orderUser.totalPrice))}
                     status={orderUser.statusOrder as 'Pending' | 'Success' | 'Failed'}
                   />

@@ -93,10 +93,17 @@ export const renderCellContent = <T extends { [key: string]: any }>(
     } else if (col.key === 'statusOrder') {
       return (
         <span
-          className={`px-3 py-1 rounded-md text-sm font-semibold ${value === 'Completed' ? 'bg-green-100 text-green-600' : 'bg-yellow-100 text-yellow-600'
+          className={`inline-block px-3 py-1 rounded-lg text-base font-semibold cursor-pointer 
+            ${value === "Completed"
+              ? "bg-green-100 text-green-600"
+              : value === "Cancelled"
+          ? "bg-red-100 text-red-600"
+          : value === "Processing"
+            ? "bg-blue-100 text-blue-600"
+            : "bg-yellow-100 text-yellow-600"
             }`}
         >
-          {String(value)}
+          {value}
         </span>
       );
     } else if (col.key === 'isPaid') {

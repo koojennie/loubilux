@@ -14,10 +14,11 @@ import { User } from "@/types/type";
 interface SidebarProps {
   activeMenu: 'transactions' | 'edit-profile' | 'my-address' | 'logout';
   eventUpdate? :boolean
+  setUpdateEvent: (arg0: boolean) => void;
 }
 
 export default function Sidebar(props: SidebarProps) {
-  const { activeMenu, eventUpdate } = props;
+  const { activeMenu, eventUpdate, setUpdateEvent } = props;
   const router = useRouter();
   const { expanded, toggleSidebar } = useSidebar();
   const [user, setUser] = useState<User | null>(null);
@@ -43,7 +44,8 @@ export default function Sidebar(props: SidebarProps) {
       toast.error(msg)
       console.error('Fetch error:', error)
     } finally {
-      setLoading(false)
+      setLoading(false);
+      setUpdateEvent(false);
     }
   }
 

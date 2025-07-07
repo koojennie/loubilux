@@ -11,7 +11,7 @@ export default function EditProfile() {
   return (
     <SidebarProvider>
       <section className="edit-profile overflow-auto">
-        <Sidebar eventUpdate={updateEvent} activeMenu="edit-profile"/>
+        <Sidebar eventUpdate={updateEvent} setUpdateEvent={setUpdateEvent} activeMenu="edit-profile"/>
         <ProfileContent setUpdateEvent={setUpdateEvent}/>
       </section>
     </SidebarProvider>

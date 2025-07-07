@@ -14,35 +14,42 @@ interface OrderDetailComponentProps {
 }
 
 const OrderDetailComponent: React.FC<OrderDetailComponentProps> = ({ order, setOrder, isEdit }) => {
-  // const [order, SetOrder] = useState<Order|null>()
-  const formattedDate = new Date(order.orderDate.replace(/\./g, ":")).toLocaleDateString("en-EN", {
-    day: "2-digit",
-    month: "long",
-    year: "numeric",
-  });
+  function formatOrderDate(dateString: string): string {
+    const [datePart, timePart] = dateString.split(", ");
+    const [day, month, year] = datePart.split("/").map(Number);
 
-  const handleStatusChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const monthNames = [
+      "Januari", "Februari", "Maret", "April", "Mei", "Juni",
+      "Juli", "Agustus", "September", "Oktober", "November", "Desember"
+    ];
+
+    const monthName = monthNames[month - 1];
+
+    return `${day} ${monthName} ${year}`;
+  }
+
+  const handleStatusChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const newStatus = e.target.value;
+
     if (setOrder) {
-      setOrder({ ...order, statusOrder: e.target.value });
+      setOrder({ ...order, statusOrder: newStatus });
     }
-    changeStatus();
-  };
 
-  const changeStatus = async () => {
     try {
       await axios.put(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/orders/updatestatus`,
-        { 
+        {
           orderId: order.orderId,
-          status: order.statusOrder 
+          status: newStatus
         },
-        { withCredentials: true });
-      toast.success("Update Status Succesfully!");
-
+        { withCredentials: true }
+      );
+      toast.success("Update Status Successfully!");
     } catch (error) {
-      console.error("error when update status : ", error);
-      toast.error(`Error when changed status : ${error}`)
+      console.error("Error when updating status:", error);
+      toast.error("Error when changing status");
     }
-  }
+  };
+
 
   return (
     <div className="p-6">
@@ -51,7 +58,7 @@ const OrderDetailComponent: React.FC<OrderDetailComponentProps> = ({ order, setO
         <div className="flex justify-between items-center">
           <div>
             <p className="text-2xl font-semibold text-[#493628]">Order Details #{order.orderId}</p>
-            <p className="text-base text-[#493628] mt-1">Date: {formattedDate}</p>
+            <p className="text-base text-[#493628] mt-1">Date: {formatOrderDate(order.orderDate)}</p>
           </div>
           {!isEdit && (
             <div className="">

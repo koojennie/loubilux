@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import Head from 'next/head'
 import { Poppins } from "next/font/google";
+import { AuthProvider } from "@/context/AuthContext";
 import AOSProvider from "@/components/providers/AOSProvider";
 import { CartProvider } from "@/context/CartContext";
 import { CheckoutProvider } from "@/context/CheckoutContext";
+import { Toaster } from "react-hot-toast";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "aos/dist/aos.css";
 import "@/app/utilities.css";
@@ -44,13 +46,16 @@ export default function RootLayout({
       <body
         className={`${poppins.variable} antialiased`}
       >
-        <AOSProvider>
-          <CheckoutProvider>
-            <CartProvider>
-              {children}
-            </CartProvider>
-          </CheckoutProvider>
-        </AOSProvider>
+        <AuthProvider>
+          <AOSProvider>
+            <Toaster/>
+            <CheckoutProvider>
+              <CartProvider>
+                {children}
+              </CartProvider>
+            </CheckoutProvider>
+          </AOSProvider>
+        </AuthProvider>
       </body>
     </html>
   );

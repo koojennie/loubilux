@@ -17,7 +17,7 @@ const OrdersPage = () => {
   const [page, setPage] = useState<number>(1);
   const [totalItems, setTotalItems] = useState<number>(1);
   const [limit, setLimit] = useState<number>(5);
-  const [sortBy, setSortBy] = useState<string>("createdAt");
+  const [sortBy, setSortBy] = useState<string>("createdAt"); // or "orderId" or "totalPrice" etc.
   const [orderBy, setOrderBy] = useState<string>("asc");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [user, setUser] = useState(null);
@@ -31,11 +31,18 @@ const OrdersPage = () => {
   const fetchAllOrders = async () => {
     setIsLoading(true);
     try {
-      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/orders/all?page=${page}&limit=${limit}&sortBy=${sortBy}&sortOrder=${orderBy}&searchQuery=${searchQuery}`,
-        {
-          withCredentials: true
-        }
-      );
+      const params = new URLSearchParams({
+        page: String(page),
+        limit: String(limit),
+        sortBy: sortBy || "createdAt",
+        sortOrder: orderBy || "desc",
+      });
+
+      if (searchQuery) params.append("searchQuery", searchQuery);
+
+      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/orders/all?${params.toString()}`, {
+        withCredentials: true,
+      });
 
       const results = response.data.data.map((order: Order) => (
         {
@@ -60,7 +67,6 @@ const OrdersPage = () => {
   }, [page, limit, sortBy, orderBy, searchQuery]);
 
   const handleOpenCloseModalViewDetail = (order?: Order) => {
-    console.log('ini adalah orders yang dipilih', order);
     setSelectedViewDetailOrder(order || null)
     // setIsModalViewDetailOpen(!isModalViewDetailOpen);
   }

@@ -1,5 +1,6 @@
 'use client'
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import Swal from 'sweetalert2';
 import { toast, Toaster } from "react-hot-toast"
 import axios from "axios";
 import { FaRegTrashCan, FaUpload } from "react-icons/fa6";
@@ -23,6 +24,8 @@ export default function ProfileContent({ setUpdateEvent }: PropsProfileContent) 
   const [imageBase64, setImageBase64] = useState<string | null>(null);
   const [deletedImage, setDeletedImage] = useState<boolean>(false)
 
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
 
   const fetchUser = async () => {
     try {
@@ -43,7 +46,6 @@ export default function ProfileContent({ setUpdateEvent }: PropsProfileContent) 
     } catch (error: any) {
       const msg = error?.response?.data?.message || 'Failed to fetch user data.'
       toast.error(msg)
-      console.error('Fetch error:', error)
     } finally {
       setLoading(false)
     }
@@ -81,7 +83,7 @@ export default function ProfileContent({ setUpdateEvent }: PropsProfileContent) 
         updateData.profilePicture = user.profilePicture;
       } else if (imageBase64) {
         updateData.newImage = imageBase64;
-        updateData.profilePicture=imageBase64;
+        updateData.profilePicture = imageBase64;
       } else {
         updateData.keepImage = true;
         updateData.profilePicture = user.profilePicture;
@@ -92,16 +94,18 @@ export default function ProfileContent({ setUpdateEvent }: PropsProfileContent) 
         updateData,
         { withCredentials: true }
       )
-      console.log(updateData);
-      toast.success('Profile updated successfully!');
-      console.log('profile updated successfully')
-      fetchUser();
+      Swal.fire({
+        title: 'Update Profile Berhasil',
+        icon: 'success'
+      });
       setImageBase64(null);
       setDeletedImage(false);
       setUpdateEvent(true);
     } catch (error: any) {
       toast.error(error?.response?.data?.message || 'Failed to update profile.')
       console.error("error update profile", error.message);
+    } finally {
+      fetchUser();
     }
   }
 
@@ -121,9 +125,13 @@ export default function ProfileContent({ setUpdateEvent }: PropsProfileContent) 
 
   const handleDeleteImage = () => {
     setDeletedImage(true);
-    setImageBase64(null); 
-    fetchUser();
+    setImageBase64(null);
+    setImageFile(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
   };
+
 
   if (loading) {
     return (
@@ -172,59 +180,62 @@ export default function ProfileContent({ setUpdateEvent }: PropsProfileContent) 
           <form action="" onSubmit={handleSubmit} className="w-full max-w-xl">
             <div className="photo d-flex">
               <div className="position-relative me-20">
-              {deletedImage ? (
-                <img
-                src="/img/user-loubilux.svg"
-                alt="Default"
-                width="90"
-                height="90"
-                className="avatar object-cover"
-                style={{ borderRadius: "60px", width: "90px", height: "90px" }}
-                />
-              ) : imageBase64 ? (
-                <img
-                src={imageBase64}
-                alt="Preview"
-                width="90"
-                height="90"
-                className="avatar object-cover"
-                style={{ borderRadius: "60px", width: "90px", height: "90px" }}
-                />
-              ) : (
-                <img
-                src={user?.profilePicture || "/img/user-loubilux.svg"}
-                width="90"
-                height="90"
-                className="avatar object-cover"
-                style={{ borderRadius: "60px", width: "90px", height: "90px" }}
-                />
-              )}
+                {deletedImage ? (
+                  <img
+                    src="/img/user-loubilux.svg"
+                    alt="Default"
+                    width="90"
+                    height="90"
+                    className="avatar object-cover"
+                    style={{ borderRadius: "60px", width: "90px", height: "90px" }}
+                  />
+                ) : imageBase64 ? (
+                  <img
+                    src={imageBase64}
+                    alt="Preview"
+                    width="90"
+                    height="90"
+                    className="avatar object-cover"
+                    style={{ borderRadius: "60px", width: "90px", height: "90px" }}
+                  />
+                ) : (
+                  <img
+                    src={user?.profilePicture || "/img/user-loubilux.svg"}
+                    width="90"
+                    height="90"
+                    className="avatar object-cover"
+                    style={{ borderRadius: "60px", width: "90px", height: "90px" }}
+                  />
+                )}
 
-              {(!deletedImage) && (user?.profilePicture || imageBase64) && (
-                <button
-                type="button"
-                onClick={handleDeleteImage}
-                className="avatar-overlay position-absolute top-0 d-flex justify-content-center align-items-center"
-                >
-                <FaRegTrashCan className="text-white text-2xl" />
-                </button>
-              )}
+
+                {(!deletedImage) && (user?.profilePicture || imageBase64) && (
+                  <button
+                    type="button"
+                    onClick={handleDeleteImage}
+                    className="avatar-overlay position-absolute top-0 d-flex justify-content-center align-items-center"
+                  >
+                    <FaRegTrashCan className="text-white text-2xl" />
+                  </button>
+                )}
               </div>
               <div className="image-upload">
-              <label htmlFor="avatar">
-                <div className="flex items-center">
-                  <div className="w-[90px] h-[90px] rounded-full bg-[#f4e6dc] hover:bg-[#f7ece4] flex items-center justify-center text-[#493628] hover:text-[#705C53] text-2xl">
-                  <FaUpload />
+                <label htmlFor="avatar">
+                  <div className="flex items-center">
+                    <div className="w-[90px] h-[90px] rounded-full bg-[#f4e6dc] hover:bg-[#f7ece4] flex items-center justify-center text-[#493628] hover:text-[#705C53] text-2xl">
+                      <FaUpload />
+                    </div>
                   </div>
-                </div>
-              </label>
-              <input
-                id="avatar"
-                type="file"
-                name="avatar"
-                accept="image/png, image/jpeg"
-                onChange={handleImageChange}
-              />
+                </label>
+                <input
+                  id="avatar"
+                  type="file"
+                  name="avatar"
+                  accept="image/png, image/jpeg"
+                  onChange={handleImageChange}
+                  ref={fileInputRef}
+                />
+
               </div>
             </div>
             <div className="pt-30">
