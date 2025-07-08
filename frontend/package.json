@@ -21,6 +21,7 @@
     "html2canvas": "^1.4.1",
     "jose": "^6.0.10",
     "jspdf": "^3.0.1",
+    "luxon": "^3.6.1",
     "next": "15.2.0",
     "react": "^19.0.0",
     "react-apexcharts": "^1.7.0",

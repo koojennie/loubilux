@@ -7,6 +7,7 @@ import { toast } from "react-hot-toast";
 import { HiMinus, HiPlus, HiShoppingBag } from "react-icons/hi2";
 import { useCart } from "@/context/CartContext";
 import { Product } from "@/types/type";
+import { useAuth } from "@/context/AuthContext";
 
 interface ProductItemProps {
   products: Product[];
@@ -15,6 +16,7 @@ interface ProductItemProps {
 export default function ProductItem({ products }: ProductItemProps) {
   const { addToCart } = useCart();
   const [quantities, setQuantities] = useState<{ [key: string]: number }>({});
+  const {isAuthenticated} = useAuth();
 
   const handleQtyChange = (id: string, delta: number) => {
     setQuantities(prev => ({
@@ -24,6 +26,11 @@ export default function ProductItem({ products }: ProductItemProps) {
   };
 
   const handleAddToCart = async (id: string) => {
+    if(!isAuthenticated){
+      toast.error("Harus login terlebih dahulu untuk menambahkan ke keranjang");
+      return;
+    }
+
     const qty = quantities[id] || 1;
     try {
       await addToCart(id, qty);

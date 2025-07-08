@@ -4,6 +4,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import { User } from "@/types/type";
+import { useRouter } from "next/navigation";
 
 interface AuthContextType {
     user: User | null;
@@ -26,6 +27,8 @@ const AuthContext = createContext<AuthContextType>({
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const [user, setUser] = useState<User | null>(null);
     const [loading, setLoading] = useState(true);
+
+    const router = useRouter();
 
     const isAuthenticated = !!user;
 
@@ -100,6 +103,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             toast.success("Logout successfully");
         } catch (error) {
             toast.error("Logout failed. Please try again.");
+        } finally{
+            router.push('/');
         }
     };
 

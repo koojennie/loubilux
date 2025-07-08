@@ -8,7 +8,8 @@ import {
   Image,
 } from "@react-pdf/renderer";
 import { Order } from "@/types/type";
-import { Font } from "@react-pdf/renderer";
+// import { Font } from "@react-pdf/renderer";
+import { Font } from "@react-pdf/renderer"
 
 // Optional: Custom font (use Google Fonts via Font.register if needed)
 // Font.register({ family: 'Open Sans', src: '...' })
@@ -56,7 +57,7 @@ const styles = StyleSheet.create({
   },
   invoiceTitle: {
     fontSize: 26,
-    color: "#493628", 
+    color: "#493628",
     fontFamily: "Poppins",
     fontWeight: "600",
   },

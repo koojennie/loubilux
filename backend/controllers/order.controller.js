@@ -1,6 +1,19 @@
 const { Op, where } = require("sequelize");
 const { Order, User, OrderLineItem, Product, Cart, CartItem, Category, sequelize, Sequelize } = require("../models");
 
+const formatTimestamp = (date) => {
+  return new Date(date).toLocaleString("en-US", {
+    timeZone: "Asia/Jakarta", // Atur sesuai waktu lokal yang ingin dipakai
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: true,
+  }).replace(/:/g, '.');
+};
+
 
 const generateOrdersId = async () => {
   const datePart = new Date().toISOString().split('T')[0].replace(/-/g, '');
@@ -143,7 +156,7 @@ const getUserOrders = async (req, res) => {
       totalPrice: order.totalPrice,
       status: order.status,
       paymentMethod: order.paymentMethod,
-      orderDate: new Date(order.createdAt).toLocaleString(),
+      orderDate: formatTimestamp(order.createdAt),
       shippingAddress: order.shippingAddress,
       courier: order.courier,
       items: order.orderLineItems.map(item => ({
@@ -169,7 +182,7 @@ const getAllOrders = async (req, res) => {
 
     page = parseInt(page) || 1;
     limit = parseInt(limit) || 10;
-    sortOrder =  sortDir === 'desc' ? 'DESC' : 'ASC';
+    sortOrder = sortDir === 'desc' ? 'DESC' : 'ASC';
 
     const offset = (page - 1) * limit;
 
@@ -204,7 +217,7 @@ const getAllOrders = async (req, res) => {
       totalPrice: order.totalPrice,
       statusOrder: order.status,
       paymentMethod: order.paymentMethod,
-      orderDate: new Date(order.createdAt).toLocaleString(),
+      orderDate: formatTimestamp(order.createdAt),
       courier: order.courier?.name || "Not Assigned",
       items: order.orderLineItems.map(item => ({
         productId: item.productId || "",
@@ -278,7 +291,7 @@ const getOrderById = async (req, res) => {
       statusOrder: order.status,
       isPaid: order.isPaid,
       paymentMethod: order.paymentMethod,
-      orderDate: new Date(order.createdAt).toLocaleString(),
+      orderDate: formatTimestamp(order.createdAt),
       courier: order.courier?.name || "Not Assigned",
       items: order.orderLineItems.map((item) => ({
         productId: item.productId || "",
@@ -347,7 +360,7 @@ const getFilteredOrdersReport = async (req, res) => {
       statusOrder: order.status,
       isPaid: order.isPaid,
       paymentMethod: order.paymentMethod,
-      orderDate: new Date(order.createdAt).toLocaleString(),
+      orderDate: formatTimestamp(order.createdAt),
       courier: order.courier?.name || "Not Assigned",
       items: order.orderLineItems.map(item => ({
         productName: item.product?.name || "Deleted Product",

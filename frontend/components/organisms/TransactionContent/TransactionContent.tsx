@@ -38,8 +38,6 @@ export default function TransactionContent() {
 
   const { expanded } = useSidebar();
 
-  console.log(ordersUser)
-
   return (
     <main className={`main-wrapper ${expanded ? 'expanded' : 'collapsed'}`}>
       <div className="ps-lg-0">

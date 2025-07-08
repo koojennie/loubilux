@@ -5,29 +5,13 @@ import Row from "./Row";
 import { FaWhatsapp } from "react-icons/fa6";
 import StatusBadge from "@/components/Atoms/StatusBadge";
 import { Order } from "@/types/type";
+import {formatForFrontend} from "@/utils/helper";
 
 interface TransactionDetailContentProps {
   order: Order;
 }
 
 export default function TransactionDetailContent({ order }: TransactionDetailContentProps) {
-  function formatOrderDate(dateString: string): string {
-    const [datePart, timePart] = dateString.split(", ");
-    const [day, month, year] = datePart.split("/").map(Number);
-
-    const monthNames = [
-      "Januari", "Februari", "Maret", "April", "Mei", "Juni",
-      "Juli", "Agustus", "September", "Oktober", "November", "Desember"
-    ];
-
-    const monthName = monthNames[month - 1];
-
-    return `${day} ${monthName} ${year}`;
-  }
-
-
-  console.log(order)
-
 
   const { expanded } = useSidebar();
   return (
@@ -59,7 +43,7 @@ export default function TransactionDetailContent({ order }: TransactionDetailCon
                   <tbody>
                     <tr>
                       <td className="pr-20">{order.user.name}</td>
-                      <td className="pr-20">{formatOrderDate(order.orderDate)}</td>
+                      <td className="pr-20">{formatForFrontend(order.orderDate)}</td>
                       <td>Midtrans</td>
                     </tr>
                   </tbody>

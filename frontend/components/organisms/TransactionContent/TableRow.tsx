@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { HiClock, HiCheckCircle, HiXCircle } from "react-icons/hi";
+import { formatForFrontend } from "@/utils/helper";
 
 interface TableRowProps {
   orderId: string;
@@ -32,24 +33,6 @@ export default function TableRow(props: TableRowProps) {
     className: "bg-gray-100 text-gray-800",
   };
 
-  const formatOrderDate = (value: string): string => {
-    const [datePart, timePart] = value.split(", ");
-
-    const [day, month, year] = datePart.split("/").map(Number);
-    const [hour, minute, second] = timePart.split(".").map(Number);
-
-    const dateObj = new Date(year, month - 1, day, hour, minute, second);
-
-    const options: Intl.DateTimeFormatOptions = {
-      day: "2-digit",
-      month: "long",
-      year: "numeric",
-    };
-
-    return dateObj.toLocaleDateString("id-ID", options);
-  };
-
-
   return (
     <tr data-category="pending" className="align-middle">
       {/* <th scope="row"> */}
@@ -62,7 +45,7 @@ export default function TableRow(props: TableRowProps) {
       </td>
       <td>
 
-        <p className="fw-medium color-palette-1 m-0">{formatOrderDate(orderDate)}</p>
+        <p className="fw-medium color-palette-1 m-0">{formatForFrontend(orderDate)}</p>
       </td>
       <td>
         <p className="fw-medium color-palette-1 m-0">{totalPrice}</p>

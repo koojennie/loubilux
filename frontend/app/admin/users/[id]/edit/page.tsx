@@ -54,7 +54,7 @@ const EditUser = () => {
     } catch (error: any) {
       const errorMessage = error.response?.data?.message || "An unexpected error occurred. Please try again.";
       toast.error(errorMessage);
-      console.error('Error when submitting new product', error);
+      console.error('Error when updating user', error);
     }
   }
 

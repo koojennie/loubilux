@@ -3,8 +3,9 @@
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { generateSlug } from '@/utils/generateSlug';
 import { FaInfo, FaPenToSquare, FaRegPenToSquare, FaTrashCan } from 'react-icons/fa6';
+import { generateSlug } from '@/utils/generateSlug';
+import { formatForFrontend } from "@/utils/helper";
 
 
 export type TableType = 'products' | 'users' | 'transaction' | 'orders' | "categories" | "opname";
@@ -115,28 +116,8 @@ export const renderCellContent = <T extends { [key: string]: any }>(
         </span>
       )
     } else if (col.key === 'orderDate') {
-      // const humanReadableDate = value;
-      // console.log(value)  ;
-
-      const rawDate = value;
-
-      const [datePart, timePart] = rawDate.split(", "); 
-
-      const [day, month, year] = datePart.split("/").map(Number); 
-      const [hour, minute, second] = timePart.split(".").map(Number); 
-
-      const dateObj = new Date(year, month - 1, day, hour, minute, second);
-
-      const options: Intl.DateTimeFormatOptions = {
-        day: "2-digit",
-        month: "long",
-        year: "numeric",
-      };
-
-      const formattedDate = dateObj.toLocaleDateString("id-ID", options); 
-
       return (
-        <p className="font-normal text-sm text-slate-800">{formattedDate}</p>
+        <p className="font-normal text-sm text-slate-800">{formatForFrontend(value)}</p>
       )
     } else if (col.key === 'paymentMethod') {
       return (

@@ -18,7 +18,6 @@ import { HiSearch } from "react-icons/hi";
 import { HiChevronDown, HiFunnel, HiMinus, HiPlus, HiOutlineXMark } from "react-icons/hi2";
 import Navbar from "@/components/organisms/Navbar/Navbar";
 import ProductItem from "@/components/organisms/Products/ProductItem";
-import productsData from "@/utils/data";
 import { Product } from "@/types/type"
 
 
@@ -95,7 +94,7 @@ export default function page() {
     };
 
     const fetchCategories = async () => {
-      setIsLoading(true);
+      setIsLoading(true);     
       try {
         const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/categories`);
 
@@ -419,19 +418,19 @@ export default function page() {
                             </div>
                           </div>
                         ))}
-                      </div>     
-                  ) : filteredProducts.length === 0 ? (
-                    <div className="flex flex-col items-center justify-center py-10 text-center text-[#705C53]">
-                      <img
-                        src="/img/products-empty.svg" 
-                        alt="No products found"
-                        className="w-96 h-96 mb-6"
-                      />
-                      <h3 className="text-2xl font-semibold">No products found</h3>
-                      <p className="mt-1 text-lg">Try adjusting your filters or come back later.</p>
-                    </div>
-                  ) :   
-                  (<ProductItem products={filteredProducts} />)}
+                      </div>
+                    ) : filteredProducts.length === 0 ? (
+                      <div className="flex flex-col items-center justify-center py-10 text-center text-[#705C53]">
+                        <img
+                          src="/img/products-empty.svg"
+                          alt="No products found"
+                          className="w-96 h-96 mb-6"
+                        />
+                        <h3 className="text-2xl font-semibold">No products found</h3>
+                        <p className="mt-1 text-lg">Try adjusting your filters or come back later.</p>
+                      </div>
+                    ) :
+                      (<ProductItem products={filteredProducts} />)}
                   </div>
                 </div>
               </section>

@@ -14,7 +14,7 @@ import { User } from "@/types/type";
 interface SidebarProps {
   activeMenu: 'transactions' | 'edit-profile' | 'my-address' | 'logout';
   eventUpdate? :boolean
-  setUpdateEvent: (arg0: boolean) => void;
+  setUpdateEvent?: (arg0: boolean) => void;
 }
 
 export default function Sidebar(props: SidebarProps) {
@@ -45,7 +45,9 @@ export default function Sidebar(props: SidebarProps) {
       console.error('Fetch error:', error)
     } finally {
       setLoading(false);
-      setUpdateEvent(false);
+      if (setUpdateEvent) {
+        setUpdateEvent(false);
+      }
     }
   }
 
@@ -69,6 +71,8 @@ export default function Sidebar(props: SidebarProps) {
     } catch (error: any) {
       const errorMessage = error.response?.data?.message || "An unexpected error occurred. Please try again.";
       toast.error(errorMessage);
+    } finally{
+      router.push('/');
     }
   }
 
