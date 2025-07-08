@@ -42,7 +42,19 @@ export default function RecentOrders() {
     fetchAllOrders();
   }, []);
 
+  function formatOrderDate(dateString: string): string {
+    const [datePart, timePart] = dateString.split(", ");
+    const [day, month, year] = datePart.split("/").map(Number);
 
+    const monthNames = [
+      "Januari", "Februari", "Maret", "April", "Mei", "Juni",
+      "Juli", "Agustus", "September", "Oktober", "November", "Desember"
+    ];
+
+    const monthName = monthNames[month - 1];
+
+    return `${day} ${monthName} ${year}`;
+  }
 
   return (
     <div className="overflow-hidden rounded-2xl bg-white p-4 sm:px-6">
@@ -103,25 +115,7 @@ export default function RecentOrders() {
                   <div>{order.user}</div>
                 </TableCell>
                 <TableCell className="py-3">
-                  {(() => {
-                    const rawDate = order.orderDate as string;
-                    if (!rawDate) return <div>-</div>;
-                    try {
-                      const [datePart, timePart] = rawDate.split(", ");
-                      const [day, month, year] = datePart.split("/").map(Number);
-                      const [hour, minute, second] = timePart.split(".").map(Number);
-                      const dateObj = new Date(year, month - 1, day, hour, minute, second);
-                      const options: Intl.DateTimeFormatOptions = {
-                        day: "2-digit",
-                        month: "long",
-                        year: "numeric",
-                      };
-                      const formattedDate = dateObj.toLocaleDateString("id-ID", options);
-                      return <div>{formattedDate}</div>;
-                    } catch {
-                      return <div>{String(order.orderDate)}</div>;
-                    }
-                  })()}
+                  {formatOrderDate(order.orderDate)}
                 </TableCell>
                 <TableCell>
                   <div>
