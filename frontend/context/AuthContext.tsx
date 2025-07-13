@@ -36,43 +36,29 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const refreshUser = async () => {
         setLoading(true);
         try {
-            const meResponse = await axios.get(
+            const { data } = await axios.get(
                 `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/auth/me`,
                 { withCredentials: true }
             );
+            const userId = data.user?.id;
+            if (!userId) return setUser(null);
 
-            const userId = meResponse.data.user?.id;
-
-            if (!userId) {
-                console.warn("User ID not found in /auth/me");
-                setUser(null);
-                return;
-            }
-
-            const userResponse = await axios.get(
+            const { data: userRes } = await axios.get(
                 `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/users/userbyid/${userId}`,
                 { withCredentials: true }
             );
-
-            // ✅ FIXED: akses .data dari userResponse
-            const fullUser = userResponse.data?.data;
-
-            if (fullUser) {
-                setUser(fullUser);
-            } else {
-                console.warn("User found but no data inside response");
+            setUser(userRes.data);
+        } catch (err: any) {
+            if (axios.isAxiosError(err) && err.response?.status === 401) {
+                // tidak perlu log panjang‑panjang—ini normal saat belum login
                 setUser(null);
+            } else {
+                console.error("Gagal ambil user:", err);
             }
-
-        } catch (error) {
-            console.error("Gagal ambil user:", error);
-            setUser(null);
         } finally {
             setLoading(false);
         }
     };
-
-
 
 
     const login = async (email: string, password: string) => {
@@ -103,7 +89,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             toast.success("Logout successfully");
         } catch (error) {
             toast.error("Logout failed. Please try again.");
-        } finally{
+        } finally {
             router.push('/');
         }
     };

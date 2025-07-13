@@ -10,7 +10,7 @@ router.get('/', authenticateUser, authorizeRoles('superadmin', 'admin'), getAllU
 router.get("/generateuserid", generateUserId);
 router.get('/userbyid/:id', getUserbyId);
 router.post('/register', register);
-router.put('/:id', authenticateUser, authorizeRoles('superadmin', 'admin'), updateUser);
-router.delete('/:id', authenticateUser, authorizeRoles('superadmin', 'admin'), deleteUser);
+router.put('/:id', authenticateUser, updateUser);
+router.delete('/:id', authenticateUser, deleteUser);
 
 module.exports = router;
