@@ -95,8 +95,9 @@ export default function ProfileContent({ setUpdateEvent }: PropsProfileContent) 
         { withCredentials: true }
       )
       Swal.fire({
-        title: 'Update Profile Berhasil',
-        icon: 'success'
+        title: 'Profile updated successfully',
+        icon: 'success',
+        confirmButtonColor: '#493628'
       });
       setImageBase64(null);
       setDeletedImage(false);

@@ -56,7 +56,7 @@ export default function TransactionDetailContent({ order }: TransactionDetailCon
                   </thead>
                   <tbody>
                     <tr>
-                      <td>Jl. Margonda Raya Pondok Cina, Depok</td>
+                      <td>Jl. sesuain dulu</td>
                     </tr>
                   </tbody>
                 </table>

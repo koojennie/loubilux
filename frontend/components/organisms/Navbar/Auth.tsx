@@ -46,9 +46,9 @@ export default function Auth() {
           >
             <Image
               src={user?.profilePicture || "/img/user-loubilux.svg"}
-              className="rounded-circle"
-              width="40"
-              height="40"
+              className="rounded-full object-cover"
+              width={40}
+              height={40}
               alt=""
             />
           </a>

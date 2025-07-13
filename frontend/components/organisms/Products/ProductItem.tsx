@@ -27,7 +27,7 @@ export default function ProductItem({ products }: ProductItemProps) {
 
   const handleAddToCart = async (id: string) => {
     if(!isAuthenticated){
-      toast.error("Harus login terlebih dahulu untuk menambahkan ke keranjang");
+      toast.error("Please sign in first to add an item");
       return;
     }
 

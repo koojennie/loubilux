@@ -14,7 +14,7 @@ export default function Profile({user}: profileProps) {
         alt="user"
         width={90}
         height={90}
-        className={`img-fluid mb-20`}
+        className={`avatar object-cover mb-20`}
         style={{ borderRadius: "60px", width: "90px", height: "90px" }}
 
       />

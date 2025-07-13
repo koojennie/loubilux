@@ -64,8 +64,7 @@ export default function Sidebar(props: SidebarProps) {
       toast.success("Logout successfully", { duration: 2000 })
 
       setTimeout(() => {
-        router.replace("/");
-        window.location.reload();
+        router.push("/");
       }, 1000);
 
     } catch (error: any) {

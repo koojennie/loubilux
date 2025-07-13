@@ -225,10 +225,10 @@ const showDeleteConfirmation = async (productId: string) => {
           {cart && cart.products.length > 0 && (
           <>
           <div className="bg-[#f8f5f2] !rounded-xl p-6 w-full mb-5 max-lg:max-w-xl max-lg:mx-auto">
-            <div className="flex items-center justify-between w-full mb-6">
+            {/* <div className="flex items-center justify-between w-full mb-6">
               <p className="font-normal text-xl leading-8 text-[#705C53]">Sub Total</p>
               <h6 className="font-semibold text-xl leading-8 text-[#493628]">{subtotal.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })}</h6>
-            </div>
+            </div> */}
             <div className="flex items-center justify-between w-full py-6">
               <p className="font-medium text-2xl leading-9 text-[#493628]">Total</p>
               <h6 className="font-medium text-2xl leading-9 text-[#493628]">{total.toLocaleString('id-ID', { style: 'currency', currency: 'IDR' })}</h6>

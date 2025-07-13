@@ -15,5 +15,5 @@ export const formatForFrontend = (date: string | Date): string => {
     const dt = DateTime.fromJSDate(jsDate, { zone: 'Asia/Jakarta' });
     if (!dt.isValid) return '-';
 
-    return dt.toFormat('d LLLL yyyy');
+    return dt.toFormat('LLLL d, yyyy');
   };

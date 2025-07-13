@@ -15,12 +15,8 @@ export default function page() {
             </div>
             <div className="button-group flex flex-col mx-auto items-center max-w-[280px]">
                 <Link href="../member/transactions" className="w-full">
-                <button className="p-3 !rounded-full w-full border-2 border-[#493628] bg-white font-semibold text-lg text-[#493628] transition-all duration-500 hover:!bg-[#705C53] hover:text-white !mb-5"
+                <button className="p-3 !rounded-full w-full border-2 border-[#493628] bg-white font-semibold text-lg text-[#493628] transition-all duration-500 hover:!bg-[#493628] hover:text-white !mb-5"
                     role="button">My Orders</button>
-                </Link>
-                <Link href="/" className="w-full">
-                <button className="p-3 py-3 !rounded-full w-full bg-[#493628] text-white transition-all duration-500 font-semibold hover:bg-[#705C53] text-lg"
-                    role="button">Back to Home</button>
                 </Link>
             </div>
         </div>

@@ -181,7 +181,7 @@ const ProfileFormAdmin: React.FC<UserFormProps> = ({ onSubmit, onEditSubmit, isE
                 <ImageUploader isProfileAdmin={true} image={profilePicture} setImage={setProfilePicture} />
               </div>
             ) : (
-              <img src={profilePicture || defaultImage} width="90" height="90" className="avatar img-fluid" />
+              <img src={profilePicture || defaultImage} width="90" height="90" className=" rounded-full avatar object-cover img-fluid" />
             )}
 
             {/* User Form */}
@@ -276,7 +276,7 @@ const ProfileFormAdmin: React.FC<UserFormProps> = ({ onSubmit, onEditSubmit, isE
                   <option value="superadmin">Super Admin</option>
                 </select>
               ) : (
-                <p className={`px-3 py-2 rounded-lg w-40 text-lg text-center font-semibold ${role === 'user' ? 'bg-yellow-100 text-yellow-600' : role === 'admin' ? 'bg-pink-100 text-pink-600' : role === 'superadmin' ? 'bg-purple-100 text-purple-600' : 'bg-gray-100 text-gray-600'}`}
+                <p className={`p-2 rounded-lg w-40 text-base text-center font-semibold ${role === 'user' ? 'bg-yellow-100 text-yellow-600' : role === 'admin' ? 'bg-pink-100 text-pink-600' : role === 'superadmin' ? 'bg-purple-100 text-purple-600' : 'bg-gray-100 text-gray-600'}`}
                   >
                     {role === 'superadmin' ? String('Super Admin') : role === 'admin' ? String('Admin') : role === 'user' ? String('User') : String(role)}
                 </p>

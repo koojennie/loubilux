@@ -157,7 +157,7 @@ export default function page() {
         },
         onPending: function (result) {
           console.log("Payment pending", result);
-          toast(`Payments Pendint + ${result}`, {icon: '⌚'})
+          toast(`Payments Pending + ${result}`, {icon: '⌚'})
         },
         onError: function (result) {
           console.error("Payment error", result);
@@ -191,12 +191,6 @@ export default function page() {
                 </svg>
               </button>
             </Link>
-          </div>
-          <div className="mt-3">
-            {/* <p className="text-left text-2xl font-semibold">Contact Information</p> */}
-            {/* <p className="text-left !mt-10 text-lg font-medium">Email address</p>
-            <p className="text-lg text-[#493628] leading-none align-middle">{userShipping?.email}</p> */}
-
           </div>
           <div className="mt-10 ">
             <p className="text-2xl font-semibold mb-4">Select Shipping Address</p>
@@ -233,7 +227,7 @@ export default function page() {
                 type="text"
                 value={selectedAddress.detail}
                 readOnly
-                className="mt-1 px-3 py-2 border rounded-lg w-full outline-none focus:ring-2 focus:ring-[#493628]"
+                className="mt-1 px-3 py-2 border rounded-lg w-full outline-none !text-gray-500 focus:ring-2 focus:ring-[#493628]"
               />
 
               <p className="text-lg font-medium !mt-5">City</p>
@@ -241,7 +235,7 @@ export default function page() {
                 type="text"
                 value={selectedAddress.city}
                 readOnly
-                className="mt-1 px-3 py-2 border rounded-lg w-full outline-none focus:ring-2 focus:ring-[#493628]"
+                className="mt-1 px-3 py-2 border rounded-lg w-full outline-none !text-gray-500 focus:ring-2 focus:ring-[#493628]"
               />
 
               <p className="text-lg font-medium !mt-5">Province</p>
@@ -249,7 +243,7 @@ export default function page() {
                 type="text"
                 value={selectedAddress.province}
                 readOnly
-                className="mt-1 px-3 py-2 border rounded-lg w-full outline-none focus:ring-2 focus:ring-[#493628]"
+                className="mt-1 px-3 py-2 border rounded-lg w-full outline-none !text-gray-500 focus:ring-2 focus:ring-[#493628]"
               />
 
               <p className="text-lg font-medium !mt-5">Postal Code</p>
@@ -257,7 +251,7 @@ export default function page() {
                 type="text"
                 value={selectedAddress.postalCode}
                 readOnly
-                className="mt-1 px-3 py-2 border rounded-lg w-full outline-none focus:ring-2 focus:ring-[#493628]"
+                className="mt-1 px-3 py-2 border rounded-lg w-full outline-none !text-gray-500 focus:ring-2 focus:ring-[#493628]"
               />
             </div>
           )}

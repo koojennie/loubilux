@@ -34,6 +34,7 @@ export default function Footer() {
                       <a
                         href="https://chat.whatsapp.com/DGoYM1AHpH36PYYS2qNRbK"
                         className="text-lg color-palette-1"
+                        target="_blank"
                       >
                         WhatsApp Group
                       </a>
@@ -42,6 +43,7 @@ export default function Footer() {
                       <a
                         href="https://shopee.co.id/loubi.shop24"
                         className="text-lg color-palette-1"
+                        target="_blank"
                       >
                         Shopee
                       </a>
@@ -50,6 +52,7 @@ export default function Footer() {
                       <a
                         href="https://www.tokopedia.com/loukiesshop"
                         className="text-lg color-palette-1"
+                        target="_blank"
                       >
                         Tokopedia
                       </a>
@@ -58,6 +61,7 @@ export default function Footer() {
                       <a
                         href="https://www.instagram.com/loubi.shop24/"
                         className="text-lg color-palette-1"
+                        target="_blank"
                       >
                         Instagram
                       </a>
@@ -105,7 +109,7 @@ export default function Footer() {
                         href="https://wa.me/6281212768921"
                         className="text-lg color-palette-1"
                       >
-                        WhatsApp
+                        Contact Admin
                       </a>
                     </li>
                     <li className="mb-6">
