@@ -243,7 +243,7 @@ export default function ProfileContent({ setUpdateEvent }: PropsProfileContent) 
                 label="Full Name"
                 placeholder="Enter your full name"
                 nameInput={"name"}
-                value={user?.name}
+                value={user?.name ?? ""}
                 type="text"
                 onChange={handleChange}
               />
@@ -253,7 +253,7 @@ export default function ProfileContent({ setUpdateEvent }: PropsProfileContent) 
                 label="Username"
                 placeholder="Enter your username"
                 nameInput={"username"}
-                value={user?.username}
+                value={user?.username ?? ""}
                 type="text"
                 onChange={handleChange}
               />
@@ -263,7 +263,7 @@ export default function ProfileContent({ setUpdateEvent }: PropsProfileContent) 
                 label="Email Address"
                 placeholder="Enter your email adress"
                 nameInput={"email"}
-                value={user?.email}
+                value={user?.email ?? ""}
                 type="email"
                 onChange={handleChange}
               />
@@ -273,7 +273,7 @@ export default function ProfileContent({ setUpdateEvent }: PropsProfileContent) 
                 label="Phone Number"
                 placeholder="Enter your phone number"
                 nameInput={"phoneNumber"}
-                value={user?.phoneNumber}
+                value={user?.phoneNumber ?? ""}
                 type="text"
                 onChange={handleChange}
               />
