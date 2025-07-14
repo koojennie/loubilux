@@ -157,7 +157,7 @@ export default function page() {
         },
         onPending: function (result) {
           console.log("Payment pending", result);
-          toast(`Payments Pending + ${result}`, {icon: '⌚'})
+          toast(`Payments Pending + ${result}`, { icon: '⌚' })
         },
         onError: function (result) {
           console.error("Payment error", result);
@@ -174,7 +174,6 @@ export default function page() {
       router.push('/complete-checkout');
     }
   };
-
 
   return (
     <>
@@ -211,14 +210,19 @@ export default function page() {
             </div>
           </div>
 
-          {selectedAddressId && (
+          {addresses.length === 0 ? (
+            <div>
+              <img src="/img/address-not-found.svg" className="w-[500px] h-[500px]" alt="" />
+              <p className="font-medium text-center text-lg">Please add an address first!</p>
+            </div>
+          ) : selectedAddress ? (
             <div className="mt-10">
               <p className="text-left !mt-5 text-lg font-medium">Receiver Name</p>
               <p className="text-lg text-[#493628] leading-none align-middle">{selectedAddress?.receiverName}</p>
-              
+
               <p className="text-left !mt-5 text-lg font-medium">Email address</p>
               <p className="text-lg text-[#493628] leading-none align-middle">{userShipping?.email}</p>
-              
+
               <p className="text-left !mt-5 text-lg font-medium">Phone Number</p>
               <p className="text-lg text-[#493628] leading-none align-middle">{selectedAddress?.phoneNumber}</p>
 
@@ -254,6 +258,8 @@ export default function page() {
                 className="mt-1 px-3 py-2 border rounded-lg w-full outline-none !text-gray-500 focus:ring-2 focus:ring-[#493628]"
               />
             </div>
+          ) : (
+            <p className="text-gray-500 mt-4">Please select an address from the list above.</p>
           )}
 
 
@@ -270,13 +276,31 @@ export default function page() {
             </label>
           </div> */}
           <hr className="!mt-10 h-0.5 border-t-0 bg-transparent dark:bg-white/10" />
-          <p className="!mt-10 text-lg text-gray-500">You won't be charged until the next step.</p>
+          {selectedAddress && (
+            <p className="!mt-10 text-lg text-gray-500">You won't be charged until the next step.</p>
+          )}
           <div className="!mt-10 flex justify-end gap-3">
-            {/* <Link href="/complete-checkout"> */}
-            <button className="!rounded-full py-3 px-4 text-center bg-[#493628] font-semibold text-lg text-white flex transition-all duration-500 hover:bg-[#705C53]"
-              onClick={() => setIsOpenModalConfirmation(true)}
-            >Continue</button>
-            {/* </Link> */}
+            {addresses.length === 0 && (
+              <Link href={"/member/address"}>
+
+                <button
+                  className={`!rounded-full py-3 px-4 text-center font-semibold text-lg flex transition-all duration-500 bg-[#493628] text-white hover:bg-[#705C53]`}
+                >
+                  Add Address
+                </button>
+              </Link>
+            )}
+            <button
+              className={`!rounded-full py-3 px-4 text-center font-semibold text-lg flex transition-all duration-500 ${selectedAddressId
+                ? "bg-[#493628] text-white hover:bg-[#705C53]"
+                : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                }`}
+              onClick={() => selectedAddressId && setIsOpenModalConfirmation(true)}
+              disabled={!selectedAddressId}
+            >
+              Continue
+            </button>
+
           </div>
         </div>
 

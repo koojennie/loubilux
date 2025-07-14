@@ -13,7 +13,7 @@ export default function TransactionContent() {
 
   const fetchAllOrderUser = async () => {
     try {
-      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/orders/all`,
+      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/orders/orderbyuser`,
         {
           withCredentials: true
         }
@@ -35,6 +35,9 @@ export default function TransactionContent() {
   useEffect(() => {
     fetchAllOrderUser();
   }, []);
+
+  console.log(ordersUser);
+  
 
   const { expanded } = useSidebar();
 
@@ -73,7 +76,7 @@ export default function TransactionContent() {
                   <TableRow
                     key={orderUser.orderId}
                     orderId={orderUser.orderId}
-                    name={typeof orderUser.user === "string" ? orderUser.user : orderUser.user?.name ?? ""}
+                    name={typeof orderUser.user === "string" ? orderUser.user : orderUser.user?.name ?? "Not Name"}
                     orderDate={orderUser.orderDate}
                     totalPrice={new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(Number(orderUser.totalPrice))}
                     status={orderUser.statusOrder as 'Pending' | 'Success' | 'Failed'}

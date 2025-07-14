@@ -1,5 +1,5 @@
 'use client'
-import React from "react";
+import React, { useEffect } from "react";
 import Link from "next/link";
 import { FaCartShopping } from "react-icons/fa6";
 import { useCart } from "@/context/CartContext";
@@ -7,8 +7,12 @@ import { useAuth } from "@/context/AuthContext";
 import Image from "next/image";
 
 export default function Auth() {
-  const { isAuthenticated, user, loading, logout } = useAuth();
+  const { isAuthenticated, refreshUser , user, loading, logout } = useAuth();
   const { totalItems } = useCart();
+
+  useEffect(() => {
+    refreshUser();
+  }, [isAuthenticated]);
 
 
   if (loading) return (

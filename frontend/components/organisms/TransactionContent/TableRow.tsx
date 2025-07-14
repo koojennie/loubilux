@@ -18,6 +18,10 @@ export default function TableRow(props: TableRowProps) {
       icon: <HiClock className="text-sm me-1 text-yellow-600" />,
       className: "bg-yellow-100 text-yellow-600",
     },
+    Processing: {
+      icon: <HiClock className="text-sm me-1 text-blue-600" />,
+      className: "bg-blue-100 text-blue-600",
+    },
     Success: {
       icon: <HiCheckCircle className="text-sm me-1 text-green-600" />,
       className: "bg-green-100 text-green-600",

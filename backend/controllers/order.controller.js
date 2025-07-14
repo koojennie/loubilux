@@ -139,36 +139,50 @@ const getUserOrders = async (req, res) => {
   try {
     const orders = await Order.findAll({
       where: { userId: user.id },
-      include: {
-        model: OrderLineItem,
-        as: "orderLineItems",
-        include: {
-          model: Product,
-          as: "product",
-          attributes: ["name"],
+      include: [
+        {
+          model: User,
+          as: "user",
+          attributes: ["userId", "name", "email"],
         },
-      },
+        {
+          model: OrderLineItem,
+          as: "orderLineItems",
+          include: {
+            model: Product,
+            as: "product",
+            attributes: ["productId", "name", "price"]
+          },
+        },
+      ],
     });
+
+    // Calculate total spent by the user
+    const totalSpent = orders.reduce((sum, order) => sum + (order.totalPrice || 0), 0);
 
     const data = orders.map(order => ({
       orderId: order.orderId,
       userId: order.userId,
+      totalSpent: totalSpent,
+      user: order.user?.name,
       totalPrice: order.totalPrice,
-      status: order.status,
+      statusOrder: order.status,
       paymentMethod: order.paymentMethod,
       orderDate: formatTimestamp(order.createdAt),
       shippingAddress: order.shippingAddress,
       courier: order.courier,
       items: order.orderLineItems.map(item => ({
-        id: item.id,
-        product: item.product?.name || "Deleted Product",
-        quantity: item.quantity,
-        subPrice: item.subPrice,
-        category: item.product?.category || "Category Not"
+      id: item.id,
+      product: item.product?.name || "Deleted Product",
+      quantity: item.quantity,
+      subPrice: item.subPrice,
+      category: item.product?.category || "Category Not"
       })),
     }));
 
+    // Attach totalSpent to the response
     res.status(200).json({ status: "success", message: "Orders retrieved", data });
+
 
   } catch (error) {
     console.error("Error:", error);
