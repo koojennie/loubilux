@@ -50,7 +50,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             setUser(userRes.data);
         } catch (err: any) {
             if (axios.isAxiosError(err) && err.response?.status === 401) {
-                // tidak perlu log panjang‑panjang—ini normal saat belum login
                 setUser(null);
             } else {
                 console.error("Gagal ambil user:", err);

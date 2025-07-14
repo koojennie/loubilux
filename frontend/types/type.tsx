@@ -59,6 +59,7 @@ export interface Order {
     paymentMethod: string;
     paymentStatus: string;
     totalPrice: number;
+    totalSpent: number;
     items: Product[];
     createdAt?: Date;
     updatedAt?: Date;
