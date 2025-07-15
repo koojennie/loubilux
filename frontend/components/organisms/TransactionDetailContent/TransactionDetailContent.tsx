@@ -14,6 +14,7 @@ interface TransactionDetailContentProps {
 export default function TransactionDetailContent({ order }: TransactionDetailContentProps) {
 
   const { expanded } = useSidebar();
+  console.log(order)
   return (
     <main className={`main-wrapper ${expanded ? 'expanded' : 'collapsed'}`}>
       <div className="ps-lg-0">
@@ -56,7 +57,7 @@ export default function TransactionDetailContent({ order }: TransactionDetailCon
                   </thead>
                   <tbody>
                     <tr>
-                      <td>Jl. sesuain dulu</td>
+                      <td>{order.address.detail},<br/>{order.address.city}<br/>{order.address.province}<br/>{order.address.postalCode}</td>
                     </tr>
                   </tbody>
                 </table>
