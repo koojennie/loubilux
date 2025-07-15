@@ -108,6 +108,7 @@ export default function Footer() {
                       <a
                         href="https://wa.me/6281212768921"
                         className="text-lg color-palette-1"
+                        target="_blank"
                       >
                         Contact Admin
                       </a>
