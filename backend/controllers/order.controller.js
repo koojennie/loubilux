@@ -1,5 +1,5 @@
 const { Op, where } = require("sequelize");
-const { Order, User, OrderLineItem, Product, Cart, CartItem, Category, sequelize, Sequelize } = require("../models");
+const { Address, Order, User, OrderLineItem, Product, Cart, CartItem, Category, sequelize, Sequelize } = require("../models");
 
 const formatTimestamp = (date) => {
   return new Date(date).toLocaleString("en-US", {
@@ -278,12 +278,18 @@ const getOrderById = async (req, res) => {
     }
 
     const order = await Order.findOne({
+
       where: { orderId },
       include: [
         {
           model: User,
           as: "user",
           attributes: ["userId", "name", "email"],
+        },
+        {
+          model: Address,
+          as: "shippingAddress",
+          // attributes: [];
         },
         {
           model: OrderLineItem,
@@ -327,6 +333,12 @@ const getOrderById = async (req, res) => {
         images: item.product?.images || [],
         category: item.product.Category.name
       })),
+      address: {
+        detail: order.shippingAddress.detail,
+        city: order.shippingAddress.city,
+        province: order.shippingAddress.province,
+        postalCode: order.shippingAddress.postalCode,
+      }
     };
 
     res.status(200).json({

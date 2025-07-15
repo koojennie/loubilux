@@ -15,6 +15,20 @@ export interface User {
     updateAt: string | Date;
 }
 
+export interface Address {
+    id: string;
+    addressId: string;
+    userId: string;
+    receiverName: string;
+    phoneNumber: string;
+    province: string;
+    city: string;
+    postalCode: string;
+    detail: string;
+    createdAt: string | Date;
+    updateAt: string | Date;
+}
+
 // interface Category 
 export interface Category {
     id: string;
@@ -61,6 +75,7 @@ export interface Order {
     totalPrice: number;
     totalSpent: number;
     items: Product[];
+    address: Address;
     createdAt?: Date;
     updatedAt?: Date;
 }

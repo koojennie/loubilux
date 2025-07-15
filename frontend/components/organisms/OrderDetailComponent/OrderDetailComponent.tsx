@@ -6,6 +6,7 @@ import { Order } from "@/types/type";
 import InvoiceOrderPdf from "./InvoiceOrderPdf";
 import axios from "axios";
 import { FaRegFilePdf } from "react-icons/fa";
+import { formatForFrontend } from "@/utils/helper";
 
 interface OrderDetailComponentProps {
   order: Order;
@@ -58,7 +59,7 @@ const OrderDetailComponent: React.FC<OrderDetailComponentProps> = ({ order, setO
         <div className="flex justify-between items-center">
           <div>
             <p className="text-2xl font-semibold text-[#493628]">Order Details #{order.orderId}</p>
-            <p className="text-base text-[#493628] mt-1">Date: {formatOrderDate(order.orderDate)}</p>
+            <p className="text-base text-[#493628] mt-1">Date: {formatForFrontend(order.orderDate)}</p>
           </div>
           {!isEdit && (
             <div className="">
