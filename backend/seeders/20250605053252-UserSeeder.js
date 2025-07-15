@@ -41,6 +41,18 @@ module.exports = {
         createdAt: new Date(),
         updatedAt: new Date()
       },
+      {
+        userId: 'USR-0003 ',
+        name: 'userjennie', 
+        username: 'userjennie',
+        email: 'jennie@gmail.com',
+        password: await bcrypt.hash("Jennie.123", 10),
+        phoneNumber: '08123456789',
+        role: 'user',
+        profilePicture: 'https://res.cloudinary.com/dqjlprqcy/image/upload/v1742188549/user-loubilux_ldr7fh.svg',
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
     ]);
 
 

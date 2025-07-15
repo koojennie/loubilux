@@ -43,9 +43,11 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: true,
         references: {
-          model: 'Adresses', 
+          model: 'Adresses',
           key: 'addressId'
         },
+        onDelete: 'SET NULL',   // atau 'CASCADE' / 'RESTRICT' tergantung tujuan kamu
+        onUpdate: 'CASCADE'
       },
       courier: {
         type: Sequelize.JSON,

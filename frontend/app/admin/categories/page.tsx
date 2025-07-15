@@ -20,7 +20,7 @@ const CategoriesPage = () => {
   const [selectedViewDetailCategory, setSelectedViewDetailCategory] = useState<Category | null>(null);
   const [selectedDeletedConfirmationCategory, setSelectedDeletedConfirmationCategory] = useState<Category | null>(null);
   const [page, setPage] = useState<number>(1);
-  const [limit, setLimit] = useState<number>(10);
+  const [limit, setLimit] = useState<number>(5);
   const [total, setTotal] = useState<number>(1);
   const [sortBy, setSortBy] = useState<string>("createdAt");
   const [orderBy, setOrderBy] = useState<string>("asc");
@@ -29,7 +29,7 @@ const CategoriesPage = () => {
   const fetchAllCategories = async () => {
     setIsLoading(true);
     try {
-      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/categories??page=${page}&limit=${limit}&sortBy=${sortBy}&sortOrder=${orderBy}&searchQuery=${searchQuery}`);
+      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/categories?page=${page}&limit=${limit}&sortBy=${sortBy}&sortOrder=${orderBy}&searchQuery=${searchQuery}`);
 
       const result = response.data.data.map((category: any) => (
         {

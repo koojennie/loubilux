@@ -17,7 +17,7 @@ const OrdersPage = () => {
   const [page, setPage] = useState<number>(1);
   const [totalItems, setTotalItems] = useState<number>(1);
   const [limit, setLimit] = useState<number>(5);
-  const [sortBy, setSortBy] = useState<string>("createdAt"); // or "orderId" or "totalPrice" etc.
+  const [sortBy, setSortBy] = useState<string>("createdAt");
   const [orderBy, setOrderBy] = useState<string>("asc");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [user, setUser] = useState(null);
@@ -34,8 +34,8 @@ const OrdersPage = () => {
       const params = new URLSearchParams({
         page: String(page),
         limit: String(limit),
-        sortBy: sortBy || "createdAt",
-        sortOrder: orderBy || "desc",
+        sortBy: sortBy ,
+        sortOrder: orderBy ,
       });
 
       if (searchQuery) params.append("searchQuery", searchQuery);
@@ -80,17 +80,17 @@ const OrdersPage = () => {
         labelAdd="Generate Excel"
         columns={[
           { key: 'orderId', label: 'Order Id' as keyof Order },
-          { key: 'user', label: 'Customer' as keyof Order },
+          // { key: 'user', label: 'Customer' as keyof Order },
           // { key: 'useer.email', label: 'email' as keyof Order },
           { key: 'orderDate', label: 'Order Date' as keyof Order },
-          { key: 'statusOrder', label: 'status' as keyof Order },
-          { key: 'paymentMethod', label: 'PaymentMethod' as keyof Order },
+          { key: 'status', label: 'status' as keyof Order },
+          // { key: 'paymentMethod', label: 'PaymentMethod' as keyof Order },
           // { key: 'category', label: 'Category' },
         ]}
         onChangeDropDownLimitData={setLimit}
-        onChangeDropDownOrderBy={() => { }}
-        onChangeDropDownSortBy={() => { }}
-        onChangeSearchQuery={() => { }}
+        onChangeDropDownOrderBy={setOrderBy}
+        onChangeDropDownSortBy={setSortBy}
+        onChangeSearchQuery={setSearchQuery}
         toAddPage={() => { setIsModalReport(true) }}
         totalItems={totalItems}
       />

@@ -7,7 +7,12 @@ class Order extends Model {
     Order.belongsTo(models.User, { foreignKey: 'userId', as: 'user' });
     // 1 Order has many OrderLineItems
     Order.hasMany(models.OrderLineItem, { foreignKey: 'orderId', as: 'orderLineItems' });
-    Order.belongsTo(models.Address, { foreignKey: 'shippingAddressId', as: 'shippingAddress' });
+    Order.belongsTo(models.Address, {
+      foreignKey: 'shippingAddressId',
+      as: 'shippingAddress',
+      onDelete: 'SET NULL',
+      onUpdate: 'CASCADE',
+    });
   }
 }
 

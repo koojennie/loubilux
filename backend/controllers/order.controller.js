@@ -172,11 +172,11 @@ const getUserOrders = async (req, res) => {
       shippingAddress: order.shippingAddress,
       courier: order.courier,
       items: order.orderLineItems.map(item => ({
-      id: item.id,
-      product: item.product?.name || "Deleted Product",
-      quantity: item.quantity,
-      subPrice: item.subPrice,
-      category: item.product?.category || "Category Not"
+        id: item.id,
+        product: item.product?.name || "Deleted Product",
+        quantity: item.quantity,
+        subPrice: item.subPrice,
+        category: item.product?.category || "Category Not"
       })),
     }));
 
@@ -192,19 +192,29 @@ const getUserOrders = async (req, res) => {
 
 const getAllOrders = async (req, res) => {
   try {
-    let { page = 1, limit = 10, sortBy = "createdAt", sortDir = "DESC", searchQuery } = req.query;
+    let { page = 1, limit = 10, sortBy = "createdAt", sortOrder, searchQuery } = req.query;
 
     page = parseInt(page) || 1;
     limit = parseInt(limit) || 10;
-    sortOrder = sortDir === 'desc' ? 'DESC' : 'ASC';
+    sortOrder = String(sortOrder).toUpperCase() === "ASC" ? "ASC" : "DESC";
 
     const offset = (page - 1) * limit;
+
+    const where = {};
+    if (searchQuery) {
+      where[Op.or] = [
+        { orderId: { [Op.like]: `%${searchQuery}%` } },
+        { "$user.name$": { [Op.like]: `%${searchQuery}%` } },
+      ];
+    }
 
     const totalOrders = await Order.count();
 
     const { rows: orders } = await Order.findAndCountAll({
+      where,
       offset,
       limit: parseInt(limit),
+      order: [[sortBy, sortOrder]],
       include: [
         {
           model: User,
@@ -230,6 +240,7 @@ const getAllOrders = async (req, res) => {
       email: order.user?.email,
       totalPrice: order.totalPrice,
       statusOrder: order.status,
+      status: order.status,
       paymentMethod: order.paymentMethod,
       orderDate: formatTimestamp(order.createdAt),
       courier: order.courier?.name || "Not Assigned",

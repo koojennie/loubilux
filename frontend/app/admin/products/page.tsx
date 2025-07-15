@@ -146,7 +146,7 @@ const ProductPage = ({ initialProducts }: ProductsProps) => {
             { key: 'quantity', label: 'Quantity' },
             { key: 'price', label: 'Price' },
             { key: 'statusPublish', label: 'Status' },
-            { key: 'category', label: 'Category' },
+            { key: 'categoryId', label: 'Category' },
           ]}
           totalItems={totalItems}
           onChangeDropDownLimitData={setLimit}
