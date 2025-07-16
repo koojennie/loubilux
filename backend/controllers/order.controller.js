@@ -396,15 +396,8 @@ const getFilteredOrdersReport = async (req, res) => {
       totalPrice: order.totalPrice,
       statusOrder: order.status,
       isPaid: order.isPaid,
-      paymentMethod: order.paymentMethod,
+      paymentMethod: 'Midtrans',
       orderDate: formatTimestamp(order.createdAt),
-      courier: order.courier?.name || "Not Assigned",
-      items: order.orderLineItems.map(item => ({
-        productName: item.product?.name || "Deleted Product",
-        productPrice: item.product?.price || 0,
-        quantity: item.quantity,
-        subPrice: item.subPrice,
-      })),
     }));
 
     res.status(200).json({
