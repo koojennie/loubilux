@@ -138,7 +138,7 @@ const OpnameForm: React.FC<OpnameFormProps> = ({ onSubmit, onEditSubmit, isEdit 
 
               {/* Quantity */}
               <div className="w-full max-w-24">
-                <label className="block mb-2 text-base font-semibold text-[#493628]">Stock Fisik</label>
+                <label className="block mb-2 text-base font-semibold text-[#493628]">Physical Stock</label>
                 <input
                   type="number"
                   className="w-full h-10 bg-transparent placeholder:text-gray-500 text-[#493628] text-sm border rounded-lg px-3 focus:border-[#493628]"
@@ -193,7 +193,7 @@ const OpnameForm: React.FC<OpnameFormProps> = ({ onSubmit, onEditSubmit, isEdit 
                 <label className="block mb-2 text-base font-semibold text-[#493628]">Stock</label>
                 <input
                   type="number"
-                  className="w-full h-10 bg-transparent placeholder:text-gray-500 text-[#493628] text-sm border rounded-lg px-3 focus:border-[#493628]"
+                  className="w-full h-10 bg-transparent placeholder:text-gray-500 text-gray-500 text-sm border rounded-lg px-3 focus:border-[#493628]"
                   placeholder="0"
                   min="0"
                   value={recordedStock}

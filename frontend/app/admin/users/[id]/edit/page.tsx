@@ -47,7 +47,7 @@ const EditUser = () => {
 
       if (response.status === 200) {
         toast.success("Profile updated successfully");
-        router.push("/admin");
+        router.push("/admin/users");
       } else {
         toast.error(response.data.message || "Failed to add product!");
       }

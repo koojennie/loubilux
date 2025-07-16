@@ -126,13 +126,13 @@ export default function ModalReport({ isOpen, setIsOpen }: ModalReportProps) {
 
                         <div className="flex justify-end gap-2">
                             <button
-                                className="px-4 py-2 rounded bg-gray-300"
+                                className="px-4 py-2 rounded font-medium bg-gray-300"
                                 onClick={() => setIsOpen(false)}
                             >
                                 Cancel
                             </button>
                             <button
-                                className="px-4 py-2 rounded bg-blue-600 text-white"
+                                className="px-4 py-2 rounded bg-[#493628] font-medium text-white"
                                 onClick={handleGenerate}
                             >
                                 Generate

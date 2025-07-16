@@ -97,11 +97,11 @@ const ImageUploader = ({ image, setImage, isProfileAdmin }: ImageUploaderProps) 
               <img
                 src={image}
                 alt="Selected"
-                className="w-64 h-64 object-cover rounded-lg shadow"
+                className="w-64 h-64 object-cover rounded-lg border mb-3"
               />
               <button
                 type="button"
-                className="mt-2 bg-red-500 text-white rounded-full px-4 py-2 transition-opacity hover:opacity-90 hover:bg-red-700 shadow-md"
+                className="mt-2 bg-[#493628] text-white font-medium text-base !rounded-lg px-4 py-2 transition-opacity hover:opacity-90 hover:bg-[#705C53] shadow-md"
                 onClick={removeImage}
               >
                 Remove Image
