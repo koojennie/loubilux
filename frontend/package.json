@@ -32,7 +32,8 @@
     "sweetalert2": "^11.22.0",
     "swiper": "^11.2.8",
     "swr": "^2.3.3",
-    "xlsx": "^0.18.5"
+    "xlsx": "^0.18.5",
+    "xlsx-js-style": "^1.2.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
