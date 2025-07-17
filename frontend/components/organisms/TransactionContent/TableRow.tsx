@@ -22,11 +22,11 @@ export default function TableRow(props: TableRowProps) {
       icon: <HiClock className="text-sm me-1 text-blue-600" />,
       className: "bg-blue-100 text-blue-600",
     },
-    Success: {
+    Completed: {
       icon: <HiCheckCircle className="text-sm me-1 text-green-600" />,
       className: "bg-green-100 text-green-600",
     },
-    Failed: {
+    Cancelled: {
       icon: <HiXCircle className="text-sm me-1 text-red-600" />,
       className: "bg-red-100 text-red-600",
     },
