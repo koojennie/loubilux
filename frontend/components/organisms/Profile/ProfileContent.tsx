@@ -179,7 +179,7 @@ export default function ProfileContent({ setUpdateEvent }: PropsProfileContent) 
         <h2 className="text-4xl fw-bold color-palette-1 mb-30">Settings</h2>
         <div className="bg-card p-[1.875rem] w-full max-w-xl">
           <form action="" onSubmit={handleSubmit} className="w-full max-w-xl">
-            <div className="photo d-flex">
+            <div className="photo flex items-center gap-2">
               <div className="position-relative me-20">
                 {deletedImage ? (
                   <img
@@ -223,7 +223,7 @@ export default function ProfileContent({ setUpdateEvent }: PropsProfileContent) 
               <div className="image-upload">
                 <label htmlFor="avatar">
                   <div className="flex items-center">
-                    <div className="w-[90px] h-[90px] rounded-full bg-[#f4e6dc] hover:bg-[#f7ece4] flex items-center justify-center text-[#493628] hover:text-[#705C53] text-2xl">
+                    <div className="w-[75px] h-[75px] rounded-full bg-[#f4e6dc] hover:bg-[#f7ece4] flex items-center justify-center text-[#493628] hover:text-[#705C53] text-2xl">
                       <FaUpload />
                     </div>
                   </div>
