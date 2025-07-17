@@ -334,10 +334,10 @@ const getOrderById = async (req, res) => {
         category: item.product.Category.name
       })),
       address: {
-        detail: order.shippingAddress.detail,
-        city: order.shippingAddress.city,
-        province: order.shippingAddress.province,
-        postalCode: order.shippingAddress.postalCode,
+        detail: order.shippingAddress?.detail || "",
+        city: order.shippingAddress?.city || "",
+        province: order.shippingAddress?.province || "",
+        postalCode: order.shippingAddress?.postalCode || "",
       }
     };
 
