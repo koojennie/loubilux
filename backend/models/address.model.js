@@ -6,6 +6,8 @@ class Address extends Model {
     Address.hasOne(models.Order, {
       foreignKey: 'shippingAddressId',
       as: 'order',
+      onDelete: 'SET NULL',
+      onUpdate: 'CASCADE',
     });
   }
 }

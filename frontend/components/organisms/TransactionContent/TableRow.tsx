@@ -7,7 +7,7 @@ interface TableRowProps {
   name: string;
   orderDate: string;
   totalPrice: string;
-  status: 'Pending' | 'Success' | 'Failed';
+  status: 'Pending' | 'Processing' | 'Completed' | 'Cancelled';
 }
 
 export default function TableRow(props: TableRowProps) {

@@ -81,7 +81,7 @@ export default function TransactionContent() {
                     name={typeof orderUser.user === "string" ? orderUser.user : orderUser.user?.name ?? "Not Name"}
                     orderDate={orderUser.orderDate}
                     totalPrice={new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(Number(orderUser.totalPrice))}
-                    status={orderUser.statusOrder as 'Pending' | 'Success' | 'Failed'}
+                    status={orderUser.statusOrder as 'Pending' | 'Completed' | 'Cancelled' | 'Processing'}
                   />
                 ))}
                 {/* <TableRow orderId="ORD-20250508-001" name="Jennie Koo" orderDate="08 Mei 2025" totalPrice={new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(Number(3190000))} status="Pending" /> */}
