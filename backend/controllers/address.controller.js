@@ -3,7 +3,7 @@ const Address = require('../models/address.model');
 
 const createAddressUser = async (req, res) => {
     try {
-        const { userId, receiverName, phoneNumber, province, city, postalCode, detail } = req.body;
+        const { userId, receiverName, phoneNumber, province, city, district, postalCode, detail } = req.body;
 
         if (!userId || !receiverName) {
             return res.status(400).json({
@@ -29,6 +29,7 @@ const createAddressUser = async (req, res) => {
             phoneNumber,
             province,
             city,
+            district,
             postalCode,
             detail
         });
@@ -72,7 +73,7 @@ const getAllAddressbyUser = async (req, res) => {
 
 const updateAddress = async (req, res) => {
     const { id: addressId } = req.params;
-    const { receiverName, phoneNumber, province, city, postalCode, detail } = req.body;
+    const { receiverName, phoneNumber, province, city, district ,postalCode, detail } = req.body;
 
     if (!addressId) {
         return res.status(400).json({
@@ -95,6 +96,7 @@ const updateAddress = async (req, res) => {
             phoneNumber,
             province,
             city,
+            district,
             postalCode,
             detail
         });

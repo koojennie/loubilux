@@ -52,6 +52,9 @@ Address.init(
       type: DataTypes.STRING,
       allowNull: false,
     },
+    district: {
+      type: DataTypes.STRING
+    },
     createdAt: {
       type: DataTypes.DATE,
       allowNull: false,
