@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import ButtonTab from "./ButtonTab";
 import TableRow from "./TableRow";
 import { useSidebar } from "@/context/SidebarContext";
 import { Order } from "@/types/type";
@@ -35,10 +34,7 @@ export default function TransactionContent() {
   useEffect(() => {
     fetchAllOrderUser();
   }, []);
-
-  console.log(ordersUser);
   
-
   const { expanded } = useSidebar();
 
   return (

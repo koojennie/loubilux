@@ -18,7 +18,7 @@ const OrdersPage = () => {
   const [totalItems, setTotalItems] = useState<number>(1);
   const [limit, setLimit] = useState<number>(5);
   const [sortBy, setSortBy] = useState<string>("createdAt");
-  const [orderBy, setOrderBy] = useState<string>("asc");
+  const [orderBy, setOrderBy] = useState<string>("desc");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);

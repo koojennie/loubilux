@@ -11,6 +11,7 @@ import Image from "next/image";
 import axios from "axios";
 import { Product, Order } from "@/types/type";
 import { formatForFrontend } from "@/utils/helper"
+import { HiCheckCircle, HiClock, HiXCircle } from "react-icons/hi2";
 
 
 export default function RecentOrders() {
@@ -111,12 +112,38 @@ export default function RecentOrders() {
                   </div>
                 </TableCell>
                 <TableCell className="py-3">
-                  <span
-                    className={`px-3 py-1 rounded-md text-xs font-semibold ${order.statusOrder === 'Completed' ? 'bg-green-100 text-green-600' : 'bg-yellow-100 text-yellow-600'
-                      }`}
-                  >
-                    {String(order.statusOrder)}
-                  </span>
+                    {(() => {
+                    type StatusOrder = "Pending" | "Processing" | "Completed" | "Cancelled";
+                    const statusConfig: Record<StatusOrder, { icon: JSX.Element; className: string }> = {
+                      Pending: {
+                        icon: <HiClock className="text-sm me-1 text-yellow-600" />,
+                        className: "bg-yellow-100 text-yellow-600",
+                      },
+                      Processing: {
+                        icon: <HiClock className="text-sm me-1 text-blue-600" />,
+                        className: "bg-blue-100 text-blue-600",
+                      },
+                      Completed: {
+                        icon: <HiCheckCircle className="text-sm me-1 text-green-600" />,
+                        className: "bg-green-100 text-green-600",
+                      },
+                      Cancelled: {
+                        icon: <HiXCircle className="text-sm me-1 text-red-600" />,
+                        className: "bg-red-100 text-red-600",
+                      },
+                    };
+                    const { icon, className } =
+                      statusConfig[order.statusOrder as StatusOrder] || {
+                        icon: null,
+                        className: "bg-gray-100 text-gray-800",
+                      };
+                    return (
+                      <span className={`px-3 py-1 rounded-md text-xs font-semibold inline-flex items-center ${className}`}>
+                      {icon}
+                      {String(order.statusOrder)}
+                      </span>
+                    );
+                    })()}
 
                 </TableCell>
               </TableRow>

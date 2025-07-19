@@ -14,11 +14,35 @@ export default function AddressList() {
   const [selectedAddressId, setSelectedAddressId] = useState<string | null>(null);
   const [userShipping, setUserShipping] = useState<User | null>(null);
   const [userId, setUserId] = useState<string>("");
+  const [isFormInitialized, setIsFormInitialized] = useState(false);
+
+
+  // option dropdown address
+  const [province, setProvince] = useState<any[]>([]);
+  const [city, setCity] = useState<any[]>([]);
+  const [district, setDistrict] = useState<any[]>([]);
+  const [selectedProvinsi, setSelectedProvinsi] = useState<string | null>(null);
+  const [selectedProvinsiId, setSelectedProvinsiId] = useState<string | null>(null);
+  const [selectedCity, setSelectedCity] = useState<string | null>(null);
+  const [selectedCityId, setSelectedCityId] = useState<string | null>(null);
+  const [selectedDisctrict, setSelectedDisctrict] = useState<string | null>(null);
+  const [selectedDisctrictId, setSelectedDisctrictId] = useState<string | null>(null);
+
+  const [isLoadingProvince, setIsLoadingProvince] = useState(true);
+  const [isLoadingCity, setIsLoadingCity] = useState(false);
+  const [isLoadingDistrict, setIsLoadingDistrict] = useState(false);
+
+  const getKodeByNama = (array: { nama: string; kode: string }[], nama: string): string | null => {
+    return array.find(item => item.nama === nama)?.kode || null;
+  };
+
+
   const [form, setForm] = useState({
     userId: '',
     receiverName: '',
     detail: '',
     city: '',
+    district: '',
     province: '',
     postalCode: '',
     phoneNumber: ''
@@ -59,34 +83,122 @@ export default function AddressList() {
       console.error(err);
     }
   };
+  // when first reload
   useEffect(() => {
+
+    const fetchOptionvValueProvince = async () => {
+      try {
+        axios.get('https://api.nusakita.yuefii.site/v2/provinsi?limit=38')
+          .then(res => {
+            setProvince(res.data.data);
+
+          })
+      } catch (error) {
+        toast.error('Fetch Province data error');
+        console.error(error)
+      } finally {
+        setIsLoadingProvince(false);
+      }
+    }
     fetchUser();
     fetchAddresses();
+    fetchOptionvValueProvince();
   }, []);
 
+  // useEffect(()=>{
+  //   if (!selectedAddressId) {
+  //     setForm({
+  //       userId,
+  //       receiverName: '',
+  //       detail: '',
+  //       city: '',
+  //       district: '',
+  //       province: '',
+  //       postalCode: '',
+  //       phoneNumber: '',
+  //     });
+  //     return;
+  //   }
+  // }, [selectedAddressId])
+
+
   useEffect(() => {
-    if (selectedAddress) {
+    const initFormAndDropdown = async () => {
+      if (!selectedAddress) {
+        // Reset everything
+        setForm({
+          userId,
+          receiverName: '',
+          detail: '',
+          city: '',
+          district: '',
+          province: '',
+          postalCode: '',
+          phoneNumber: '',
+        });
+        setSelectedProvinsi(null);
+        setSelectedProvinsiId(null);
+        setSelectedCity(null);
+        setSelectedCityId(null);
+        setSelectedDisctrict(null);
+        setSelectedDisctrictId(null);
+        setCity([]);
+        setDistrict([]);
+        return;
+      }
+
+      // Set form values
       setForm({
-        userId: userId,
+        userId,
         receiverName: selectedAddress.receiverName,
         detail: selectedAddress.detail,
         city: selectedAddress.city,
+        district: selectedAddress.district,
         province: selectedAddress.province,
         postalCode: selectedAddress.postalCode,
         phoneNumber: selectedAddress.phoneNumber,
       });
-    } else {
-      setForm({
-        userId: userId,
-        receiverName: '',
-        detail: '',
-        city: '',
-        province: '',
-        postalCode: '',
-        phoneNumber: '',
-      });
-    }
+
+      // Get kode provinsi
+      const kodeProvinsi = getKodeByNama(province, selectedAddress.province);
+      if (!kodeProvinsi) return;
+
+      setSelectedProvinsi(selectedAddress.province);
+      setSelectedProvinsiId(kodeProvinsi);
+
+      // Fetch city berdasarkan provinsi
+      try {
+        setIsLoadingCity(true);
+        const cityRes = await axios.get(`https://api.nusakita.yuefii.site/v2/${kodeProvinsi}/kab-kota?pagination=false`);
+        const cities = cityRes.data.data;
+        setCity(cities);
+
+        const kodeCity = getKodeByNama(cities, selectedAddress.city);
+        if (!kodeCity) return;
+
+        setSelectedCity(selectedAddress.city);
+        setSelectedCityId(kodeCity);
+
+        // Fetch district berdasarkan city
+        setIsLoadingDistrict(true);
+        const districtRes = await axios.get(`https://api.nusakita.yuefii.site/v2/${kodeCity}/kecamatan?pagination=false`);
+        const districts = districtRes.data.data;
+        setDistrict(districts);
+
+        const kodeDistrict = getKodeByNama(districts, selectedAddress.district);
+        setSelectedDisctrict(selectedAddress.district);
+        setSelectedDisctrictId(kodeDistrict);
+      } catch (err) {
+        console.error('Gagal load data lokasi:', err);
+      } finally {
+        setIsLoadingCity(false);
+        setIsLoadingDistrict(false);
+      }
+    };
+
+    initFormAndDropdown();
   }, [selectedAddressId]);
+
 
   useEffect(() => {
     setForm((prev) => ({
@@ -95,22 +207,58 @@ export default function AddressList() {
     }));
   }, [userId]);
 
+  // when provinsi selected
+  useEffect(() => {
+    if (selectedProvinsi) {
+      setIsLoadingCity(true);
+
+      axios.get(`https://api.nusakita.yuefii.site/v2/${selectedProvinsiId}/kab-kota?pagination=false`)
+        .then(res => {
+          setCity(res.data.data);
+          setSelectedCityId(null);
+          setDistrict([]);
+        })
+        .catch((error) => {
+          toast.error('Gagal Mengambil data kota')
+          console.error('error mengambil data kota  : ', error);
+        })
+        .finally(() => setIsLoadingCity(false));
+
+    }
+  }, [selectedProvinsi])
+
+  useEffect(() => {
+    if (selectedCity) {
+      setIsLoadingDistrict(true);
+
+      axios.get(`https://api.nusakita.yuefii.site/v2/${selectedCityId}/kecamatan?pagination=false`)
+        .then(res => {
+          setDistrict(res.data.data);
+          setSelectedDisctrictId(null);
+        })
+        .catch((error) => {
+          toast.error('Gagal Mengambil data district')
+          console.error('error mengambil data disctrict  : ', error);
+        })
+        .finally(() => setIsLoadingDistrict(false));
+
+    }
+  }, [selectedCity])
+
   const handleChange = (field: string, value: string) => {
     setForm(prev => ({ ...prev, [field]: value }));
   };
 
   const handleSelectAddress = (addressId: string) => {
     setSelectedAddressId(addressId);
-    // console.log('Selected addressId:', addressId);
   };
-  const selectedAddress = addresses.find(addr => addr.addressId === selectedAddressId);
 
+  const selectedAddress = addresses.find(addr => addr.addressId === selectedAddressId);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     try {
-      console.log(form);
       if (selectedAddressId) {
 
         await axios.put(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/address/${selectedAddressId}`, form, {
@@ -125,19 +273,28 @@ export default function AddressList() {
         toast.success('New address created successfully')
       }
 
+
+    } catch (error: any) {
+      console.error(`Failed to save address: ${error.message}`);
+    } finally {
       await fetchAddresses();
       setSelectedAddressId(null);
+      setSelectedProvinsi(null);
+      setSelectedProvinsiId(null);
+      setSelectedCity(null);
+      setSelectedCityId(null);
+      setSelectedDisctrict(null);
+      setSelectedDisctrictId(null);
       setForm({
         userId: userId,
         receiverName: '',
         detail: '',
         city: '',
+        district: '',
         province: '',
         postalCode: '',
         phoneNumber: '',
       });
-    } catch (error: any) {
-      console.error(`Failed to save address: ${error.message}`);
     }
   };
 
@@ -157,15 +314,19 @@ export default function AddressList() {
       if (selectedAddressId === addressId) {
         setSelectedAddressId(null);
       }
+      toast.success('Deleted Successfully')
+      await fetchAddresses();
     } catch (error) {
       console.error("Failed to delete address", error);
       alert("Failed to delete address. Please try again.");
+    } finally {
+
     }
   };
 
   return (
     <main className={`main-wrapper ${expanded ? 'expanded' : 'collapsed'}`}>
-      <Toaster/>
+      <Toaster />
       <div className="ps-lg-0">
         <h2 className="text-4xl fw-bold color-palette-1 mb-30">Address</h2>
         <div className="">
@@ -204,24 +365,97 @@ export default function AddressList() {
                     onChange={(e) => handleChange('detail', e.target.value)}
                   />
                 </div>
-                <div className="mb-4">
-                  <label className="block mb-1 text-lg font-medium">City</label>
-                  <input
-                    type="text"
-                    className="input input-bordered rounded-md w-full"
-                    value={form?.city}
-                    onChange={(e) => handleChange('city', e.target.value)}
-                  />
-                </div>
+                {/* === Province Dropdown === */}
                 <div className="mb-4">
                   <label className="block mb-1 text-lg font-medium">Province</label>
-                  <input
-                    type="text"
+                  <select
                     className="input input-bordered rounded-md w-full"
-                    value={form?.province}
-                    onChange={(e) => handleChange('province', e.target.value)}
-                  />
+                    value={selectedProvinsiId ?? ''}
+                    disabled={isLoadingProvince}
+                    onChange={(e) => {
+                      const select = e.target;
+                      const nama = select.options[select.selectedIndex].getAttribute('data-nama') || '';
+                      const kode = select.value;
+
+                      setSelectedProvinsi(nama);
+                      setSelectedProvinsiId(kode);
+                      setSelectedCity(null);
+                      setSelectedCityId(null);
+                      setSelectedDisctrict(null);
+                      setSelectedDisctrictId(null);
+                      setCity([]);
+                      setDistrict([]);
+                    }}
+                  >
+                    <option value="">
+                      {isLoadingProvince ? 'Ambil Provinsi...' : 'Pilih Provinsi'}
+                    </option>
+                    {province.map((p) => (
+                      <option key={p.kode} value={p.kode} data-nama={p.nama}>
+                        {p.nama}
+                      </option>
+                    ))}
+                  </select>
                 </div>
+
+                {/* === City Dropdown === */}
+                <div className="mb-4">
+                  <label className="block mb-1 text-lg font-medium">City</label>
+                  <select
+                    className="input input-bordered rounded-md w-full"
+                    value={selectedCityId ?? ''}
+                    disabled={!selectedProvinsiId || isLoadingCity}
+                    onChange={(e) => {
+                      const select = e.target;
+                      const nama = select.options[select.selectedIndex].getAttribute('data-nama') || '';
+                      const kode = select.value;
+
+                      setSelectedCity(nama);
+                      setSelectedCityId(kode);
+                      setSelectedDisctrict(null);
+                      setSelectedDisctrictId(null);
+                      setDistrict([]);
+                    }}
+                  >
+                    <option value="">
+                      {isLoadingCity ? 'Ambil Kota...' : 'Pilih Kota'}
+                    </option>
+                    {city.map((k) => (
+                      <option key={k.kode} value={k.kode} data-nama={k.nama}>
+                        {k.nama}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* === District Dropdown === */}
+                <div className="mb-4">
+                  <label className="block mb-1 text-lg font-medium">District</label>
+                  <select
+                    className="input input-bordered rounded-md w-full"
+                    value={selectedDisctrictId ?? ''}
+                    disabled={!selectedCityId || isLoadingDistrict}
+                    onChange={(e) => {
+                      const select = e.target;
+                      const nama = select.options[select.selectedIndex].getAttribute('data-nama') || '';
+                      const kode = select.value;
+
+                      setSelectedDisctrict(nama);
+                      setSelectedDisctrictId(kode);
+                    }}
+                  >
+                    <option value="">
+                      {isLoadingDistrict ? 'Ambil Kecamatan...' : 'Pilih Kecamatan'}
+                    </option>
+                    {district.map((d) => (
+                      <option key={d.kode} value={d.kode} data-nama={d.nama}>
+                        {d.nama}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+
                 <div className="mb-4">
                   <label className="block mb-1 text-lg font-medium">Postal Code</label>
                   <input
@@ -263,7 +497,7 @@ export default function AddressList() {
                     </button>
 
                     <p className="font-semibold text-lg">{address.receiverName}</p>
-                    <p className="text-base">{address.detail}, {address.city}, {address.province}</p>
+                    <p className="text-base">{address.detail}, {address.district} ,{address.city}, {address.province}</p>
                     <p className="text-base">{address.postalCode}</p>
                     <p className="text-base">Phone: {address.phoneNumber}</p>
                   </div>

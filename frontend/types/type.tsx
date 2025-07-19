@@ -70,6 +70,7 @@ export interface Order {
     orderId: string;
     orderDate: string;
     statusOrder: string;
+    status: string;
     paymentMethod: string;
     paymentStatus: string;
     totalPrice: number;
