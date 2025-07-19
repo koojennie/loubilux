@@ -385,6 +385,7 @@ export default function AddressList() {
                       setSelectedDisctrictId(null);
                       setCity([]);
                       setDistrict([]);
+                      handleChange('province', nama);
                     }}
                   >
                     <option value="">
@@ -415,6 +416,7 @@ export default function AddressList() {
                       setSelectedDisctrict(null);
                       setSelectedDisctrictId(null);
                       setDistrict([]);
+                      handleChange('city', nama);
                     }}
                   >
                     <option value="">
@@ -442,6 +444,7 @@ export default function AddressList() {
 
                       setSelectedDisctrict(nama);
                       setSelectedDisctrictId(kode);
+                      handleChange('district', nama);
                     }}
                   >
                     <option value="">
