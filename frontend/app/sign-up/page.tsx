@@ -18,9 +18,7 @@ export default function SignUp() {
             withCredentials: true
           }
         );
-
-        console.log("Register success", response);
-
+        
         if (response.status === 201) {
           toast.success("Register successfully");
 

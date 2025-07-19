@@ -23,7 +23,6 @@ export default function page() {
   const [selectedAddressId, setSelectedAddressId] = useState<string | null>(null);
   const { checkoutData } = useCheckout() ?? {};
 
-  // console.log(checkoutData);
 
   const [cart, setCart] = useState<any>(null);
 
@@ -35,7 +34,6 @@ export default function page() {
         }
       );
       const sortedProducts = response.data.data.products.sort((a: any, b: any) => {
-        // Ambil angka dari string seperti "CARTITEM-00002"
         const getIdNumber = (id: string) => parseInt(id.replace(/[^\d]/g, ""));
         return getIdNumber(a.cartItemId) - getIdNumber(b.cartItemId);
       });
@@ -79,7 +77,6 @@ export default function page() {
         withCredentials: true,
       });
       setAddresses(response.data.data);
-      // console.log(response.data.data);
     } catch (err) {
       console.error(err);
     }
@@ -114,7 +111,6 @@ export default function page() {
 
   const handleSelectAddress = (addressId: string) => {
     setSelectedAddressId(addressId);
-    // console.log('Selected addressId:', addressId);
   };
   const selectedAddress = addresses.find(addr => addr.addressId === selectedAddressId);
 
@@ -131,9 +127,6 @@ export default function page() {
 
 
       const newOrderId = createOrderResponse.data.order.orderId;
-
-      console.log(createOrderResponse);
-      console.log(newOrderId);
 
       // 2. Lanjutkan ke payment
       const paymentResponse = await axios.post(

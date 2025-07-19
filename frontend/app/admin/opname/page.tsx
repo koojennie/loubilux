@@ -125,12 +125,6 @@ const OpnamePage = ({ initialOpnames }: OpnameProps) => {
         setIsModalConfirmationDeleteOpenClosed(!isModalConfirmationDeleteOpenClosed);
     };
 
-    const handleOpenCloseModalViewDetail = (opname?: Opname) => {
-        // setSelectedViewDetailUser(user || null);
-        // setIsModalViewDetailOpen(!isModalViewDetailOpen);
-        // console.log(opname);
-    };
-
     return (
         <>
             <div className="flex px-8 mx-3 my-2 flex-col rounded-2xl bg-white">

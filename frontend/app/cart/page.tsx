@@ -72,8 +72,6 @@ const showDeleteConfirmation = async (productId: string) => {
         });
       }
 
-      // console.log(quantity);
-
       // Refresh cart data
       fetchCartUser();
       refreshCart();

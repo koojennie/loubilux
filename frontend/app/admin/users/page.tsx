@@ -116,7 +116,6 @@ const UserPage = ({ initialUsers }: UsersProps) => {
           onChangeDropDownOrderBy={setOrderBy}
           onChangeDropDownSortBy={setSortBy}
           onChangeSearchQuery={setSearchQuery}
-          // backPage={() => { console.log("Back") }}
           toAddPage={() => {
             router.push("/admin/users/add");
           }}
