@@ -108,27 +108,22 @@ const ProfileFormAdmin: React.FC<UserFormProps> = ({ onSubmit, onEditSubmit, isE
     // case 1 upload image first time 
     if (!oldImage && profilePicture && base64Pattern.test(profilePicture)) {
       tempNewImage = profilePicture;
-      console.log("case pertama upload");
     }
 
     // case 2: deleted image profile
     if (!profilePicture && oldImage) {
       tempDeletedImage = oldImage;
-      console.log("case kedua upload");
     }
 
     // case 3 : replace old profile image
     if (profilePicture && base64Pattern.test(profilePicture) && oldImage) {
       tempNewImage = profilePicture;
       tempDeletedImage = oldImage;
-
-      console.log("case ketiga upload");
     }
 
     // case 4 does't change image 
     if (oldImage === profilePicture) {
       tempKeepImage = true;
-      console.log("case keempat upload = ", tempKeepImage);
     }
 
     const formData = {

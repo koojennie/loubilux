@@ -20,7 +20,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/v1/auth/me`, {
           withCredentials: true, // Kirim cookies
         });
-        console.log("Response dari API:", response.data);
         setUser(response.data.user || null);
       } catch (error) {
         console.error("Error fetching user:", error);

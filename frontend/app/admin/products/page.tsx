@@ -92,7 +92,6 @@ const ProductPage = ({ initialProducts }: ProductsProps) => {
 
   const handleDeleteProduct = async (product: Product | null) => {
     if (!product) {
-      console.log("No product selected for deletion");
       return;
     }
 
@@ -153,7 +152,6 @@ const ProductPage = ({ initialProducts }: ProductsProps) => {
           onChangeDropDownOrderBy={setOrderBy}
           onChangeDropDownSortBy={setSortBy}
           onChangeSearchQuery={setSearchQuery}
-          // backPage={() => { console.log("Back") }}
           toAddPage={() => router.push('/admin/products/add')}
         />
 

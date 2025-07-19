@@ -14,7 +14,6 @@ interface TransactionDetailContentProps {
 export default function TransactionDetailContent({ order }: TransactionDetailContentProps) {
 
   const { expanded } = useSidebar();
-  console.log(order)
   return (
     <main className={`main-wrapper ${expanded ? 'expanded' : 'collapsed'}`}>
       <div className="ps-lg-0">
