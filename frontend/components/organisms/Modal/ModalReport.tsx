@@ -133,7 +133,7 @@ export default function ModalReport({ isOpen, setIsOpen }: ModalReportProps) {
             {isOpen && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
                     <div className="bg-white p-6 rounded-lg w-full max-w-md">
-                        <h2 className="text-xl font-semibold mb-4">Pilih Filter Laporan</h2>
+                        <h2 className="text-xl font-semibold mb-4">Choose Filter</h2>
 
                         <select
                             className="w-full mb-4 p-2 border rounded"
@@ -141,9 +141,9 @@ export default function ModalReport({ isOpen, setIsOpen }: ModalReportProps) {
                             onChange={(e) => setFilterType(e.target.value)}
                         >
                             <option value="all">All</option>
-                            <option value="month">Per Bulan</option>
-                            <option value="year">Per Tahun</option>
-                            <option value="range">Rentang Tanggal</option>
+                            <option value="month">By Month</option>
+                            <option value="year">By Year</option>
+                            <option value="range">By Date</option>
                         </select>
 
                         {filterType === "all" && (
