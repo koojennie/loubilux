@@ -179,6 +179,7 @@ export default function ProfileContent({ setUpdateEvent }: PropsProfileContent) 
         <h2 className="text-4xl fw-bold color-palette-1 mb-30">Settings</h2>
         <div className="bg-card p-[1.875rem] w-full max-w-xl">
           <form action="" onSubmit={handleSubmit} className="w-full max-w-xl">
+            <h5 className="mb-3 text-[#493628]">Update Profile Picture</h5>
             <div className="photo flex items-center gap-2">
               <div className="position-relative me-20">
                 {deletedImage ? (
