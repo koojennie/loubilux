@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 import { showConfirmationAlert } from "@/components/Atoms/AlertConfirmation";
+import { formatForFrontend } from "@/utils/helper";
 
 interface OpnameFormProps {
   onSubmit?: (formData: any) => void;
@@ -220,7 +221,7 @@ const OpnameForm: React.FC<OpnameFormProps> = ({ onSubmit, onEditSubmit, isEdit 
               <div className="w-full">
                 <p className="block mb-2 font-semibold text-base text-[#493628]">Opname Date</p>
                 <p className="text-gray-500 mt-3 text-sm truncate">
-                  {new Date().toLocaleDateString("id-ID", { day: "2-digit", month: "long", year: "numeric" })}
+                  {formatForFrontend(new Date)}
                 </p>
                 {/* <input type="hidden" name="opnameDate" value={new Date().toISOString()} /> */}
               </div>
