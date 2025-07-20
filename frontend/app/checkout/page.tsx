@@ -151,7 +151,6 @@ export default function page() {
         onSuccess: function (result: any) {
           console.log("Payment success", result);
           toast.success("Payment success");
-          router.push('/complete-checkout');
         },
         onPending: function (result: any) {
           console.log("Payment pending", result);
@@ -163,15 +162,16 @@ export default function page() {
         },
         onClose: function () {
           console.log("Payment popup closed");
+          toast("Payment popup closed");
         },
       });
 
 
     } catch (err) {
       console.error("Checkout failed", err);
+      toast.error("Checkout failed");
     } finally {
       setIsOpenModalConfirmation(false);
-      router.push('/complete-checkout');
     }
   };
 
