@@ -82,8 +82,12 @@ const OrderDetailComponent: React.FC<OrderDetailComponentProps> = ({ order, setO
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-8">
           <div>
             <h3 className="text-lg !font-semibold text-[#493628] mb-2">Customer</h3>
-            <p className="text-base text-gray-700">{order.user.name}</p>
-            <p className="text-base text-gray-700">{order.user.email}</p>
+            <p className="text-base text-gray-700">
+              {typeof order.user === "object" && "name" in order.user ? order.user.name : order.user}
+            </p>
+            <p className="text-base text-gray-700">
+              {typeof order.user === "object" && "email" in order.user ? order.user.email : ""}
+            </p>
           </div>
 
           <div>

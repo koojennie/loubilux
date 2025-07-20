@@ -11,15 +11,13 @@ import ModalViewDetails from "@/components/organisms/Modal/ModalViewDetail";
 import DeleteConfirmation from "@/components/Atoms/DeleteConfirmation";
 
 
-type ProductsProps = {
-  initialProducts: Product[];
-}
 
-const ProductPage = ({ initialProducts }: ProductsProps) => {
+
+const ProductPage = () => {
   
   const router = useRouter();
 
-  const [products, setProducts] = useState<Product[]>(initialProducts);
+  const [products, setProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [selectedViewDetailProduct, setSelectedViewDetailProduct] = useState<Product | null>(null);
   const [selectedDeleteProduct, setSelectedDeleteProduct] = useState<Product | null>(null);

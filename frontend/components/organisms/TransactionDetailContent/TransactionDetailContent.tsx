@@ -27,7 +27,7 @@ export default function TransactionDetailContent({ order }: TransactionDetailCon
                     <img src="/icon/loubilux-logo.png" width="100" height="10" className="img-fluid" alt="" />
                   </div>
                 </div>
-                <StatusBadge status={order.statusOrder as 'Pending' | 'Success' | 'Failed'} />
+                <StatusBadge status={order.statusOrder as "Pending" | "Processing" | "Completed" | "Cancelled"} />
               </div>
               <hr />
               <div className="purchase pt-10">
@@ -42,7 +42,7 @@ export default function TransactionDetailContent({ order }: TransactionDetailCon
                   </thead>
                   <tbody>
                     <tr>
-                      <td className="pr-20">{order.user.name}</td>
+                      <td className="pr-20">{typeof order.user === 'object' && 'name' in order.user ? order.user.name : order.user}</td>
                       <td className="pr-20">{formatForFrontend(order.orderDate)}</td>
                       <td>Midtrans</td>
                     </tr>

@@ -12,9 +12,15 @@ import { User } from "@/types/type";
 import toast, { Toaster } from "react-hot-toast";
 import { HiOutlineQrCode } from "react-icons/hi2";
 
-
+declare global {
+  interface Window {
+    snap: any;
+  }
+}
 
 export default function page() {
+
+
   const router = useRouter();
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [isOpenModalConfirmation, setIsOpenModalConfirmation] = useState<boolean>(false);
@@ -142,17 +148,16 @@ export default function page() {
       const snapToken = paymentResponse.data.token;
 
       window.snap.pay(snapToken, {
-        onSuccess: function (result) {
+        onSuccess: function (result: any) {
           console.log("Payment success", result);
-          // redirect ke halaman success
           toast.success("Payment success");
           router.push('/complete-checkout');
         },
-        onPending: function (result) {
+        onPending: function (result: any) {
           console.log("Payment pending", result);
-          toast(`Payments Pending + ${result}`, { icon: '⌚' })
+          toast(`Payments Pending + ${result}`, { icon: '⌚' });
         },
-        onError: function (result) {
+        onError: function (result: any) {
           console.error("Payment error", result);
           toast.error(`Payment error + ${result}`);
         },
@@ -160,6 +165,8 @@ export default function page() {
           console.log("Payment popup closed");
         },
       });
+
+
     } catch (err) {
       console.error("Checkout failed", err);
     } finally {

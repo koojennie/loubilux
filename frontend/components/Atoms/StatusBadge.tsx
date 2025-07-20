@@ -1,7 +1,7 @@
 import { HiClock, HiCheckCircle, HiXCircle } from "react-icons/hi";
 
 interface StatusBadgeProps {
-  status: 'Pending' | 'Success' | 'Failed';
+  status: "Pending" | "Processing" | "Completed" | "Cancelled";
 }
 
 const statusConfig = {

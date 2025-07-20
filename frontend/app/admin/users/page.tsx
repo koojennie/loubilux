@@ -10,14 +10,11 @@ import HeaderContentAdmin from "@/components/organisms/HeaderContetntAdmin/Heade
 import ModalViewDetail from "@/components/organisms/Modal/ModalViewDetail";
 import DeleteConfirmation from "@/components/Atoms/DeleteConfirmation";
 
-interface UsersProps {
-  initialUsers: User[];
-}
 
-const UserPage = ({ initialUsers }: UsersProps) => {
+const UserPage = () => {
   const router = useRouter();
 
-  const [user, setUser] = useState<User[]>(initialUsers);
+  const [user, setUser] = useState<User[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [selectedViewDetailUser, setSelectedViewDetailUser] = useState<User | null>(null);
   const [selectedDeleteUser, setSelectedDeleteUser] = useState<User | null>(null);

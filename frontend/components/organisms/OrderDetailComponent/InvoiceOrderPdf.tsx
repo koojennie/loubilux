@@ -166,8 +166,12 @@ const InvoiceOrderPdf: React.FC<{ order: Order }> = ({ order }) => {
           {/* Ditagihkan Kepada (Kanan) */}
           <View style={{ width: "48%", textAlign: "right" }}>
             <Text style={styles.sectionTitle}>Customer</Text>
-            <Text style={styles.infoText}>{order.user.name}</Text>
-            <Text style={styles.infoText}>{order.user.email}</Text>
+            <Text style={styles.infoText}>
+              {typeof order.user === "object" && "name" in order.user ? order.user.name : order.user}
+            </Text>
+            <Text style={styles.infoText}>
+              {typeof order.user === "object" && "email" in order.user ? order.user.email : ""}
+            </Text>
           </View>
         </View>
 
