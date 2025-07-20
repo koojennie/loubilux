@@ -102,7 +102,7 @@ const OrdersPage = () => {
           { key: 'user', label: 'Customer' as keyof Order },
           { key: 'orderDate', label: 'Order Date' as keyof Order },
           { key: 'totalPrice', label: 'Total Price' as keyof Order },
-          { key: 'statusOrder', label: 'Status Order' as keyof Order },
+          { key: 'statusOrder', label: 'Order Status' as keyof Order },
           // { key: 'category', label: 'Category' },
         ]}
         tableType="orders"
@@ -125,7 +125,7 @@ const OrdersPage = () => {
           { key: 'user', label: 'Customer' as keyof Order },
           { key: 'email', label: 'Email' as keyof Order },
           { key: 'orderDate', label: 'Order Date' as keyof Order },
-          { key: 'statusOrder', label: 'Status Order' as keyof Order },
+          { key: 'statusOrder', label: 'Order Status' as keyof Order },
           { key: 'paymentMethod', label: 'Payment Status' as keyof Order },
           { key: 'totalPrice', label: 'Total Price' as keyof Order },
           { key: 'items', label: 'Items' as keyof Order },

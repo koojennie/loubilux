@@ -20,19 +20,19 @@ const statusConfig: Record<
   { icon: () => React.ReactNode; className: string }
 > = {
   Pending: {
-    icon: () => <HiClock className="text-sm me-1 text-yellow-600" />,
+    icon: () => <HiClock className="text-xs me-1 text-yellow-600" />,
     className: "bg-yellow-100 text-yellow-600",
   },
   Processing: {
-    icon: () => <HiClock className="text-sm me-1 text-blue-600" />,
+    icon: () => <HiClock className="text-xs me-1 text-blue-600" />,
     className: "bg-blue-100 text-blue-600",
   },
   Completed: {
-    icon: () => <HiCheckCircle className="text-sm me-1 text-green-600" />,
+    icon: () => <HiCheckCircle className="text-xs me-1 text-green-600" />,
     className: "bg-green-100 text-green-600",
   },
   Cancelled: {
-    icon: () => <HiXCircle className="text-sm me-1 text-red-600" />,
+    icon: () => <HiXCircle className="text-xs me-1 text-red-600" />,
     className: "bg-red-100 text-red-600",
   },
 };
@@ -87,7 +87,7 @@ export default function RecentOrders() {
                 Total Price
               </TableCell>
               <TableCell isHeader className="py-3 font-medium text-gray-500">
-                Status Order
+                Order Status
               </TableCell>
             </TableRow>
           </TableHeader>
@@ -119,7 +119,7 @@ export default function RecentOrders() {
                   </TableCell>
                   <TableCell className="py-3">
                     <span
-                      className={`px-3 py-1 rounded-md text-xs font-semibold inline-flex items-center ${config.className}`}
+                      className={`px-3 py-1 rounded-md !text-xs font-semibold inline-flex items-center ${config.className}`}
                     >
                       {config.icon()}
                       {status}

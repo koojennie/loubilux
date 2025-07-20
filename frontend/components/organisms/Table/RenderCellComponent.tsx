@@ -94,7 +94,7 @@ export const renderCellContent = <T extends { [key: string]: any }>(
     } else if (col.key === 'statusOrder') {
       return (
         <span
-          className={`inline-block px-3 py-1 rounded-lg text-base font-semibold cursor-pointer 
+          className={`inline-block px-3 py-1 rounded-lg text-sm font-semibold cursor-pointer 
             ${value === "Completed"
               ? "bg-green-100 text-green-600"
               : value === "Cancelled"
