@@ -369,7 +369,7 @@ export default function AddressList() {
                 <div className="mb-4">
                   <label className="block mb-1 text-lg font-medium">Province</label>
                   <select
-                    className="input input-bordered rounded-md w-full"
+                    className="rounded-md w-full border border-gray-300 px-3 py-3 text-base focus:outline-none focus:ring-2 focus:ring-[#493628]"
                     value={selectedProvinsiId ?? ''}
                     disabled={isLoadingProvince}
                     onChange={(e) => {
@@ -403,7 +403,7 @@ export default function AddressList() {
                 <div className="mb-4">
                   <label className="block mb-1 text-lg font-medium">City</label>
                   <select
-                    className="input input-bordered rounded-md w-full"
+                    className="rounded-md w-full border border-gray-300 px-3 py-3 text-base focus:outline-none focus:ring-2 focus:ring-[#493628]"
                     value={selectedCityId ?? ''}
                     disabled={!selectedProvinsiId || isLoadingCity}
                     onChange={(e) => {
@@ -434,7 +434,7 @@ export default function AddressList() {
                 <div className="mb-4">
                   <label className="block mb-1 text-lg font-medium">District</label>
                   <select
-                    className="input input-bordered rounded-md w-full"
+                    className="rounded-md w-full border border-gray-300 px-3 py-3 text-base focus:outline-none focus:ring-2 focus:ring-[#493628]"
                     value={selectedDisctrictId ?? ''}
                     disabled={!selectedCityId || isLoadingDistrict}
                     onChange={(e) => {
