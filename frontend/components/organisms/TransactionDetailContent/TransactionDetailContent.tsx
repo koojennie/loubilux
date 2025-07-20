@@ -24,7 +24,7 @@ export default function TransactionDetailContent({ order }: TransactionDetailCon
               <div className="d-flex flex-row  align-items-center justify-content-between mb-30">
                 <div className="game-checkout d-flex flex-row align-items-center">
                   <div className="pe-4">
-                    <img src="/icon/loubilux-logo.png" width="100" height="10" className="img-fluid" alt="" />
+                    <img src="/icon/loubishop-logo.svg" width="100" height="10" className="img-fluid" alt="" />
                   </div>
                 </div>
                 <StatusBadge status={order.statusOrder as "Pending" | "Processing" | "Completed" | "Cancelled"} />

@@ -9,7 +9,7 @@ export default function Footer() {
             <div className="col-lg-4 text-lg-start text-center">
               <a href="" className="mb-30">
                 <Image
-                  src="/icon/loubilux-logo.png"
+                  src="/icon/loubishop-logo.svg"
                   width={80}
                   height={80}
                   alt="logo"

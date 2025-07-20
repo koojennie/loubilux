@@ -68,7 +68,7 @@ const NavbarAdmin = ({ isSidebarOpen, toggleSidebar, handleSignOut }: SidebarAdm
               <div className="gap-3 flex flex-row justify-center items-center">
                 <a className="" href="/#">
                   <Image
-                    src="/icon/loubilux-logo-white.png"
+                    src="/icon/loubishop-brown.svg"
                     width={30}
                     height={30}
                     alt="Logo" />

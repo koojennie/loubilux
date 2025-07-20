@@ -50,7 +50,7 @@ export default function SignUp() {
           <div className="container mx-auto">
             <div className="pb-50">
               <Link className="navbar-brand" href="/">
-                <Image src="/icon/loubilux-logo.png" width={60} height={60} alt="Logo" />
+                <Image src="/icon/loubishop-logo.svg" width={60} height={60} alt="Logo" />
               </Link>
             </div>
             <SignUpForm onSubmit={handleSignUp} />
