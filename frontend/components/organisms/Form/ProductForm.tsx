@@ -177,7 +177,7 @@ const ProductForm: React.FC<ProductFormProps> = ({ onSubmit, onEditSubmit ,isEdi
 
               {/* Quantity */}
               <div className="w-full max-w-24">
-                <label className="block mb-2 text-base font-semibold text-[#493628]">Quantity</label>
+                <label className="block mb-2 text-base font-semibold text-[#493628]">Stock</label>
                 <input
                   type="number"
                   className="w-full h-10 bg-transparent placeholder:text-gray-500 text-[#493628] text-sm border rounded-lg px-3 focus:border-[#493628]"
