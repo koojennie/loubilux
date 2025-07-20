@@ -42,6 +42,7 @@ export default function RootLayout({
     <html lang="en">
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="icon" type="image/x-icon" href="/icon/favicon.ico"/>
       </Head>
       <body
         className={`${poppins.variable} antialiased`}
