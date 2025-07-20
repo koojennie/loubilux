@@ -107,7 +107,7 @@ const OrderDetailComponent: React.FC<OrderDetailComponentProps> = ({ order, setO
             <br />
             {/* Help Text */}
             <p className="mt-1 text-xs text-gray-500">
-              Pilih status terbaru untuk pesanan ini.
+              Update the order status
             </p>
             <select
               id="statusOrderSelect"

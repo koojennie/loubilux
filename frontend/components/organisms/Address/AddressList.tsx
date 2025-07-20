@@ -389,7 +389,7 @@ export default function AddressList() {
                     }}
                   >
                     <option value="">
-                      {isLoadingProvince ? 'Ambil Provinsi...' : 'Pilih Provinsi'}
+                      {isLoadingProvince ? 'Get Province...' : 'Choose Province'}
                     </option>
                     {province.map((p) => (
                       <option key={p.kode} value={p.kode} data-nama={p.nama}>
@@ -420,7 +420,7 @@ export default function AddressList() {
                     }}
                   >
                     <option value="">
-                      {isLoadingCity ? 'Ambil Kota...' : 'Pilih Kota'}
+                      {isLoadingCity ? 'Get City...' : 'Choose City'}
                     </option>
                     {city.map((k) => (
                       <option key={k.kode} value={k.kode} data-nama={k.nama}>
@@ -448,7 +448,7 @@ export default function AddressList() {
                     }}
                   >
                     <option value="">
-                      {isLoadingDistrict ? 'Ambil Kecamatan...' : 'Pilih Kecamatan'}
+                      {isLoadingDistrict ? 'Get District...' : 'Choose District'}
                     </option>
                     {district.map((d) => (
                       <option key={d.kode} value={d.kode} data-nama={d.nama}>
