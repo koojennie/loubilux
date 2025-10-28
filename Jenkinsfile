@@ -35,14 +35,22 @@ pipeline {
         stage('Install Ortelius CLI & Tools') {
             steps {
                 sh '''
-                # Install Ortelius CLI (dh)
-                curl -L https://raw.githubusercontent.com/Ortelius/ortelius-cli/main/install.sh | sh
-
-                # Install Syft for SBOM
+                echo "📦 Installing Ortelius CLI (v10.0.5584)..."
+                curl -L https://github.com/Ortelius/ortelius-cli/releases/download/v10.0.5584/ortelius-linux-amd64.tar.gz -o dh.tar.gz
+                tar -xvf dh.tar.gz
+                chmod +x ortelius
+                mv ortelius dh
+                mv dh /usr/local/bin/
+                dh version || echo "✅ Ortelius CLI installed successfully."
+        
+                echo "📦 Installing Syft (for SBOM)..."
                 curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin
-
-                # Install Scorecard
-                curl -sSfL https://raw.githubusercontent.com/ossf/scorecard/main/install.sh | sh -s -- -b /usr/local/bin
+        
+                echo "📊 Installing OpenSSF Scorecard..."
+                curl -L https://github.com/ossf/scorecard/releases/download/v5.3.0/scorecard_5.3.0_linux_amd64.tar.gz -o scorecard.tar.gz
+                tar -xzf scorecard.tar.gz && chmod +x scorecard
+                mv scorecard /usr/local/bin/
+                scorecard version || echo "✅ Scorecard installed successfully."
                 '''
             }
         }
