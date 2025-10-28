@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         // 🔧 Ortelius Credentials
-        DHURL = "http://10.171.3.36/dmadminweb"   // ganti sesuai URL Ortelius kamu
+        DHURL = "http://10.171.3.36"   // ganti sesuai URL Ortelius kamu
         DHUSER = "admin"
         DHPASS = "admin"
 
