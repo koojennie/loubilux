@@ -67,7 +67,6 @@ pipeline {
                     sh '''
                     echo "⚙️ Building Express.js backend..."
                     npm ci
-                    npm run build
                     '''
                 }
             }
