@@ -30,8 +30,8 @@ pipeline {
         stage('Install Tools') {
             steps {
                 sh '''
-                echo "📦 Installing Ortelius CLI v10.0.5584..."
-                curl -L https://github.com/Ortelius/ortelius-cli/releases/download/v10.0.5584/ortelius-linux-amd64.tar.gz -o dh.tar.gz
+                echo "📦 Installing Ortelius CLI..."
+                curl -L https://github.com/ortelius/ortelius-cli/releases/download/v9.3.283/ortelius-linux-amd64.tar.gz -o dh.tar.gz
                 tar -xvf dh.tar.gz
                 chmod +x ortelius
                 mv ortelius /usr/local/bin/dh
