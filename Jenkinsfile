@@ -1,3 +1,7 @@
+triggers {
+    githubPush()
+}
+
 pipeline {
     agent any
 
@@ -34,17 +38,17 @@ pipeline {
                 curl -L https://github.com/ortelius/ortelius-cli/releases/download/v9.3.283/ortelius-linux-amd64.tar.gz -o dh.tar.gz
                 tar -xvf dh.tar.gz
                 chmod +x ortelius
-                mv ortelius /usr/local/bin/dh
-                dh version || echo "✅ Ortelius CLI installed"
-
+                mv ortelius dh
+                ./dh version || echo "✅ Ortelius CLI installed"
+        
                 echo "📦 Installing Syft (SBOM)..."
-                curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b /usr/local/bin
-
+                curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b $PWD
+                ./syft version || echo "✅ Syft installed"
+        
                 echo "📊 Installing OpenSSF Scorecard..."
                 curl -L https://github.com/ossf/scorecard/releases/download/v5.3.0/scorecard_5.3.0_linux_amd64.tar.gz -o scorecard.tar.gz
                 tar -xzf scorecard.tar.gz && chmod +x scorecard
-                mv scorecard /usr/local/bin/
-                scorecard version || echo "✅ Scorecard installed"
+                ./scorecard version || echo "✅ Scorecard installed"
                 '''
             }
         }
@@ -122,13 +126,13 @@ Version = "v${APP_VERSION}.${BUILD_NUM}"
                 export DHPASS=${DHPASS}
 
                 echo "🚀 Uploading Frontend Component..."
-                dh updatecomp --rsp frontend.toml \
+                ./dh updatecomp --rsp frontend.toml \
                   --deppkg "cyclonedx@frontend-sbom.json" \
                   --deppkg "scorecard@scorecard.json" \
                   --deploydatasave frontend.json
 
                 echo "🚀 Uploading Backend Component..."
-                dh updatecomp --rsp backend.toml \
+                ./dh updatecomp --rsp backend.toml \
                   --deppkg "cyclonedx@backend-sbom.json" \
                   --deploydatasave backend.json
                 '''
@@ -139,7 +143,7 @@ Version = "v${APP_VERSION}.${BUILD_NUM}"
             steps {
                 sh '''
                 echo "📦 Linking components into Ortelius App..."
-                dh deploy \
+                ./dh deploy \
                   --dhurl ${DHURL} \
                   --dhuser ${DHUSER} \
                   --dhpass ${DHPASS} \
@@ -148,7 +152,7 @@ Version = "v${APP_VERSION}.${BUILD_NUM}"
                   --deployenv "GLOBAL.LoubiShop.Dev" \
                   --deploydata frontend.json
 
-                dh deploy \
+                ./dh deploy \
                   --dhurl ${DHURL} \
                   --dhuser ${DHUSER} \
                   --dhpass ${DHPASS} \
