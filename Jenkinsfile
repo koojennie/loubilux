@@ -16,6 +16,8 @@ pipeline {
         IMAGE_TAG = "v1.${env.BUILD_NUMBER}"
 
         PATH = "/usr/local/bin:${env.PATH}"
+
+        GITHUB_AUTH_TOKEN = credentials('github-token')
     }
 
     stages {
@@ -78,7 +80,10 @@ pipeline {
                 syft ./frontend -o cyclonedx-json > frontend-sbom.json || true
                 syft ./backend -o cyclonedx-json > backend-sbom.json || true
 
-                scorecard --repo=https://github.com/koojennie/loubilux --format json > scorecard.json || true
+                echo "🔑 Using GitHub token for Scorecard..."
+                export GITHUB_AUTH_TOKEN=${GITHUB_AUTH_TOKEN}   # ← penting!
+                ./scorecard --repo=https://github.com/koojennie/loubilux --format json --show-details > scorecard.json
+                cat scorecard.json | jq '.score' || echo "⚠️ Unable to parse scorecard score"
                 '''
             }
         }
