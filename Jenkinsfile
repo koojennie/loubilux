@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        DHURL = "http://10.171.3.36"     // tanpa /dmadminweb
+        DHURL = "http://34.50.82.137"     // tanpa /dmadminweb
         DHUSER = "admin"
         DHPASS = "admin"
 
@@ -75,10 +75,10 @@ pipeline {
         stage('Generate SBOMs & Scorecard') {
             steps {
                 sh '''
-                syft ./frontend -o cyclonedx-json > frontend-sbom.json || true
-                syft ./backend -o cyclonedx-json > backend-sbom.json || true
-
-                scorecard --repo=https://github.com/koojennie/loubilux --format json > scorecard.json || true
+                ./syft ./frontend -o cyclonedx-json > frontend-sbom.json || true
+                ./syft ./backend -o cyclonedx-json > backend-sbom.json || true
+        
+                ./scorecard --repo=https://github.com/koojennie/loubilux --format json > scorecard.json || true
                 '''
             }
         }
@@ -145,8 +145,9 @@ Version = "v${APP_VERSION}.${BUILD_NUM}"
                   --appname ${APP_NAME} \
                   --appversion ${APP_VERSION} \
                   --deployenv "GLOBAL.LoubiShop.Dev" \
-                  --deploydata frontend.json
-
+                  --deploydata frontend.json \
+                  --logdeployment
+        
                 ./dh deploy \
                   --dhurl ${DHURL} \
                   --dhuser ${DHUSER} \
@@ -154,7 +155,8 @@ Version = "v${APP_VERSION}.${BUILD_NUM}"
                   --appname ${APP_NAME} \
                   --appversion ${APP_VERSION} \
                   --deployenv "GLOBAL.LoubiShop.Dev" \
-                  --deploydata backend.json
+                  --deploydata backend.json \
+                  --logdeployment
                 '''
             }
         }
