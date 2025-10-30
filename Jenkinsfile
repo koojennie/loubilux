@@ -169,12 +169,14 @@ Version = "v${APP_VERSION}.${BUILD_NUM}"
         stage('Upload Scorecard to Dashboard (Optional)') {
             steps {
                 sh '''
+                echo "📤 Uploading OpenSSF Scorecard to Ortelius dashboard..."
                 curl -X POST -u ${DHUSER}:${DHPASS} \
-                  -H "Content-Type: application/json" \
-                  -d @scorecard.json \
-                  ${DHURL}/api/catalog/scorecard || true
+                -H "Content-Type: application/json" \
+                -d @scorecard.json \
+                ${DHURL}/api/catalog/scorecards || true
                 '''
             }
         }
+
     }
 }
