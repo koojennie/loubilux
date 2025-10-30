@@ -1,7 +1,3 @@
-triggers {
-    githubPush()
-}
-
 pipeline {
     agent any
 
