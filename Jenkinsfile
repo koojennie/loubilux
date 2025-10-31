@@ -175,7 +175,7 @@ Version = "v${APP_VERSION}.${BUILD_NUM}"
                 curl -X POST -u ${DHUSER}:${DHPASS} \
                 -H "Content-Type: application/json" \
                 -d @scorecard.json \
-                ${DHURL}/api/catalog/scorecards || true
+                "${DHURL}/msapi/scorecard?component_name=${BACK_COMPONENT}&component_version=v${APP_VERSION}.${BUILD_NUM}"
                 '''
             }
         }
