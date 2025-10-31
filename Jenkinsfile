@@ -81,7 +81,8 @@ pipeline {
                 syft ./backend -o cyclonedx-json > backend-sbom.json || true
 
                 echo "🔑 Using GitHub token for Scorecard..."
-                ./scorecard --repo=https://github.com/koojennie/loubilux --format json --show-details --github-auth-token=$GITHUB_AUTH_TOKEN > scorecard.json
+                export GITHUB_AUTH_TOKEN=${GITHUB_AUTH_TOKEN}
+                ./scorecard --repo=https://github.com/koojennie/loubilux --format json --show-details > scorecard.json
                 cat scorecard.json | jq '.score' || echo "⚠️ Unable to parse scorecard score"
                 '''
             }
