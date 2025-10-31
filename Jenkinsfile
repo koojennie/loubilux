@@ -6,7 +6,7 @@ pipeline {
         DHUSER = "admin"
         DHPASS = "admin"
 
-        APP_NAME = "GLOBAL.LoubiShop"
+        APP_NAME = "GLOBAL.LoubiShop" 
         APP_VERSION = "v1.0.0"
         FRONT_COMPONENT = "GLOBAL.LoubiShop.Frontend"
         BACK_COMPONENT = "GLOBAL.LoubiShop.Backend"
