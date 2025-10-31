@@ -137,6 +137,10 @@ Version = "v${APP_VERSION}.${BUILD_NUM}"
                 ./dh updatecomp --rsp backend.toml \
                   --deppkg "cyclonedx@backend-sbom.json" \
                   --deploydatasave backend.json
+                  --deppkg "scorecard@scorecard.json" \
+                  --dhurl ${DHURL} \
+                  --dhuser ${DHUSER} \
+                  --dhpass ${DHPASS}
                 '''
             }
         }
@@ -175,7 +179,7 @@ Version = "v${APP_VERSION}.${BUILD_NUM}"
                 curl -X POST -u ${DHUSER}:${DHPASS} \
                 -H "Content-Type: application/json" \
                 -d '{"component_name": "GLOBAL.LoubiShop.Backend", "repo": {"name": "github.com/koojennie/loubilux"}, "score": 5.6, "checks": [{"name": "Maintained", "score": 10}, {"name": "License", "score": 0}]}' \
-                "${DHURL}/api/catalog/scorecards"
+                http://34.50.82.137/msapi/metrics
                 '''
             }
         }
