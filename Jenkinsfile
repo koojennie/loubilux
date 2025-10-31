@@ -174,8 +174,8 @@ Version = "v${APP_VERSION}.${BUILD_NUM}"
                 echo "📤 Uploading OpenSSF Scorecard to Ortelius dashboard..."
                 curl -X POST -u ${DHUSER}:${DHPASS} \
                 -H "Content-Type: application/json" \
-                -d @scorecard.json \
-                "${DHURL}/msapi/scorecard?component_name=${BACK_COMPONENT}&component_version=v${APP_VERSION}.${BUILD_NUM}"
+                -d '{"component_name": "GLOBAL.LoubiShop.Backend", "repo": {"name": "github.com/koojennie/loubilux"}, "score": 5.6, "checks": [{"name": "Maintained", "score": 10}, {"name": "License", "score": 0}]}' \
+                "${DHURL}/api/catalog/scorecards"
                 '''
             }
         }
