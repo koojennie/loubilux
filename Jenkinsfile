@@ -137,10 +137,6 @@ Version = "v${APP_VERSION}.${BUILD_NUM}"
                 ./dh updatecomp --rsp backend.toml \
                   --deppkg "cyclonedx@backend-sbom.json" \
                   --deploydatasave backend.json
-                  --deppkg "scorecard@scorecard.json" \
-                  --dhurl ${DHURL} \
-                  --dhuser ${DHUSER} \
-                  --dhpass ${DHPASS}
                 '''
             }
         }
