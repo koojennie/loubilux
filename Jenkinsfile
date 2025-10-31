@@ -114,6 +114,7 @@ Version = "v${APP_VERSION}.${BUILD_NUM}"
   DockerTag = "${IMAGE_TAG}"
   ServiceOwner = "${DHUSER}"
   ServiceOwnerEmail = "jenkins@loubishop.site"
+  SourceUrl = "https://github.com/koojennie/loubilux"
 """
             }
         }
