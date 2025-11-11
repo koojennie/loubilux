@@ -82,8 +82,14 @@ pipeline {
 
                 echo "🔑 Using GitHub token for Scorecard..."
                 export GITHUB_AUTH_TOKEN=${GITHUB_AUTH_TOKEN}
-                ./scorecard --repo=https://github.com/koojennie/loubilux --format json --show-details > scorecard.json
-                cat scorecard.json | jq '.score' || echo "⚠️ Unable to parse scorecard score"
+                ./scorecard --repo=https://github.com/koojennie/loubilux --format json --show-details > raw_scorecard.json
+                if [ -s raw_scorecard.json ]; then
+                  echo "🧩 Normalizing JSON structure for Ortelius..."
+                  jq '[.checks[] | {check: .name, score: .score, details: .reason}]' raw_scorecard.json > scorecard.json
+                else
+                  echo "❌ raw_scorecard.json empty or failed to generate!"
+                  exit 1
+                fi
                 '''
             }
         }
