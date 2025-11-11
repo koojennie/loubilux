@@ -85,11 +85,18 @@ pipeline {
                 ./scorecard --repo=https://github.com/koojennie/loubilux --format json --show-details > raw_scorecard.json
                 if [ -s raw_scorecard.json ]; then
                   echo "🧩 Normalizing JSON structure for Ortelius..."
-                  jq '[.checks[] | {check: .name, score: .score, details: .reason}]' raw_scorecard.json > scorecard.json
+                  cat raw_scorecard.json | jq '{
+                    "Scorecard": .score,
+                    "Checks": [.checks[] | {Check: .name, Score: .score, Details: .reason}]
+                  }' > scorecard.json
+                  echo "✅ Scorecard normalized successfully!"
                 else
                   echo "❌ raw_scorecard.json empty or failed to generate!"
                   exit 1
                 fi
+
+                echo "📊 Final Score:"
+                jq '.Scorecard' scorecard.json
                 '''
             }
         }
