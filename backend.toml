@@ -1,0 +1,9 @@
+Application = "GLOBAL.LoubiShop"
+Application_Version = "1.0.0"
+Name = "GLOBAL.LoubiShop.Backend"
+Variant = "${GIT_BRANCH}"
+Version = "v1.0.0.${BUILD_NUM}-g${SHORT_SHA}"
+
+[Attributes]
+  ServiceOwner = "${DHUSER}"
+  ServiceOwnerEmail = "jenkins@loubishop.site"

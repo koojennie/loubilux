@@ -12,8 +12,8 @@ pipeline {
         BACK_COMPONENT = "GLOBAL.LoubiShop.Backend"
         BUILD_NUM = "${env.BUILD_NUMBER}"
 
-        DOCKERREPO = "ghcr.io/koojennie/loubishop"
-        IMAGE_TAG = "v1.${env.BUILD_NUMBER}"
+        // DOCKERREPO = "ghcr.io/koojennie/loubishop"
+        // IMAGE_TAG = "v1.${env.BUILD_NUMBER}"
 
         PATH = "/usr/local/bin:${env.PATH}"
 
