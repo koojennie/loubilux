@@ -112,7 +112,7 @@ Variant = "frontend-main"
 Version = "v${APP_VERSION}.${BUILD_NUM}"
 
 [Attributes]
-  DockerTag = "${IMAGE_TAG}"
+//   DockerTag = "${IMAGE_TAG}"
   ServiceOwner = "${DHUSER}"
   ServiceOwnerEmail = "jenkins@loubishop.site"
   SourceUrl = "https://github.com/koojennie/loubilux"
@@ -126,7 +126,7 @@ Variant = "backend-main"
 Version = "v${APP_VERSION}.${BUILD_NUM}"
 
 [Attributes]
-  DockerTag = "${IMAGE_TAG}"
+//   DockerTag = "${IMAGE_TAG}"
   ServiceOwner = "${DHUSER}"
   ServiceOwnerEmail = "jenkins@loubishop.site"
   SourceUrl = "https://github.com/koojennie/loubilux"
