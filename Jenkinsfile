@@ -172,10 +172,20 @@ Version = "v${APP_VERSION}.${BUILD_NUM}"
             steps {
                 sh '''
                 echo "📤 Uploading OpenSSF Scorecard to Ortelius dashboard..."
+                SCORE=$(jq '.score' scorecard.json)
+                CHECKS=$(jq '.checks | map({name: .name, score: .score})' scorecard.json)
+                
                 curl -X POST -u ${DHUSER}:${DHPASS} \
-                -H "Content-Type: application/json" \
-                -d '{"component_name": "GLOBAL.LoubiShop.Backend", "repo": {"name": "github.com/koojennie/loubilux"}, "score": 5.6, "checks": [{"name": "Maintained", "score": 10}, {"name": "License", "score": 0}]}' \
-                http://34.50.82.137/msapi/metrics
+                  -H "Content-Type: application/json" \
+                  -d "{
+                    \"component_name\": \"GLOBAL.LoubiShop.Backend\",
+                    \"repo\": \"github.com/koojennie/loubilux\",
+                    \"scorecard\": {
+                        \"score\": $SCORE,
+                        \"checks\": $CHECKS
+                    }
+                  }" \
+                  http://34.50.82.137/msapi/metrics
                 '''
             }
         }
