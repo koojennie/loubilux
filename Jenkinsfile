@@ -136,12 +136,12 @@ Version = "v${APP_VERSION}.${BUILD_NUM}"
 
                 echo "🚀 Uploading Frontend Component..."
                 ./dh updatecomp --rsp frontend.toml \
-                  --importfile "frontend-sbom.json" \
+                  --deppkg "cyclonedx@frontend-sbom.json" \
                   --deploydatasave frontend.json
 
                 echo "🚀 Uploading Backend Component..."
                 ./dh updatecomp --rsp backend.toml \
-                  --importfile "backend-sbom.json" \
+                  --deppkg "cyclonedx@backend-sbom.json" \
                   --deploydatasave backend.json
                 '''
             }
