@@ -86,7 +86,6 @@ pipeline {
                   --format json \
                   --show-details \
                   --checks=-CII-Best-Practices \
-                  --enable-retries \
                   > scorecard.json
                 cat scorecard.json | jq '.score' || echo "⚠️ Unable to parse scorecard score"
                 '''
