@@ -129,13 +129,13 @@ Version = "v${APP_VERSION}.${BUILD_NUM}"
 
                 echo "🚀 Uploading Frontend Component..."
                 ./dh updatecomp --rsp frontend.toml \
-                  --deppkg "cyclonedx@frontend-sbom.json" \
+                  --deppkg "cyclonedx-frontend@frontend-sbom.json" \
                   --deppkg "scorecard@scorecard.json" \
                   --deploydatasave frontend.json
 
                 echo "🚀 Uploading Backend Component..."
                 ./dh updatecomp --rsp backend.toml \
-                  --deppkg "cyclonedx@backend-sbom.json" \
+                  --deppkg "cyclonedx-backend@backend-sbom.json" \
                   --deploydatasave backend.json
                 '''
             }
@@ -178,7 +178,8 @@ Version = "v${APP_VERSION}.${BUILD_NUM}"
                 curl -X POST -u ${DHUSER}:${DHPASS} \
                   -H "Content-Type: application/json" \
                   -d "{
-                    \"component_name\": \"GLOBAL.LoubiShop.Backend\",
+                    \"app_name\": \"${APP_NAME}\",
+                    \"app_version\": \"${APP_VERSION}\",
                     \"repo\": \"github.com/koojennie/loubilux\",
                     \"scorecard\": {
                         \"score\": $SCORE,
