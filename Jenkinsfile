@@ -103,7 +103,7 @@ Version = "v${APP_VERSION}.${BUILD_NUM}"
   ServiceOwnerEmail = "jenkins@loubishop.site"
   SourceUrl = "https://github.com/koojennie/loubilux"
   Layer = "frontend"
-  SBOMRole = "frontend"
+  SBOMFile = "frontend-sbom.json"
 """
 
                 writeFile file: 'backend.toml', text: """
@@ -119,7 +119,7 @@ Version = "v${APP_VERSION}.${BUILD_NUM}"
   ServiceOwnerEmail = "jenkins@loubishop.site"
   SourceUrl = "https://github.com/koojennie/loubilux"
   Layer = "backend"
-  SBOMRole = "backend"
+  SBOMFile = "backend-sbom.json"
 """
             }
         }
@@ -133,13 +133,12 @@ Version = "v${APP_VERSION}.${BUILD_NUM}"
 
                 echo "🚀 Uploading Frontend Component..."
                 ./dh updatecomp --rsp frontend.toml \
-                  --deppkg "cyclonedx@frontend-sbom.json" \
-                  --deppkg "scorecard@scorecard.json" \
+                  --importfile "frontend-sbom.json" \
                   --deploydatasave frontend.json
 
                 echo "🚀 Uploading Backend Component..."
                 ./dh updatecomp --rsp backend.toml \
-                  --deppkg "cyclonedx@backend-sbom.json" \
+                  --importfile "backend-sbom.json" \
                   --deploydatasave backend.json
                 '''
             }
