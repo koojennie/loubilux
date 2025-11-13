@@ -32,7 +32,7 @@ pipeline {
         stage('Install Tools') {
             steps {
                 sh '''
-                echo "📦 Installing Ortelius CLI v10.0.5584..."
+                echo "📦 Installing Ortelius CLI"
                 curl -L https://github.com/ortelius/ortelius-cli/releases/download/v9.3.283/ortelius-linux-amd64.tar.gz -o dh.tar.gz
                 tar -xvf dh.tar.gz
                 chmod +x ortelius
@@ -106,7 +106,6 @@ Version = "v${APP_VERSION}.${BUILD_NUM}"
   ServiceOwnerEmail = "jenkins@loubishop.site"
   SourceUrl = "https://github.com/koojennie/loubilux"
   Layer = "frontend"
-  SBOMFile = "frontend-sbom.json"
 """
 
                 writeFile file: 'backend.toml', text: """
@@ -122,7 +121,6 @@ Version = "v${APP_VERSION}.${BUILD_NUM}"
   ServiceOwnerEmail = "jenkins@loubishop.site"
   SourceUrl = "https://github.com/koojennie/loubilux"
   Layer = "backend"
-  SBOMFile = "backend-sbom.json"
 """
             }
         }
@@ -177,22 +175,12 @@ Version = "v${APP_VERSION}.${BUILD_NUM}"
         stage('Upload Scorecard to Dashboard (Optional)') {
             steps {
                 sh '''
-                echo "📤 Uploading OpenSSF Scorecard to Ortelius dashboard..."
-                SCORE=$(jq '.score' scorecard.json)
-                CHECKS=$(jq '.checks | map({name: .name, score: .score})' scorecard.json)
-                
-                curl -X POST -u ${DHUSER}:${DHPASS} \
-                  -H "Content-Type: application/json" \
-                  -d "{
-                    \"app_name\": \"${APP_NAME}\",
-                    \"app_version\": \"${APP_VERSION}\",
-                    \"repo\": \"github.com/koojennie/loubilux\",
-                    \"scorecard\": {
-                        \"score\": $SCORE,
-                        \"checks\": $CHECKS
-                    }
-                  }" \
-                  http://34.50.82.137/msapi/metrics
+                echo "📤 Attaching Scorecard to Application..."
+
+                ./dh updateapp \
+                  --appname "${APP_NAME}" \
+                  --appversion "${APP_VERSION}" \
+                  --appattr "ScorecardFile:scorecard.json"
                 '''
             }
         }
