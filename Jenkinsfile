@@ -135,6 +135,7 @@ Version = "v${APP_VERSION}.${BUILD_NUM}"
                 echo "🚀 Uploading Frontend Component..."
                 ./dh updatecomp --rsp frontend.toml \
                   --deppkg "cyclonedx@frontend-sbom.json" \
+                  --compattr "ScorecardFile:scorecard.json" \
                   --deploydatasave frontend.json
 
                 echo "🚀 Uploading Backend Component..."
@@ -172,18 +173,18 @@ Version = "v${APP_VERSION}.${BUILD_NUM}"
             }
         }
 
-        stage('Upload Scorecard to Dashboard (Optional)') {
-            steps {
-                sh '''
-                echo "📤 Attaching Scorecard to Application..."
+        // stage('Upload Scorecard to Dashboard (Optional)') {
+        //     steps {
+        //         sh '''
+        //         echo "📤 Attaching Scorecard to Application..."
 
-                ./dh updateapp \
-                  --appname "${APP_NAME}" \
-                  --appversion "${APP_VERSION}" \
-                  --appattr "ScorecardFile:scorecard.json"
-                '''
-            }
-        }
+        //         ./dh updateapp \
+        //           --appname "${APP_NAME}" \
+        //           --appversion "${APP_VERSION}" \
+        //           --appattr "ScorecardFile:scorecard.json"
+        //         '''
+        //     }
+        // }
 
     }
 }
