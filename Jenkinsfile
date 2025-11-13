@@ -135,7 +135,6 @@ Version = "v${APP_VERSION}.${BUILD_NUM}"
                 echo "🚀 Uploading Frontend Component..."
                 ./dh updatecomp --rsp frontend.toml \
                   --deppkg "cyclonedx@frontend-sbom.json" \
-                  --compattr "ScorecardFile:scorecard.json" \
                   --deploydatasave frontend.json
 
                 echo "🚀 Uploading Backend Component..."
