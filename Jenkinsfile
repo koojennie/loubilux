@@ -173,12 +173,22 @@ Version = "v${APP_VERSION}.${BUILD_NUM}"
         stage('Upload Scorecard to Dashboard (Optional)') {
             steps {
                 sh '''
-                echo "📤 Attaching Scorecard to Application..."
-
-                ./dh updateapp \
-                  --appname "${APP_NAME}" \
-                  --appversion "${APP_VERSION}" \
-                  --appattr "ScorecardFile:scorecard.json"
+                echo "📤 Uploading OpenSSF Scorecard to Ortelius dashboard..."
+                SCORE=$(jq '.score' scorecard.json)
+                CHECKS=$(jq '.checks | map({name: .name, score: .score})' scorecard.json)
+                
+                curl -X POST -u ${DHUSER}:${DHPASS} \
+                  -H "Content-Type: application/json" \
+                  -d "{
+                    \"app_name\": \"${APP_NAME}\",
+                    \"app_version\": \"${APP_VERSION}\",
+                    \"repo\": \"github.com/koojennie/loubilux\",
+                    \"scorecard\": {
+                        \"score\": $SCORE,
+                        \"checks\": $CHECKS
+                    }
+                  }" \
+                  http://34.50.82.137/msapi/metrics
                 '''
             }
         }
