@@ -77,8 +77,8 @@ pipeline {
         stage('Generate SBOMs & Scorecard') {
             steps {
                 sh '''
-                syft ./frontend -o cyclonedx-json --catalogers all > frontend-sbom.json
-                syft ./backend -o cyclonedx-json --catalogers all > backend-sbom.json
+                syft ./frontend -o cyclonedx-json > frontend-sbom.json || true
+                syft ./backend -o cyclonedx-json > backend-sbom.json || true
 
                 echo "🔑 Using GitHub token for Scorecard..."
                 export GITHUB_AUTH_TOKEN=${GITHUB_AUTH_TOKEN}
@@ -104,8 +104,7 @@ Version = "v${APP_VERSION}.${BUILD_NUM}"
   DockerTag = "${IMAGE_TAG}"
   ServiceOwner = "${DHUSER}"
   ServiceOwnerEmail = "jenkins@loubishop.site"
-  SourceUrl = "https://github.com/koojennie/loubilux"
-  Layer = "frontend"
+  SourceUrl = "https://github.com/koojennie/loubilux.git"
 """
 
                 writeFile file: 'backend.toml', text: """
@@ -119,8 +118,7 @@ Version = "v${APP_VERSION}.${BUILD_NUM}"
   DockerTag = "${IMAGE_TAG}"
   ServiceOwner = "${DHUSER}"
   ServiceOwnerEmail = "jenkins@loubishop.site"
-  SourceUrl = "https://github.com/koojennie/loubilux"
-  Layer = "backend"
+  SourceUrl = "https://github.com/koojennie/loubilux.git"
 """
             }
         }
@@ -172,18 +170,18 @@ Version = "v${APP_VERSION}.${BUILD_NUM}"
             }
         }
 
-        // stage('Upload Scorecard to Dashboard (Optional)') {
-        //     steps {
-        //         sh '''
-        //         echo "📤 Attaching Scorecard to Application..."
+        stage('Upload Scorecard to Dashboard (Optional)') {
+            steps {
+                sh '''
+                echo "📤 Attaching Scorecard to Application..."
 
-        //         ./dh updateapp \
-        //           --appname "${APP_NAME}" \
-        //           --appversion "${APP_VERSION}" \
-        //           --appattr "ScorecardFile:scorecard.json"
-        //         '''
-        //     }
-        // }
+                ./dh updateapp \
+                  --appname "${APP_NAME}" \
+                  --appversion "${APP_VERSION}" \
+                  --appattr "ScorecardFile:scorecard.json"
+                '''
+            }
+        }
 
     }
 }
