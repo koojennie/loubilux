@@ -77,8 +77,8 @@ pipeline {
         stage('Generate SBOMs & Scorecard') {
             steps {
                 sh '''
-                syft packages ./frontend --catalogers all -o cyclonedx-json > frontend-sbom.json
-                syft packages ./backend  --catalogers all -o cyclonedx-json > backend-sbom.json
+                syft ./frontend -o cyclonedx-json --catalogers all > frontend-sbom.json
+                syft ./backend -o cyclonedx-json --catalogers all > backend-sbom.json
 
                 echo "🔑 Using GitHub token for Scorecard..."
                 export GITHUB_AUTH_TOKEN=${GITHUB_AUTH_TOKEN}
