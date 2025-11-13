@@ -85,7 +85,6 @@ pipeline {
                 ./scorecard --repo=https://github.com/koojennie/loubilux \
                   --format json \
                   --show-details \
-                  --checks=-CII-Best-Practices \
                   > scorecard.json
                 cat scorecard.json | jq '.score' || echo "⚠️ Unable to parse scorecard score"
                 '''
