@@ -13,7 +13,7 @@
     "cloudinary": "^2.6.0",
     "cookie-parser": "~1.4.4",
     "cors": "^2.8.5",
-    "debug": "~2.6.9",
+    "debug": "~4.4.3",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "http-errors": "~1.6.3", 
