@@ -6,7 +6,7 @@
 
 # 👜 Loubishop
 
-<img src="https://raw.githubusercontent.com/koojennie/loubilux/main/public/preview.png" alt="Loubishop Website Preview" />
+<img src="https://raw.githubusercontent.com/koojennie/loubilux/refs/heads/main/frontend/public/img/loubishop.png" alt="Loubishop Website Preview" />
 
 **Loubishop** is a premium **personal shopper (jastip) platform from Germany**, specializing in **authentic branded products** sourced directly from Europe. Based in **Depok, Indonesia**, Loubishop serves customers through both its own website and trusted Indonesian marketplaces such as **Tokopedia** and **Shopee**.
 
@@ -147,10 +147,95 @@ All products are **authentic preloved items imported from Europe**.
 
 ## 🚀 Getting Started
 
-To run this project locally, please refer to the setup guide provided in the repository or your internal documentation.
+Follow the steps below to install and run Loubishop locally.
 
-📘 **Repository:**
-👉 [https://github.com/koojennie/loubilux](https://github.com/koojennie/loubilux)
+**Installation & Execution Steps**
+
+1.  Extract and place the project folder
+    
+    Extract and copy the loubishop project folder into your working directory, for example:
+    
+    ```powershell
+    C:\Users\kim\Documents\loubishop
+    ```
+
+2.  Open the project using Visual Studio Code
+    
+    Open Command Prompt in the project directory, then run:
+
+    ```powershell
+    code .
+    ```
+
+3.  Install dependencies
+
+    Open the Visual Studio Code terminal and run:
+
+    ```powershell
+    npm install
+    ```
+
+4.  Navigate to backend directory
+
+    ```powershell
+    cd backend
+    ```
+
+5.  Create backend environment file
+    
+    Create a new file named .env inside the backend directory, then copy the configuration below:
+
+    ```powershell
+    JWT_SECRET=86b662b4f00f418e8a9fb4cd40b2497e32811f99b5db3c8fcf23d830fca6740d
+
+    CLOUDINARY_URL=cloudinary://496649482931383:70C0xWwPcdYNJ0HrzG3ZYyFb5h0@dqjlprqcyx
+    CLOUDINARY_API_KEY=496649482931383
+    CLOUDINARY_API_SECRET=70C0xWwPcdYNJ0HrzG3ZYyFb5h0
+    CLOUDINARY_CLOUD_NAME=dqjlprqcy
+
+    FRONTED_URL="http://localhost:3000"
+
+    SERVERKEY_MIDTRANS=SB-Mid-server-ejpmqDkPMYgvBmTzqqS-rzWu
+
+    POSTGRES_DB_NAME=postgres
+    POSTGRES_DB_USER=postgres.fhydlfpttsikusdupxpp
+    POSTGRES_DB_PASS=230710alwayshao
+    POSTGRES_DB_HOST=aws-0-ap-southeast-1.pooler.supabase.com
+    POSTGRES_DB_PORT=5432
+    POSTGRES_DB_DRIVER=postgres
+    ```
+
+6.  Run backend server
+
+    ```powershell
+    npm run dev
+    ```
+
+7.  Open a new terminal and navigate to frontend
+
+    ```powershell
+    cd frontend
+    ```
+
+8.  Create frontend environment file
+
+    Create a new file named .env.local inside the frontend directory, then add:
+
+    ```powershell
+    NEXT_PUBLIC_API_BASE_URL='http://localhost:5000'
+    ```
+
+9.  Run frontend development server
+
+    ```powershell
+    npm run dev
+    ```
+
+    Once both servers are running, open your browser and access the application via:
+
+    ```powershell
+    http://localhost:3000
+    ```
 
 ---
 
