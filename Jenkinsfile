@@ -32,7 +32,7 @@ pipeline {
         stage('Install Tools') {
             steps {
                 sh '''
-                echo "📦 Installing Ortelius CLI v10.0.5584..."
+                echo "📦 Installing Ortelius CLI"
                 curl -L https://github.com/ortelius/ortelius-cli/releases/download/v9.3.283/ortelius-linux-amd64.tar.gz -o dh.tar.gz
                 tar -xvf dh.tar.gz
                 chmod +x ortelius
@@ -82,7 +82,10 @@ pipeline {
 
                 echo "🔑 Using GitHub token for Scorecard..."
                 export GITHUB_AUTH_TOKEN=${GITHUB_AUTH_TOKEN}
-                ./scorecard --repo=https://github.com/koojennie/loubilux --format json --show-details > scorecard.json
+                ./scorecard --repo=https://github.com/koojennie/loubilux \
+                  --format json \
+                  --show-details \
+                  > scorecard.json
                 cat scorecard.json | jq '.score' || echo "⚠️ Unable to parse scorecard score"
                 '''
             }
@@ -101,7 +104,7 @@ Version = "v${APP_VERSION}.${BUILD_NUM}"
   DockerTag = "${IMAGE_TAG}"
   ServiceOwner = "${DHUSER}"
   ServiceOwnerEmail = "jenkins@loubishop.site"
-  SourceUrl = "https://github.com/koojennie/loubilux"
+  SourceUrl = "https://github.com/koojennie/loubilux.git"
 """
 
                 writeFile file: 'backend.toml', text: """
@@ -115,7 +118,7 @@ Version = "v${APP_VERSION}.${BUILD_NUM}"
   DockerTag = "${IMAGE_TAG}"
   ServiceOwner = "${DHUSER}"
   ServiceOwnerEmail = "jenkins@loubishop.site"
-  SourceUrl = "https://github.com/koojennie/loubilux"
+  SourceUrl = "https://github.com/koojennie/loubilux.git"
 """
             }
         }
@@ -130,7 +133,6 @@ Version = "v${APP_VERSION}.${BUILD_NUM}"
                 echo "🚀 Uploading Frontend Component..."
                 ./dh updatecomp --rsp frontend.toml \
                   --deppkg "cyclonedx@frontend-sbom.json" \
-                  --deppkg "scorecard@scorecard.json" \
                   --deploydatasave frontend.json
 
                 echo "🚀 Uploading Backend Component..."
@@ -172,10 +174,21 @@ Version = "v${APP_VERSION}.${BUILD_NUM}"
             steps {
                 sh '''
                 echo "📤 Uploading OpenSSF Scorecard to Ortelius dashboard..."
+                SCORE=$(jq '.score' scorecard.json)
+                CHECKS=$(jq '.checks | map({name: .name, score: .score})' scorecard.json)
+                
                 curl -X POST -u ${DHUSER}:${DHPASS} \
-                -H "Content-Type: application/json" \
-                -d '{"component_name": "GLOBAL.LoubiShop.Backend", "repo": {"name": "github.com/koojennie/loubilux"}, "score": 5.6, "checks": [{"name": "Maintained", "score": 10}, {"name": "License", "score": 0}]}' \
-                http://34.50.82.137/msapi/metrics
+                  -H "Content-Type: application/json" \
+                  -d "{
+                    \"app_name\": \"${APP_NAME}\",
+                    \"app_version\": \"${APP_VERSION}\",
+                    \"repo\": \"github.com/koojennie/loubilux\",
+                    \"scorecard\": {
+                        \"score\": $SCORE,
+                        \"checks\": $CHECKS
+                    }
+                  }" \
+                  http://34.50.82.137/msapi/metrics
                 '''
             }
         }
