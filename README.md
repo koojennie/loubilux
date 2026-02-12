@@ -186,21 +186,21 @@ Follow the steps below to install and run Loubishop locally.
     Create a new file named .env inside the backend directory, then copy the configuration below:
 
     ```powershell
-    JWT_SECRET=86b662b4f00f418e8a9fb4cd40b2497e32811f99b5db3c8fcf23d830fca6740d
+    JWT_SECRET=
 
-    CLOUDINARY_URL=cloudinary://496649482931383:70C0xWwPcdYNJ0HrzG3ZYyFb5h0@dqjlprqcyx
-    CLOUDINARY_API_KEY=496649482931383
-    CLOUDINARY_API_SECRET=70C0xWwPcdYNJ0HrzG3ZYyFb5h0
-    CLOUDINARY_CLOUD_NAME=dqjlprqcy
+    CLOUDINARY_URL=
+    CLOUDINARY_API_KEY=
+    CLOUDINARY_API_SECRET=
+    CLOUDINARY_CLOUD_NAME=
 
     FRONTED_URL="http://localhost:3000"
 
-    SERVERKEY_MIDTRANS=SB-Mid-server-ejpmqDkPMYgvBmTzqqS-rzWu
+    SERVERKEY_MIDTRANS=SB-Mid-server-<your_key>
 
     POSTGRES_DB_NAME=postgres
-    POSTGRES_DB_USER=postgres.fhydlfpttsikusdupxpp
-    POSTGRES_DB_PASS=230710alwayshao
-    POSTGRES_DB_HOST=aws-0-ap-southeast-1.pooler.supabase.com
+    POSTGRES_DB_USER=postgres.xxxxx
+    POSTGRES_DB_PASS=
+    POSTGRES_DB_HOST=
     POSTGRES_DB_PORT=5432
     POSTGRES_DB_DRIVER=postgres
     ```
