@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@headlessui/react": "^2.2.0",
+    "@headlessui/react": "^2.2.9",
     "@react-pdf/renderer": "^4.3.0",
     "aos": "^2.3.4",
     "apexcharts": "^4.7.0",
